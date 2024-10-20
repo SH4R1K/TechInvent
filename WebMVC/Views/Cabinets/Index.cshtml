@@ -1,0 +1,29 @@
+﻿@model IEnumerable<TechInventAPI.Models.Cabinet>
+
+@{
+    ViewData["Title"] = "Кабинеты";
+}
+
+<h1>Кабинеты</h1>
+
+@{
+    var cabinets = Model.ToList();
+    @for (int i = 0; i < Model.Count(); i += 3)
+    {
+        <div class="row mb-4">
+            @for (int j = 0; j < 3; j++)
+            {
+                if (i + j < Model.Count())
+                {
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@cabinets[i + j].Name</h5>
+                            <p class="card-text">Количество рабочих мест: @cabinets[i + j].Workplaces.Count</p>
+                            <a asp-controller="Workplaces" asp-action="Index" asp-route-id="@cabinets[i+j].IdCabinet" class="btn btn-primary">Подробнее</a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+}

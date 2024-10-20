@@ -1,0 +1,117 @@
+﻿@model TechInventAPI.Models.Workplace
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div class="container mt-4">
+    <div class="col-md-6">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMainboard">
+                    Mainboard
+                </button>
+            </h2>
+            <div id="collapseMainboard" class="accordion-collapse collapse">
+                @foreach (var component in Model.Components.Where(c => c.Mainboard != null))
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@component.Mainboard?.Name</h5>
+                            <p class="card-text">Серийный номер: @component.Mainboard?.SerialNumber</p>
+                            <p class="card-text">Рабочее место: @component.IdWorkplaceNavigation.Name</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCPU">
+                    CPU
+                </button>
+            </h2>
+            <div id="collapseCPU" class="accordion-collapse collapse">
+                @foreach (var component in Model.Components.Where(c => c.Processor != null))
+                {
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@component.Processor?.Name</h5>
+                                <p class="card-text">Количество ядер: @component.Processor?.PhysicalCores</p>
+                                <p class="card-text">Количество логических ядер: @component.Processor?.LogicalCores</p>
+                                <p class="card-text">Максимальная частота: @component.Processor?.MaxClockSpeed</p>
+                                <p class="card-text">Рабочее место: @component.IdWorkplaceNavigation.Name</p>
+                            </div>
+                        </div>
+                }
+            </div>
+        </div>        
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGPU">
+                    GPU
+                </button>
+            </h2>
+            <div id="collapseGPU" class="accordion-collapse collapse">
+                @foreach (var component in Model.Components.Where(c => c.Gpu != null))
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@component.Gpu?.Name</h5>
+                            <p class="card-text">Объём памяти: @component.Gpu?.AdapterRam</p>
+                            <p class="card-text">Рабочее место: @component.IdWorkplaceNavigation.Name</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>        
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRam">
+                    RAM
+                </button>
+            </h2>
+            <div id="collapseRam" class="accordion-collapse collapse">
+                @foreach (var component in Model.Components.Where(c => c.Ram != null))
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@component.Ram?.Name</h5>
+                            <p class="card-text">Скорость: @component.Ram?.Speed</p>
+                            <p class="card-text">Ёмкость: @component.Ram?.Capacity</p>
+                            <p class="card-text">Код партии: @component.Ram?.PartNumber</p>
+                            <p class="card-text">Серийный номер: @component.Ram?.SerialNumber</p>
+                            <p class="card-text">Производитель: @component.Ram?.IdManufacturerNavigation.Name</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNet">
+                    NetAdapters
+                </button>
+            </h2>
+            <div id="collapseNet" class="accordion-collapse collapse">
+                 @foreach (var component in Model.Components.Where(c => c.NetAdapter != null))
+                 {
+                     <div class="card">
+                         <div class="card-body">
+                             <h5 class="card-title">@component.NetAdapter?.Name</h5>
+                            <p class="card-text">MAC: @component.NetAdapter?.MacAddress</p>
+                            <p class="card-text">Производитель: @component.NetAdapter?.IdManufacturerNavigation?.Name</p>
+                            <p class="card-text">Тип адаптера: @component.NetAdapter?.AdapterTypeIdAdapterTypeNavigation?.Name</p>
+
+                         </div>
+                     </div>
+                 }
+            </div>
+        </div>
+        <div>
+            <a class="btn btn-primary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
+        </div>
+</div>

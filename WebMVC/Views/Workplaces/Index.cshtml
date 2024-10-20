@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TechInventAPI.Models.Workplace>
+
+@{
+    ViewData["Title"] = @ViewBag.cabinetName;
+}
+
+<h1>@ViewBag.cabinetName</h1>
+@{
+    var workplaces = Model.ToList();
+    @for (int i = 0; i < Model.Count(); i += 3)
+    {
+        <div class="row mb-4">
+            @for (int j = 0; j < 3; j++)
+            {
+                if (i + j < Model.Count())
+                {
+                    <div class="card" style="width: 25rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@workplaces[i + j].Name</h5>
+                            <p class="card-text">ОС: @workplaces[i + j].IdOsNavigation.OsName</p>
+                            <div>
+                                <a asp-action="Details" asp-route-id="@workplaces[i+j].IdCabinet" class="btn btn-primary">Подробнее</a>
+                                <a asp-action="Details" asp-route-id="@workplaces[i+j].IdCabinet" class="btn btn-primary">QR-Код</a>
+                            </div>
+                            <p class="card-text"><small class="text-body-secondary">Последнее обновление Сегодня</small></p>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div>
+            <a class="btn btn-primary" asp-controller="Cabinets" asp-action="Index">Назад</a>
+        </div>
+    }
+}
