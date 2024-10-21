@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using QRCoder;
 using TechInventAPI.Data;
 
 namespace WebMVC.Controllers
@@ -16,8 +18,8 @@ namespace WebMVC.Controllers
         // GET: Workplaces
         public async Task<IActionResult> Index(int? id)
         {
-            var techInventContext = _context.Workplaces.Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
-            ViewBag.cabinetName = _context.Cabinets.FirstOrDefault(c => c.IdCabinet == id)?.Name;
+            var techInventContext = _context.Workplaces.AsNoTracking().Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
+            ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
             return View(await techInventContext.ToListAsync());
         }
 
@@ -29,6 +31,7 @@ namespace WebMVC.Controllers
             }
 
             var workplace = await _context.Workplaces
+                .AsNoTracking()
                 .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.IdOsNavigation)
                 .Include(w => w.Components)
@@ -53,6 +56,25 @@ namespace WebMVC.Controllers
             }
 
             return View(workplace);
+        }
+        public async Task<IActionResult> QRCode(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            byte[] qrCodeImage = null;
+            byte[] data = null;
+            string scheme = Request.Scheme;
+            string url = Request.Host.ToString();
+            using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
+            using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(Url.Action("Details", "Workplaces", new {id}, scheme, url), QRCodeGenerator.ECCLevel.Q)) //Url.Page("./Workplaces/Details/" + id)
+            using (PngByteQRCode qrCode = new PngByteQRCode(qrCodeData))
+            {
+                qrCodeImage = qrCode.GetGraphic(5);
+            }
+            ViewData["qrBinary"] = Convert.ToBase64String(qrCodeImage);
+            return View();
         }
     }
 }

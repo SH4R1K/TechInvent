@@ -1,0 +1,11 @@
+﻿@{
+    if (ViewData["qrBinary"] != null)
+    {
+        <img src="data:image/jpeg;base64,@ViewData["qrBinary"]" />
+    }
+    else
+    {
+        <p>Странно, не нашли QR для этого рабочего места</p>
+    }
+
+}

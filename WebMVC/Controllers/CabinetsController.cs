@@ -22,7 +22,7 @@ namespace WebMVC.Controllers
         // GET: Cabinets
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Cabinets.Include(c => c.Workplaces).ToListAsync());
+            return View(await _context.Cabinets.AsNoTracking().Include(c => c.Workplaces).ToListAsync());
         }
     }
 }
