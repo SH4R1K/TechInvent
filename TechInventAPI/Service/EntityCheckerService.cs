@@ -20,6 +20,7 @@ namespace TechInventAPI.Service
             {
                 os = new Os { OsName = osName, OsVersion = osVersion };
                 _context.Os.Add(os);
+                SaveChanges();
             }
             return os;
         }
@@ -31,6 +32,7 @@ namespace TechInventAPI.Service
             {
                 manufacturer = new Manufacturer { Name = name };
                 _context.Manufacturers.Add(manufacturer);
+                SaveChanges();
             }
             return manufacturer;
         }
@@ -42,6 +44,7 @@ namespace TechInventAPI.Service
             {
                 adapterType = new AdapterType { Name = name };
                 _context.AdapterTypes.Add(adapterType);
+                SaveChanges();
             }
             return adapterType;
         }
@@ -67,7 +70,7 @@ namespace TechInventAPI.Service
                 workplace.Components.Add(component);
             }
 
-            _context.Update(workplace);
+            //_context.Update(workplace);
             return workplace;
         }
 
@@ -78,6 +81,7 @@ namespace TechInventAPI.Service
             {
                 cabinet = new Cabinet { Name = name };
                 _context.Cabinets.Add(cabinet);
+                SaveChanges();
             }
             return cabinet;
         }
