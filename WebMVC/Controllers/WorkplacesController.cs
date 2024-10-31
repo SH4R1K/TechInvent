@@ -49,6 +49,8 @@ namespace WebMVC.Controllers
                 .Include(w => w.Components)
                     .ThenInclude(c => c.Ram)
                     .ThenInclude(r => r.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Disk)
                 .FirstOrDefaultAsync(m => m.IdWorkplace == id);
             if (workplace == null)
             {

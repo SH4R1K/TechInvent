@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TechInventAPI.Models;
+using WebMVC.Models;
 
 namespace TechInventAPI.Data;
 
@@ -37,6 +38,7 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<Ram> Rams { get; set; }
 
     public virtual DbSet<Workplace> Workplaces { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AdapterType>(entity =>
@@ -84,7 +86,7 @@ public partial class TechInventContext : DbContext
 
             entity.HasOne(d => d.IdWorkplaceNavigation).WithMany(p => p.Components)
                 .HasForeignKey(d => d.IdWorkplace)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_hardware_component_workplace1");
         });
 
@@ -102,8 +104,24 @@ public partial class TechInventContext : DbContext
 
             entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Gpu)
                 .HasForeignKey<Gpu>(d => d.IdComponent)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_gpu_component1");
+        });
+        modelBuilder.Entity<Disk>(entity =>
+        {
+            entity.ToTable("disk");
+
+            entity.Property(e => e.IdComponent).HasColumnName("id_component");
+            entity.Property(e => e.Model)
+                .HasMaxLength(45)
+                .HasColumnName("model");
+            entity.Property(e => e.Size)
+                .HasColumnName("size");
+
+            entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Disk)
+                .HasForeignKey<Disk>(d => d.IdComponent)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_disk_component1");
         });
 
         modelBuilder.Entity<Mainboard>(entity =>
@@ -117,7 +135,7 @@ public partial class TechInventContext : DbContext
 
             entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Mainboard)
                 .HasForeignKey<Mainboard>(d => d.IdComponent)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_mainboard_component1");
         });
 
@@ -159,7 +177,7 @@ public partial class TechInventContext : DbContext
 
             entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.NetAdapter)
                 .HasForeignKey<NetAdapter>(d => d.IdComponent)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_ram_component1");
 
             entity.HasOne(d => d.IdManufacturerNavigation).WithMany(p => p.NetAdapters)
@@ -202,7 +220,7 @@ public partial class TechInventContext : DbContext
 
             entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Processor)
                 .HasForeignKey<Processor>(d => d.IdComponent)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_processor_component1");
         });
 
@@ -232,7 +250,7 @@ public partial class TechInventContext : DbContext
 
             entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Ram)
                 .HasForeignKey<Ram>(d => d.IdComponent)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_net_adapter_component1");
 
             entity.HasOne(d => d.IdManufacturerNavigation).WithMany(p => p.Rams)

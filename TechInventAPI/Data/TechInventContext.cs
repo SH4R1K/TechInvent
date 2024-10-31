@@ -106,6 +106,22 @@ public partial class TechInventContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_gpu_component1");
         });
+        modelBuilder.Entity<Disk>(entity =>
+        {
+            entity.ToTable("disk");
+
+            entity.Property(e => e.IdComponent).HasColumnName("id_component");
+            entity.Property(e => e.Model)
+                .HasMaxLength(45)
+                .HasColumnName("model");
+            entity.Property(e => e.Size)
+                .HasColumnName("size");
+
+            entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Disk)
+                .HasForeignKey<Disk>(d => d.IdComponent)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_disk_component1");
+        });
 
         modelBuilder.Entity<Mainboard>(entity =>
         {

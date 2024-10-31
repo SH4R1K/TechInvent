@@ -38,6 +38,7 @@ namespace TechInventAPI.Dto
             components.AddRange(hardwareInfo.Gpu.Select(ConvertDtoGpu));
             components.AddRange(hardwareInfo.Processor.Select(ConvertDtoProcessor));
             components.AddRange(hardwareInfo.Net.Select(ConvertDtoNetAdapter));
+            components.AddRange(hardwareInfo.Disks.Select(ConvertDtoDisk));
 
             components.Add(ConvertDtoMainboard(hardwareInfo.Mainboard));
             return components;
@@ -63,6 +64,14 @@ namespace TechInventAPI.Dto
             {
                 Name = mainboardDto.Name,
                 SerialNumber = mainboardDto.SerialNumber
+            };
+        }
+        public Disk ConvertDtoDisk(DiskDto diskDto)
+        {
+            return new Disk
+            {
+                Model = diskDto.Model,
+                Size = diskDto.Size
             };
         }
 
