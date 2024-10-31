@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddHostedService<RabbitMqListener>();
 builder.Services.AddDbContext<TechInventContext>(options =>
 {
-    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnectionMysql") ?? "server=;user=;password=;database=;");
+    options.UseMySQL(Environment.GetEnvironmentVariable("MySQLConnString") ?? builder.Configuration.GetConnectionString("DefaultConnectionMysql") ?? "server=;user=;password=;database=;");
 });
 builder.Services.AddScoped<EntityCheckerService>();
 builder.Services.AddScoped<DtoConverter>();
