@@ -19,6 +19,9 @@ namespace TechInventAPI.DtoModels
 
         [JsonProperty("gpu")]
         public List<GpuDto> Gpu { get; set; }
+        
+        [JsonProperty("disk")]
+        public List<DiskDto> Disks { get; set; }
 
         [JsonProperty("perifery")]
         public Perifery? Perifery { get; set; }
