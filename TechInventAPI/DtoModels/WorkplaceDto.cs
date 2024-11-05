@@ -18,6 +18,8 @@ namespace TechInventAPI.DtoModels
         public HardwareInfo? HardwareInfo { get; set; }
         public int IdCabinet { get; set; }
         public CabinetDto Cabinet { get; set; }
+        [JsonProperty("software")]
+        public List<SoftwareDto> Software { get; set; }
     }
 
 

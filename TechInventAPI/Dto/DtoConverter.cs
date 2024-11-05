@@ -26,8 +26,21 @@ namespace TechInventAPI.Dto
         {
             var os = _entityChecker.GetOrCreateOs(workplaceDto.OsName, workplaceDto.Version);
             List<Component> components = ConvertDtoComponents(workplaceDto.HardwareInfo);
-            var workplace = _entityChecker.GetOrCreateWorkplace(workplaceDto.CompName, cabinet, os, components);
+            List<Software> software = ConvertDtoSoftware(workplaceDto.Software);
+            
+            var workplace = _entityChecker.GetOrCreateWorkplace(workplaceDto.CompName, cabinet, os, components, software);
             return workplace;
+        }
+
+        public List<Software> ConvertDtoSoftware(List<SoftwareDto> softwareDtoList)
+        {
+            var softwareList = new List<Software>();
+            foreach (SoftwareDto softwareDto in softwareDtoList)
+            {
+                var software = _entityChecker.GetOrCreateSoftware(softwareDto.Name, softwareDto.Version, _entityChecker.GetOrCreateManufacturer(softwareDto.Vendor).IdManufacturer);
+                softwareList.Add(software);
+            }
+            return softwareList;
         }
 
         public List<Component> ConvertDtoComponents(HardwareInfo hardwareInfo)

@@ -15,6 +15,8 @@ public partial class Workplace
 
     public virtual ICollection<Component> Components { get; set; } = new List<Component>();
 
+    public virtual ICollection<InstalledSoftware> InstalledSoftware { get; set; } = new List<InstalledSoftware>();
+
     public virtual Cabinet IdCabinetNavigation { get; set; } = null!;
 
     public virtual Os IdOsNavigation { get; set; } = null!;

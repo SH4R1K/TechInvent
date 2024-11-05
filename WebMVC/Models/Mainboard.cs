@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TechInventAPI.Models;
+namespace WebMVC.Models;
 
 public partial class Mainboard : Component
 {

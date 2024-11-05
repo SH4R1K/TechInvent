@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using QRCoder;
-using TechInventAPI.Data;
+using WebMVC.Data;
 
 namespace WebMVC.Controllers
 {
@@ -51,6 +50,9 @@ namespace WebMVC.Controllers
                     .ThenInclude(r => r.IdManufacturerNavigation)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.Disk)
+                .Include(w => w.InstalledSoftware)
+                    .ThenInclude(s => s.SoftwareNavigation)
+                        .ThenInclude(s => s.ManufacturerNavigation)
                 .FirstOrDefaultAsync(m => m.IdWorkplace == id);
             if (workplace == null)
             {
@@ -70,7 +72,7 @@ namespace WebMVC.Controllers
             string scheme = Request.Scheme;
             string url = Request.Host.ToString();
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
-            using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(Url.Action("Details", "Workplaces", new {id}, scheme, url), QRCodeGenerator.ECCLevel.Q)) //Url.Page("./Workplaces/Details/" + id)
+            using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(Url.Action("Details", "Workplaces", new { id }, scheme, url), QRCodeGenerator.ECCLevel.Q)) //Url.Page("./Workplaces/Details/" + id)
             using (PngByteQRCode qrCode = new PngByteQRCode(qrCodeData))
             {
                 qrCodeImage = qrCode.GetGraphic(5);

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TechInventAPI.Data;
+using WebMVC.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

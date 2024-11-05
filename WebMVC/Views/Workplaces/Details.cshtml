@@ -1,4 +1,4 @@
-﻿@model TechInventAPI.Models.Workplace
+﻿@model Workplace
 
 @{
     ViewData["Title"] = "Details";
@@ -124,6 +124,27 @@
                         <div class="card-body">
                             <h5 class="card-title">@component.Disk?.Model</h5>
                             <p class="card-text">Объем: @component.Disk?.Size ГБ</p>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <!--ПЕРЕДЕЛАТЬ МАСТ ХЕВ!!!! В отдельную страницу вынести-->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSoft">
+                    Software
+                </button>
+            </h2>
+            <div id="collapseSoft" class="accordion-collapse collapse">
+                @foreach (var software in Model.InstalledSoftware)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@software.SoftwareNavigation?.Name</h5>
+                            <p class="card-text">Версия: @software.SoftwareNavigation?.Version ГБ</p>
+                            <p class="card-text">Производитель: @software.SoftwareNavigation?.ManufacturerNavigation.Name</p>
 
                         </div>
                     </div>

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using TechInventAPI.Models;
 using WebMVC.Models;
 
-namespace TechInventAPI.Data;
+namespace WebMVC.Data;
 
 public partial class TechInventContext : DbContext
 {
@@ -39,6 +38,8 @@ public partial class TechInventContext : DbContext
 
     public virtual DbSet<Workplace> Workplaces { get; set; }
 
+    public virtual DbSet<Software> Softwares { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AdapterType>(entity =>
@@ -51,7 +52,7 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdAdapterType).HasColumnName("id_adapter_type");
             entity.Property(e => e.Name)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("name");
         });
 
@@ -65,7 +66,7 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
             entity.Property(e => e.Name)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("name");
         });
 
@@ -81,7 +82,7 @@ public partial class TechInventContext : DbContext
             entity.Property(e => e.IdComponent).HasColumnName("id_component");
             entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
             entity.Property(e => e.Name)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("name");
 
             entity.HasOne(d => d.IdWorkplaceNavigation).WithMany(p => p.Components)
@@ -96,10 +97,10 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdComponent).HasColumnName("id_component");
             entity.Property(e => e.AdapterRam)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("adapter_ram");
             entity.Property(e => e.Uuid)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("uuid");
 
             entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Gpu)
@@ -113,7 +114,7 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdComponent).HasColumnName("id_component");
             entity.Property(e => e.Model)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("model");
             entity.Property(e => e.Size)
                 .HasColumnName("size");
@@ -130,7 +131,7 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdComponent).HasColumnName("id_component");
             entity.Property(e => e.SerialNumber)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("serial_number");
 
             entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Mainboard)
@@ -149,7 +150,7 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdManufacturer).HasColumnName("id_manufacturer");
             entity.Property(e => e.Name)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("name");
         });
 
@@ -167,7 +168,7 @@ public partial class TechInventContext : DbContext
             entity.Property(e => e.AdapterTypeIdAdapterType).HasColumnName("adapter_type_id_adapter_type");
             entity.Property(e => e.IdManufacturer).HasColumnName("id_manufacturer");
             entity.Property(e => e.MacAddress)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("mac_address");
 
             entity.HasOne(d => d.AdapterTypeIdAdapterTypeNavigation).WithMany(p => p.NetAdapters)
@@ -209,13 +210,13 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdComponent).HasColumnName("id_component");
             entity.Property(e => e.LogicalCores)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("logical_cores");
             entity.Property(e => e.MaxClockSpeed)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("max_clock_speed");
             entity.Property(e => e.PhysicalCores)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("physical_cores");
 
             entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Processor)
@@ -232,20 +233,20 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdComponent).HasColumnName("id_component");
             entity.Property(e => e.Capacity)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("capacity");
             entity.Property(e => e.IdManufacturer).HasColumnName("id_manufacturer");
             entity.Property(e => e.MemoryType)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("memory_type");
             entity.Property(e => e.PartNumber)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("part_number");
             entity.Property(e => e.SerialNumber)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("serial_number");
             entity.Property(e => e.Speed)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("speed");
 
             entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Ram)
@@ -272,7 +273,7 @@ public partial class TechInventContext : DbContext
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
             entity.Property(e => e.IdOs).HasColumnName("id_os");
             entity.Property(e => e.Name)
-                .HasMaxLength(45)
+                .HasMaxLength(100)
                 .HasColumnName("name");
 
             entity.HasOne(d => d.IdCabinetNavigation).WithMany(p => p.Workplaces)
@@ -284,6 +285,47 @@ public partial class TechInventContext : DbContext
                 .HasForeignKey(d => d.IdOs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_workplace_os1");
+        });
+
+        modelBuilder.Entity<Software>(entity =>
+        {
+            entity.HasKey(e => e.IdSoftware).HasName("PRIMARY");
+            entity.ToTable("software");
+
+            entity.HasIndex(e => e.IdManufacturer, "fk_software_manufacturer");
+
+            entity.Property(e => e.IdSoftware).HasColumnName("id_software");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name"); ;
+            entity.Property(e => e.Version)
+                .HasMaxLength(100)
+                .HasColumnName("version");
+            entity.Property(e => e.IdManufacturer).HasColumnName("id_manufacturer");
+
+            entity.HasOne(d => d.ManufacturerNavigation).WithMany(p => p.Softwares)
+                .HasForeignKey(d => d.IdManufacturer)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_software_manufacturer");
+        }); 
+        
+        modelBuilder.Entity<InstalledSoftware>(entity =>
+        {
+            entity.HasKey(e => new { e.IdSoftware, e.IdWorkplace }).HasName("PRIMARY");
+            entity.ToTable("installed_software");
+
+            entity.Property(e => e.IdSoftware).HasColumnName("id_software");
+            entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
+
+            entity.HasOne(d => d.SoftwareNavigation).WithMany(p => p.InstalledSoftware)
+                .HasForeignKey(d => d.IdSoftware)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_software_installed_software");
+
+            entity.HasOne(d => d.WorkplaceNavigation).WithMany(p => p.InstalledSoftware)
+                .HasForeignKey(d => d.IdWorkplace)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_workplace_installed_software");
         });
 
         OnModelCreatingPartial(modelBuilder);

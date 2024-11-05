@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using WebMVC.Models;
 
-namespace TechInventAPI.Models;
+namespace WebMVC.Models;
 
 public partial class Component
 {
@@ -23,6 +22,6 @@ public partial class Component
     public virtual Processor? Processor { get; set; }
 
     public virtual Ram? Ram { get; set; }
-
+    
     public virtual Disk? Disk { get; set; }
 }
