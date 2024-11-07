@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using QRCoder;
 using WebMVC.Data;
+using WebMVC.Models;
 
 namespace WebMVC.Controllers
 {
@@ -28,7 +29,6 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
-
             var workplace = await _context.Workplaces
                 .AsNoTracking()
                 .Include(w => w.IdCabinetNavigation)
@@ -50,6 +50,27 @@ namespace WebMVC.Controllers
                     .ThenInclude(r => r.IdManufacturerNavigation)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.Disk)
+                .FirstOrDefaultAsync(m => m.IdWorkplace == id);
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["PCName"] = workplace.Name;
+
+            return View(workplace);
+        }
+
+        public async Task<IActionResult> SoftwareList(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewBag.workplaceId = id;
+            var workplace = await _context.Workplaces
+                .AsNoTracking()
+                .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.InstalledSoftware)
                     .ThenInclude(s => s.SoftwareNavigation)
                         .ThenInclude(s => s.ManufacturerNavigation)
@@ -59,8 +80,12 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            return View(workplace);
+            ViewData["PCName"] = workplace.Name;
+            var groups = workplace.InstalledSoftware.GroupBy(g => g.SoftwareNavigation.IdManufacturer);
+
+            return View(groups);
         }
+
         public async Task<IActionResult> QRCode(int? id)
         {
             if (id == null)
@@ -78,6 +103,7 @@ namespace WebMVC.Controllers
                 qrCodeImage = qrCode.GetGraphic(5);
             }
             ViewData["qrBinary"] = Convert.ToBase64String(qrCodeImage);
+            ViewData["Reffer"] = Request.Headers["Referer"].ToString();
             return View();
         }
     }
