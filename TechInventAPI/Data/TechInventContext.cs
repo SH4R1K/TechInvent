@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TechInventAPI.Models;
+using WebMVC.Models;
 
 namespace TechInventAPI.Data;
 
@@ -326,6 +327,31 @@ public partial class TechInventContext : DbContext
                 .HasForeignKey(d => d.IdWorkplace)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_workplace_installed_software");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.IdUser).HasName("PRIMARY");
+            entity.ToTable("user");
+
+            entity.Property(e => e.IdUser).HasColumnName("id_user");
+            entity.Property(e => e.IdRole).HasColumnName("id_role");
+            entity.Property(e => e.Login).HasColumnName("login").HasMaxLength(100);
+            entity.Property(e => e.Password).HasColumnName("password").HasMaxLength(255);
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
+                .HasForeignKey(d => d.IdRole)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_user_role");
+        });
+
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(e => e.IdRole).HasName("PRIMARY");
+            entity.ToTable("role");
+
+            entity.Property(e => e.IdRole).HasColumnName("id_role");
+            entity.Property(e => e.Name).HasColumnName("name").HasMaxLength(45);
         });
 
         OnModelCreatingPartial(modelBuilder);
