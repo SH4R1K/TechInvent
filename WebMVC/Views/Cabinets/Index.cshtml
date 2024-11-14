@@ -8,22 +8,16 @@
 
 @{
     var cabinets = Model.ToList();
-    @for (int i = 0; i < Model.Count(); i += 3)
-    {
-        <div class="row mb-4">
-            @for (int j = 0; j < 3; j++)
+        <div class="row justify-content-center justify-content-md-start">
+            @for (int j = 0; j < cabinets.Count; j++)
             {
-                if (i + j < Model.Count())
-                {
-                    <div class="card" style="width: 18rem;">
+                    <div class="card" style="width: 18rem; margin: 1rem;">
                         <div class="card-body">
-                            <h5 class="card-title">@cabinets[i + j].Name</h5>
-                            <p class="card-text">Количество рабочих мест: @cabinets[i + j].Workplaces.Count</p>
-                            <a asp-controller="Workplaces" asp-action="Index" asp-route-id="@cabinets[i+j].IdCabinet" class="btn btn-primary">Подробнее</a>
+                            <h5 class="card-title">@cabinets[j].Name</h5>
+                            <p class="card-text">Количество рабочих мест: @cabinets[j].Workplaces.Count</p>
+                            <a asp-controller="Workplaces" asp-action="Index" asp-route-id="@cabinets[j].IdCabinet" class="btn btn-primary">Подробнее</a>
                         </div>
                     </div>
-                }
             }
         </div>
-    }
 }

@@ -7,29 +7,23 @@
 <h1>@ViewBag.cabinetName</h1>
 @{
     var workplaces = Model.ToList();
-    @for (int i = 0; i < Model.Count(); i += 3)
-    {
-        <div class="row">
-            @for (int j = 0; j < 3; j++)
-            {
-                if (i + j < Model.Count())
-                {
-                    <div class="card" style="width: 20rem; margin: 1rem">
+    <div>
+        <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="Index">Назад</a>
+    </div>
+    <div class="row justify-content-center justify-content-lg-start">
+        @for (int i = 0; i < workplaces.Count; i++)
+        {
+                    <div class="card" style="width: 18rem; margin: 1rem">
                         <div class="card-body">
-                            <h5 class="card-title">@workplaces[i + j].Name</h5>
-                            <p class="card-text">ОС: @workplaces[i + j].IdOsNavigation.OsName</p>
+                            <h5 class="card-title">@workplaces[i].Name</h5>
+                            <p class="card-text">ОС: @workplaces[i].IdOsNavigation.OsName</p>
                             <div>
-                                <a asp-action="Details" asp-route-id="@workplaces[i+j].IdWorkplace" class="btn btn-primary">Подробнее</a>
-                                <a asp-action="QRCode" asp-route-id="@workplaces[i+j].IdWorkplace" class="btn btn-primary">QR-Код</a>
+                                <a asp-action="Details" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">Подробнее</a>
+                                <a asp-action="QRCode" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">QR-Код</a>
                             </div>
                             <p class="card-text"><small class="text-body-secondary">Последнее обновление Сегодня</small></p>
                         </div>
                     </div>
-                }
             }
         </div>
-    }
-    <div>
-        <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="Index">Назад</a>
-    </div>
 }

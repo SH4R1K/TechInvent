@@ -1,4 +1,4 @@
-html {
+﻿html {
     font-size: 14px;
 }
 
@@ -642,7 +642,7 @@ progress {
 }
 
     .blockquote-footer::before {
-        content: "��";
+        content: "— ";
     }
 
 .img-fluid {

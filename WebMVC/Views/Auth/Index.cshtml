@@ -12,22 +12,13 @@
                     <h3 class="mb-5">Авторизация</h3>
                     <form asp-action="Login">
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <input asp-for="Login" id="login" class="form-control form-control-lg" />
-                            <label class="form-label" for="login">Логин</label>
+                            <input asp-for="Login" placeholder="Логин" id="login" class="form-control form-control-lg" />
                         </div>
 
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <input asp-for="Password" type="password" id="password" class="form-control form-control-lg" />
-                            <label class="form-label" for="password">Пароль</label>
+                            <input asp-for="Password" type="password" placeholder="Пароль" id="password" class="form-control form-control-lg" />
                         </div>
-
-                        <!-- Checkbox -->
-                        <div class="form-check d-flex justify-content-start mb-4">
-                            <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
-                            <label class="form-check-label" for="form1Example3"> Remember password </label>
-                        </div>
-
-                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" type="submit">Авторизоваться</button>
                     </form>
                 </div>
             </div>

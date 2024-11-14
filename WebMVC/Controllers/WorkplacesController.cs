@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QRCoder;
 using WebMVC.Data;
@@ -6,6 +7,7 @@ using WebMVC.Models;
 
 namespace WebMVC.Controllers
 {
+    [Authorize(Roles = "user, admin")]
     public class WorkplacesController : Controller
     {
         private readonly TechInventContext _context;
@@ -50,6 +52,9 @@ namespace WebMVC.Controllers
                     .ThenInclude(r => r.IdManufacturerNavigation)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.Disk)
+                .Include(w => w.InstalledSoftware)
+                    .ThenInclude(s => s.SoftwareNavigation)
+                        .ThenInclude(s => s.ManufacturerNavigation)
                 .FirstOrDefaultAsync(m => m.IdWorkplace == id);
             if (workplace == null)
             {

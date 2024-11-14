@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Common;
 using WebMVC.Data;
 using WebMVC.Models;
 using WebMVC.Services;
@@ -31,10 +32,16 @@ namespace WebMVC.Controllers
             {
                 var token = _tokenService.CreateToken(existUser);
                 Response.Cookies.Append("A", token);
-                return Ok(token);
+                return RedirectToAction("Index", "Home");
 
             }
             return Unauthorized();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            Response.Cookies.Delete("A");
+            return RedirectToAction("Index", "Auth");
         }
     }
 }
