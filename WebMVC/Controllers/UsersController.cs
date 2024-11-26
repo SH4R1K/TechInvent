@@ -7,7 +7,9 @@ using WebMVC.Models;
 
 namespace WebMVC.Controllers
 {
-    [Authorize(Roles = "admin")]
+    //Потом раскоментировать, когда сделаю default юзера
+    //Можно будет сделать стартового юзера админа, который меняет пароль после первого входа
+    //[Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
         private readonly TechInventContext _context;
