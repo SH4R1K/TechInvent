@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TechInventAPI.Models;
-using WebMVC.Models;
 
 namespace TechInventAPI.Data;
 
@@ -353,6 +352,10 @@ public partial class TechInventContext : DbContext
             entity.Property(e => e.IdRole).HasColumnName("id_role");
             entity.Property(e => e.Name).HasColumnName("name").HasMaxLength(45);
         });
+
+
+        modelBuilder.Entity<User>().HasData(InitialData.UsersList);
+        modelBuilder.Entity<Role>().HasData(InitialData.RolesList);
 
         OnModelCreatingPartial(modelBuilder);
     }

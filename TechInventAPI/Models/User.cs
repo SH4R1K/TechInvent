@@ -1,4 +1,4 @@
-﻿namespace WebMVC.Models
+﻿namespace TechInventAPI.Models
 {
     public class User
     {
@@ -7,6 +7,5 @@
         public string Password { get; set; }
         public int IdRole { get; set; }
         public Role Role { get; set; }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WebMVC.Models
+﻿namespace TechInventAPI.Models
 {
     public class Role
     {
