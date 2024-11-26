@@ -14,7 +14,7 @@ namespace WebMVC.Services
         public JWTokenService(IConfiguration config)
         {
             _config = config;
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWTKey") ?? _config["JWT:Key"]));
         }
 
         public string CreateToken(User user)
@@ -33,8 +33,8 @@ namespace WebMVC.Services
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddMinutes(30), // _config["JWT:TTL"]
                 SigningCredentials = creds,
-                Issuer = _config["JWT:Issuer"],
-                Audience = _config["JWT:Audience"]
+                Issuer = Environment.GetEnvironmentVariable("JWTIssuer") ?? _config["JWT:Issuer"],
+                Audience = Environment.GetEnvironmentVariable("JWTAudience") ?? _config["JWT:Audience"]
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
