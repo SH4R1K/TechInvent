@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechInventAPI.Data;
 
@@ -10,9 +11,11 @@ using TechInventAPI.Data;
 namespace TechInventAPI.Migrations
 {
     [DbContext(typeof(TechInventContext))]
-    partial class TechInventContextModelSnapshot : ModelSnapshot
+    [Migration("20241202202305_guids")]
+    partial class guids
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -273,10 +276,6 @@ namespace TechInventAPI.Migrations
                     b.Property<int>("IdOs")
                         .HasColumnType("int")
                         .HasColumnName("id_os");
-
-                    b.Property<DateTime>("LastUpdate")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("last_update");
 
                     b.Property<string>("Name")
                         .HasMaxLength(100)

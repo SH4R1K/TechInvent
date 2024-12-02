@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechInventAPI.Data;
 
@@ -10,9 +11,11 @@ using TechInventAPI.Data;
 namespace TechInventAPI.Migrations
 {
     [DbContext(typeof(TechInventContext))]
-    partial class TechInventContextModelSnapshot : ModelSnapshot
+    [Migration("20241202202858_update_workplace_time")]
+    partial class update_workplace_time
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

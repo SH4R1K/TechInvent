@@ -270,12 +270,19 @@ public partial class TechInventContext : DbContext
 
             entity.HasIndex(e => e.IdOs, "fk_workplace_os1_idx");
 
+            entity.HasIndex(e => e.Guid, "uq_workplace_guid").IsUnique();
+
             entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
             entity.Property(e => e.IdOs).HasColumnName("id_os");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
+            entity.Property(e => e.Guid)
+                .HasDefaultValue(null)
+                .HasColumnName("guid");
+            entity.Property(e => e.LastUpdate)
+                .HasColumnName("last_update");
 
             entity.HasOne(d => d.IdCabinetNavigation).WithMany(p => p.Workplaces)
                 .HasForeignKey(d => d.IdCabinet)

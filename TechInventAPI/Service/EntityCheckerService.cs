@@ -60,6 +60,7 @@ namespace TechInventAPI.Service
             }
             else
             {
+                workplace.LastUpdate = DateTime.UtcNow;
                 workplace.IdCabinetNavigation = cabinet;
                 workplace.IdOsNavigation = os;
                 workplace.Components.Clear();

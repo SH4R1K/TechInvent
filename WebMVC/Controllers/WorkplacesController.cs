@@ -25,6 +25,7 @@ namespace WebMVC.Controllers
             return View(await techInventContext.ToListAsync());
         }
 
+        [HttpGet("{Controller}/Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -65,7 +66,49 @@ namespace WebMVC.Controllers
 
             return View(workplace);
         }
+        [AllowAnonymous]
+        [HttpGet("{Controller}/Public/{id}")]
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var workplace = await _context.Workplaces
+                .AsNoTracking()
+                .Include(w => w.IdCabinetNavigation)
+                .Include(w => w.IdOsNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Gpu)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Processor)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Mainboard)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.NetAdapter)
+                    .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.NetAdapter)
+                    .ThenInclude(n => n.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Ram)
+                    .ThenInclude(r => r.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Disk)
+                .Include(w => w.InstalledSoftware)
+                    .ThenInclude(s => s.SoftwareNavigation)
+                        .ThenInclude(s => s.ManufacturerNavigation)
+                .FirstOrDefaultAsync(m => m.Guid == id);
 
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["PCName"] = workplace.Name;
+
+            return View(workplace);
+        }
         public async Task<IActionResult> SoftwareList(int? id)
         {
             if (id == null)
@@ -97,12 +140,17 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
+            var workplace = await _context.Workplaces.AsNoTracking().FirstOrDefaultAsync(w => w.IdWorkplace == id);
+            if (workplace == null)
+            {
+                return NotFound();
+            }
             byte[] qrCodeImage = null;
             byte[] data = null;
             string scheme = Request.Scheme;
             string url = Request.Host.ToString();
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
-            using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(Url.Action("Details", "Workplaces", new { id }, scheme, url), QRCodeGenerator.ECCLevel.Q)) //Url.Page("./Workplaces/Details/" + id)
+            using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(Url.Action("Public", "Workplaces", new { id=workplace.Guid }, scheme, url), QRCodeGenerator.ECCLevel.Q)) //Url.Page("./Workplaces/Details/" + id)
             using (PngByteQRCode qrCode = new PngByteQRCode(qrCodeData))
             {
                 qrCodeImage = qrCode.GetGraphic(5);
