@@ -40,7 +40,7 @@ namespace TechInventAPI.Service
 
         public AdapterType GetOrCreateAdapterType(string name)
         {
-            var adapterType = _context.AdapterTypes.AsNoTracking().FirstOrDefault(m => m.Name == name);
+            var adapterType = _context.AdapterTypes.FirstOrDefault(m => m.Name == name);
             if (adapterType == null)
             {
                 adapterType = new AdapterType { Name = name };
