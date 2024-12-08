@@ -20,7 +20,7 @@ namespace WebMVC.Controllers
         // GET: Workplaces
         public async Task<IActionResult> Index(int? id)
         {
-            var techInventContext = _context.Workplaces.AsNoTracking().Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
+            var techInventContext = _context.Workplaces.AsNoTracking().OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
             ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
             return View(await techInventContext.ToListAsync());
         }
