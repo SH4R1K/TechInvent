@@ -13,7 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //builder.Services.AddHostedService<RabbitMqListener>();
-builder.Services.AddDbContextPool<TechInventContext>(options =>
+builder.Services.AddDbContext<TechInventContext>(options =>
 {
     options.UseMySQL(Environment.GetEnvironmentVariable("MySQLConnString") ?? builder.Configuration.GetConnectionString("DefaultConnectionMysql") ?? "server=;user=;password=;database=;");
 });
