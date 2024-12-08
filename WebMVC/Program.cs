@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<JWTokenService>();
-builder.Services.AddDbContext<TechInventContext>(options =>
+builder.Services.AddDbContextPool<TechInventContext>(options =>
 {
     options.UseMySQL(Environment.GetEnvironmentVariable("MySQLConnString") ?? builder.Configuration.GetConnectionString("DefaultConnectionMysql") ?? "server=;user=;password=;database=;");
 });

@@ -303,10 +303,10 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdSoftware).HasColumnName("id_software");
             entity.Property(e => e.Name)
-                .HasMaxLength(100)
+                .HasMaxLength(255)
                 .HasColumnName("name"); ;
             entity.Property(e => e.Version)
-                .HasMaxLength(100)
+                .HasMaxLength(255)
                 .HasColumnName("version");
             entity.Property(e => e.IdManufacturer).HasColumnName("id_manufacturer");
 
