@@ -21,7 +21,7 @@
                                 <a asp-action="Details" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">Подробнее</a>
                                 <a asp-action="QRCode" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">QR-Код</a>
                             </div>
-                    <p class="card-text"><small class="text-body-secondary">Последнее обновление: @workplaces[i].LastUpdate.AddHours(3).ToString("g")</small></p> <!-- Ну в перспективе надо написать определение часового пояса пользователя-->
+                            <p class="card-text"><small class="text-body-secondary">Последнее обновление: @workplaces[i].LastUpdate.AddHours(3).ToString("g")</small></p> <!-- Ну в перспективе надо написать определение часового пояса пользователя-->
                         </div>
                     </div>
             }

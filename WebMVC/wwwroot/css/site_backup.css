@@ -1,0 +1,313 @@
+/* Custom Bootstrap 5 Dark High-Tech Theme with Neon Accents in Purple */
+
+/* General Body Styles */
+body {
+    background: linear-gradient(135deg, #1a1a1a 50%, #4A2C85 100%); /* Gradient Background */
+    color: #e0e0e0; /* Light Text Color */
+    font-family: 'Roboto', sans-serif; /* Modern Font */
+}
+
+/* Links and Buttons */
+a {
+    color: #a020f0; /* Neon Purple Link Color */
+    transition: color 0.3s ease; /* Smooth transition for links */
+    text-shadow: 0 0 5px #a020f0; /* Neon glow effect */
+    border: none;
+    box-shadow: none;
+}
+    a:hover, a:focus {
+        color: #d5006d; /* Neon Pink on hover */
+    }
+
+/* Buttons */
+.btn {
+    background-color: transparent; /* Transparent background */
+    color: #e0e0e0; /* Light text color */
+    border: 2px solid transparent; /* Initial transparent border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding for button */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer on hover */
+    position: relative; /* Positioning for pseudo-element */
+    overflow: hidden; /* Hide overflow for pseudo-element */
+}
+
+    .btn:before {
+        content: ''; /* Pseudo-element for border */
+        position: absolute; /* Absolute positioning */
+        top: 0; /* Align to top */
+        left: 0; /* Align to left */
+        right: 0; /* Align to right */
+        bottom: 0; /* Align to bottom */
+        background-color: #4A2C85; /* Gradient colors */
+        z-index: -1; /* Send behind the text */
+        border-radius: 5px; /* Rounded corners */
+        filter: blur(5px); /* Blur effect for a soft look */
+    }
+
+    .btn:hover, .btn:focus {
+        background-color: transparent;
+        color: #ffffff; /* Change text color on hover */
+    }
+
+        .btn:hover:before, .btn:focus:before {
+            filter: blur(10px); /* Increase blur on hover */
+        }
+
+/* Card Styles */
+.card {
+    background-color: rgba(42, 42, 42, 0.9); /* Dark Card Background with slight transparency */
+    border: 1px solid #a020f0; /* Neon Purple Border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
+}
+
+/* Card Body Customization */
+/* Card Styles for Accordion Items */
+
+.card {
+    background-color: transparent; /* No background for cards inside accordion */
+    border: none; /* Remove default border */
+}
+
+.card-body {
+    background-color: transparent; /* Dark Background for Card Body */
+    padding: 1em; /* Padding for content */
+}
+
+/* Card Title Customization */
+.card-title {
+    color: #a020f0; /* Neon Purple Card Title */
+    font-size: 1.5rem; /* Size of Card Title */
+}
+
+/* Card Text Customization */
+.card-text {
+    color: #e0e0e0; /* Light Color for Card Text */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 15px; /* Smaller padding on mobile */
+    }
+}
+/* Footer Styles */
+footer {
+    background-color: rgba(13, 13, 13, 0.8); /* Dark Footer with slight transparency */
+    color: #e0e0e0; /* Light Text Color */
+    padding: 20px 0; /* Padding for footer */
+    text-align: center; /* Centered Text */
+}
+
+@media (max-width: 576px) {
+    .btn {
+        width: 100%; /* Full width buttons on small screens */
+    }
+}
+
+/* Accordion Styles */
+.accordion {
+    background-color: rgba(15, 15, 15, 0.95); /* Darker background for accordion */
+    border: none; /* Remove default border */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); /* Deeper shadow for more depth */
+}
+.accordion-item {
+    background-color: rgba(15, 15, 15, 0.95);
+    border: none;
+    margin: 0.4em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.accordion-button {
+    background-color: rgba(25, 25, 25, 0.9); /* Darker button background */
+    color: #d0d0d0; /* Slightly lighter text color */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    box-shadow: none;
+}
+
+    .accordion-button:not(.collapsed) {
+        box-shadow: none;
+        background-color: rgba(74, 44, 133); /* Darker Neon Purple when expanded */
+        color: #e0e0e0; /* Darker text for expanded button */
+    }
+
+    .accordion-button.collapsed {
+        box-shadow: none;
+    }
+
+    .accordion-button:hover {
+        background-color: rgba(74, 44, 133, 0.7); /* Darker purple on hover */
+        color: #e0e0e0; /* Darker text for expanded button */
+    }
+
+/* Accordion Item Header */
+.accordion-header {
+    margin-bottom: 0; /* Remove margin to avoid gaps */
+}
+
+/* Accordion Item Body */
+.accordion-body {
+    background-color: rgba(20, 20, 20, 0.95); /* Darker background for body */
+    color: #d0d0d0; /* Slightly lighter text color for body */
+    border-radius: 0 0 8px 8px; /* Rounded corners at the bottom */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 576px) {
+    .accordion-button {
+        font-size: 14px; /* Smaller font size on mobile */
+    }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 576px) {
+    header h1 {
+        font-size: 2rem; /* Smaller title on mobile */
+    }
+
+    header h2 {
+        font-size: 1.2rem; /* Smaller subtitle on mobile */
+    }
+
+    header nav a {
+        padding: 8px; /* Smaller padding for mobile links */
+    }
+}
+
+/* Transparent Divs */
+* {
+    border-radius: 10px; /* Rounded corners */
+    color: #e0e0e0;
+}
+
+
+/* Example of applying transparency to a section */
+.section {
+    background-color: rgba(30, 30, 30, 0.9); /* Slightly less transparent for sections */
+    border-radius: 8px; /* Rounded corners */
+    padding: 30px; /* Padding for sections */
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(25, 25, 25, 0.8); /* Background of the scrollbar track */
+    border-radius: 10px; /* Rounded corners for track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4A2C85; /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Rounded corners for thumb */
+    transition: background 0.3s ease; /* Smooth transition */
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(74,43,133,0.8); /* Color of the scrollbar thumb on hover */
+    }
+
+/* Scrollable Divs */
+.scrollable-div {
+    max-height: 35em; /* Max height for scrolling */
+    overflow-y: auto; /* Enables vertical scrolling */
+    padding-right: 15px; /* Padding to prevent text from touching the scrollbar */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 576px) {
+    .transparent-div,
+    .section {
+        padding: 15px; /* Smaller padding on mobile */
+    }
+
+    .scrollable-div {
+        max-height: 300px; /* Smaller max height on mobile */
+    }
+}
+
+/* dropdown*/
+.dropdown {
+    position: relative; /* Positioning for dropdown */
+}
+
+/* Dropdown Toggle Button */
+.dropdown-toggle {
+    color: #e0e0e0; /* Light text color */
+    border-radius: 5px; /* Rounded corners */
+}
+
+
+/* Dropdown Menu */
+.dropdown-menu {
+    background-color: rgba(30, 30, 30, 0.9); /* Dark background for dropdown */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
+}
+
+/* Dropdown Items */
+.dropdown-item {
+    color: #e0e0e0; /* Light text color */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+    .dropdown-item:hover {
+        color: #e0e0e0; /* Dark text color on hover */
+        background-color: transparent;
+    }
+
+    /* Active and Disabled Items */
+    .dropdown-item.active,
+    .dropdown-item:active {
+        color: #1a1a1a; /* Dark text color for active item */
+    }
+
+/* Media Queries for Responsiveness */
+@media (max-width: 576px) {
+    .dropdown-toggle {
+        font-size: 14px; /* Smaller font size on mobile */
+    }
+
+    .dropdown-menu {
+        min-width: 100%; /* Full width dropdown on mobile */
+    }
+}
+
+.nav-link {
+   color: #e0e0e0;
+}
+    .nav-link:hover, .nav-link:focus {
+        color: #e0e0e0;
+        text-shadow: 0 0 10px #d5006d; /* Intensified glow on hover */
+    }
+
+
+/* Custom Styles for Bootstrap Input */
+.form-control {
+    background-color: rgb(30,30,30); /* Transparent background */
+    color: #e0e0e0; /* Light text color */
+    border: 2px solid transparent; /* Initial transparent border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 15px; /* Padding for input */
+    font-size: 1.25rem; /* Large font size */
+    position: relative; /* Positioning for pseudo-element */
+    overflow: hidden; /* Hide overflow for pseudo-element */
+}
+
+    /* Input Focus Effect */
+    .form-control:focus {
+        outline: none; /* Remove default outline */
+        box-shadow: none; /* Remove default box shadow */
+        background-color: rgba(30,30,30,0.8); /* Transparent background */
+        color: #e0e0e0; /* Light text color */
+    }
+
+    /* Placeholder Color */
+    .form-control::placeholder {
+        color: #e0e0e0; /* Light color for placeholder */
+    }

@@ -11,7 +11,7 @@
     </div>
     <div class="col-md-6">
         <h3 style="padding-top: 1em; padding-bottom: 1em;">Комплектующие</h3>
-        <div style="overflow-y: scroll; height: 35em">
+        <div class="scrollable-div" style="height: 35em">
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMainboard">
@@ -141,7 +141,7 @@
         <h3 style="padding-top: 1em; padding-bottom: 1em;">Программное Обеспечение</h3>
         @{
             var groups = Model.InstalledSoftware.GroupBy(s => s.SoftwareNavigation.IdManufacturer);
-            <div style ="overflow-y: scroll; height: 35em">
+            <div class="scrollable-div" style="height: 35em">
                 @foreach (var group in groups)
                 {
                     <div class="accordion-item">
