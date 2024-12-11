@@ -19,6 +19,33 @@ namespace WebMVC.Controllers
             _context = context;
             _excelService = exceltService;
         }
+        private IQueryable<Workplace> GetWorkplacesQuery()
+        {
+            return _context.Workplaces
+                .AsNoTracking()
+                .Include(w => w.IdCabinetNavigation)
+                .Include(w => w.IdOsNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Gpu)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Processor)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Mainboard)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.NetAdapter)
+                        .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.NetAdapter)
+                        .ThenInclude(n => n.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Ram)
+                        .ThenInclude(r => r.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Disk)
+                .Include(w => w.InstalledSoftware)
+                    .ThenInclude(s => s.SoftwareNavigation)
+                        .ThenInclude(s => s.ManufacturerNavigation);
+        }
 
         // GET: Workplaces
         public async Task<IActionResult> Index(int? id)
@@ -35,30 +62,7 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
-            var workplace = await _context.Workplaces
-                .AsNoTracking()
-                .Include(w => w.IdCabinetNavigation)
-                .Include(w => w.IdOsNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Gpu)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Processor)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Mainboard)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.IdManufacturerNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Ram)
-                    .ThenInclude(r => r.IdManufacturerNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Disk)
-                .Include(w => w.InstalledSoftware)
-                    .ThenInclude(s => s.SoftwareNavigation)
-                        .ThenInclude(s => s.ManufacturerNavigation)
+            var workplace = await GetWorkplacesQuery()
                 .FirstOrDefaultAsync(m => m.IdWorkplace == id);
             if (workplace == null)
             {
@@ -77,30 +81,7 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
-            var workplace = await _context.Workplaces
-                .AsNoTracking()
-                .Include(w => w.IdCabinetNavigation)
-                .Include(w => w.IdOsNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Gpu)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Processor)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Mainboard)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.IdManufacturerNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Ram)
-                    .ThenInclude(r => r.IdManufacturerNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Disk)
-                .Include(w => w.InstalledSoftware)
-                    .ThenInclude(s => s.SoftwareNavigation)
-                        .ThenInclude(s => s.ManufacturerNavigation)
+            var workplace = await GetWorkplacesQuery()
                 .FirstOrDefaultAsync(m => m.Guid == id);
 
             if (workplace == null)
@@ -153,7 +134,7 @@ namespace WebMVC.Controllers
             string scheme = Request.Scheme;
             string url = Request.Host.ToString();
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
-            using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(Url.Action("Public", "Workplaces", new { id=workplace.Guid }, scheme, url), QRCodeGenerator.ECCLevel.Q)) //Url.Page("./Workplaces/Details/" + id)
+            using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(Url.Action("Public", "Workplaces", new { id = workplace.Guid }, scheme, url), QRCodeGenerator.ECCLevel.Q)) //Url.Page("./Workplaces/Details/" + id)
             using (PngByteQRCode qrCode = new PngByteQRCode(qrCodeData))
             {
                 qrCodeImage = qrCode.GetGraphic(5);
@@ -162,36 +143,15 @@ namespace WebMVC.Controllers
             ViewData["Reffer"] = Request.Headers["Referer"].ToString();
             return View();
         }
+
         public async Task<IActionResult> GenerateReportById(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var workplace = await _context.Workplaces
-                .AsNoTracking()
-                .Include(w => w.IdCabinetNavigation)
-                .Include(w => w.IdOsNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Gpu)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Processor)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Mainboard)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.IdManufacturerNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Ram)
-                    .ThenInclude(r => r.IdManufacturerNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Disk)
-                .Include(w => w.InstalledSoftware)
-                    .ThenInclude(s => s.SoftwareNavigation)
-                        .ThenInclude(s => s.ManufacturerNavigation)
+
+            var workplace = await GetWorkplacesQuery()
                 .FirstOrDefaultAsync(w => w.IdWorkplace == id);
 
             if (workplace == null)
@@ -201,78 +161,57 @@ namespace WebMVC.Controllers
 
             return File(await _excelService.GenerateWorkplaceReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}.xlsx");
         }
+
+        [AllowAnonymous]
+        [HttpGet("{Controller}/PublicReport/{id}")]
+        public async Task<IActionResult> PublicGenerateReportById(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var workplace = await GetWorkplacesQuery()
+                .FirstOrDefaultAsync(w => w.Guid == id);
+
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            return File(await _excelService.GenerateWorkplaceReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}.xlsx");
+        }
+
         public async Task<IActionResult> GenerateReportByIdCabinet(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var workplaces = _context.Workplaces
-                .AsNoTracking()
-                .Include(w => w.IdCabinetNavigation)
-                .Include(w => w.IdOsNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Gpu)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Processor)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Mainboard)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.IdManufacturerNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Ram)
-                    .ThenInclude(r => r.IdManufacturerNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Disk)
-                .Include(w => w.InstalledSoftware)
-                    .ThenInclude(s => s.SoftwareNavigation)
-                        .ThenInclude(s => s.ManufacturerNavigation)
-                .Where(w => w.IdCabinet == id);
 
-            if (workplaces.Count() == 0)
+            var workplaces = await GetWorkplacesQuery()
+                .Where(w => w.IdCabinet == id)
+                .ToListAsync();
+
+            if (!workplaces.Any())
             {
                 return NotFound();
             }
 
-            return File(await _excelService.GenerateWorkplacesReportAsync(await workplaces.ToListAsync()), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.FirstOrDefault().IdCabinetNavigation.Name}WorkplacesReport.xlsx");
+            return File(await _excelService.GenerateWorkplacesReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}WorkplacesReport.xlsx");
         }
+
         public async Task<IActionResult> GenerateReport()
         {
-            var workplaces = _context.Workplaces
-                .AsNoTracking()
-                .Include(w => w.IdCabinetNavigation)
-                .Include(w => w.IdOsNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Gpu)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Processor)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Mainboard)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.IdManufacturerNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Ram)
-                    .ThenInclude(r => r.IdManufacturerNavigation)
-                .Include(w => w.Components)
-                    .ThenInclude(c => c.Disk)
-                .Include(w => w.InstalledSoftware)
-                    .ThenInclude(s => s.SoftwareNavigation)
-                        .ThenInclude(s => s.ManufacturerNavigation);
+            var workplaces = await GetWorkplacesQuery().ToListAsync();
 
-            if (workplaces.Count() == 0)
+            if (!workplaces.Any())
             {
                 return NotFound();
             }
 
-            return File(await _excelService.GenerateWorkplacesReportAsync(await workplaces.ToListAsync()), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"WorkplacesReport.xlsx");
+            return File(await _excelService.GenerateWorkplacesReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"WorkplacesReport.xlsx");
         }
+
     }
 }
