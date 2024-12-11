@@ -41,6 +41,20 @@ namespace WebMVC.Services
 
             return memoryStream;
         }
+        public async Task<MemoryStream> GenerateWorkplaceReportAsync(Workplace workplace)
+        {
+            var memoryStream = new MemoryStream();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add(workplace.Name ?? "Безымянный");
+                GenerateWorkplaceHardwareWorksheet(worksheet, workplace);
+                await Task.Run(() => workbook.SaveAs(memoryStream));
+            }
+
+            memoryStream.Position = 0;
+            return memoryStream;
+        }
         public async Task<MemoryStream> GenerateWorkplacesReportAsync(List<Workplace> workplaces)
         {
             var memoryStream = new MemoryStream();
@@ -75,7 +89,7 @@ namespace WebMVC.Services
 
             for (int i = 0; i < workplaces.Count; i++)
             {
-                worksheet.Cell(5 + i, 1).Value = i+1;
+                worksheet.Cell(5 + i, 1).Value = i + 1;
                 worksheet.Cell(5 + i, 2).Value = workplaces[i].Name;
                 worksheet.Cell(5 + i, 3).Value = workplaces[i].IdOsNavigation.OsName;
                 worksheet.Cell(5 + i, 4).Value = workplaces[i].IdOsNavigation.OsVersion;

@@ -162,6 +162,84 @@ namespace WebMVC.Controllers
             ViewData["Reffer"] = Request.Headers["Referer"].ToString();
             return View();
         }
+        public async Task<IActionResult> GenerateReportById(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var workplace = await _context.Workplaces
+                .AsNoTracking()
+                .Include(w => w.IdCabinetNavigation)
+                .Include(w => w.IdOsNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Gpu)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Processor)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Mainboard)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.NetAdapter)
+                    .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.NetAdapter)
+                    .ThenInclude(n => n.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Ram)
+                    .ThenInclude(r => r.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Disk)
+                .Include(w => w.InstalledSoftware)
+                    .ThenInclude(s => s.SoftwareNavigation)
+                        .ThenInclude(s => s.ManufacturerNavigation)
+                .FirstOrDefaultAsync(w => w.IdWorkplace == id);
+
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            return File(await _excelService.GenerateWorkplaceReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}.xlsx");
+        }
+        public async Task<IActionResult> GenerateReportByIdCabinet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var workplaces = _context.Workplaces
+                .AsNoTracking()
+                .Include(w => w.IdCabinetNavigation)
+                .Include(w => w.IdOsNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Gpu)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Processor)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Mainboard)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.NetAdapter)
+                    .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.NetAdapter)
+                    .ThenInclude(n => n.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Ram)
+                    .ThenInclude(r => r.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Disk)
+                .Include(w => w.InstalledSoftware)
+                    .ThenInclude(s => s.SoftwareNavigation)
+                        .ThenInclude(s => s.ManufacturerNavigation)
+                .Where(w => w.IdCabinet == id);
+
+            if (workplaces.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return File(await _excelService.GenerateWorkplacesReportAsync(await workplaces.ToListAsync()), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.FirstOrDefault().IdCabinetNavigation.Name}WorkplacesReport.xlsx");
+        }
         public async Task<IActionResult> GenerateReport()
         {
             var workplaces = _context.Workplaces

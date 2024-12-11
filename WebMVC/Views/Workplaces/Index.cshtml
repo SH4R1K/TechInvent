@@ -9,6 +9,7 @@
     var workplaces = Model.ToList();
     <div>
         <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="Index">Назад</a>
+        <a class="btn btn-secondary" asp-action="GenerateReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel</a>
     </div>
     <div class="row justify-content-center justify-content-lg-start">
         @for (int i = 0; i < workplaces.Count; i++)
