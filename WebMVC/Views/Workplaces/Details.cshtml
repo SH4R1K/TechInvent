@@ -24,9 +24,10 @@
                 {
                     <div class="card">
                         <div class="card-body">
-                                <h5 class="card-title"><a href="https://yandex.ru/search/?text=@{@component.Mainboard?.Name} драйвера">@component.Mainboard?.Name</a></h5>
+                                <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{
+                                    @component.Mainboard?.Name
+} драйвера">@component.Mainboard?.Name</a></h5>
                             <p class="card-text">Серийный номер: @component.Mainboard?.SerialNumber</p>
-                            <p class="card-text">Рабочее место: @component.IdWorkplaceNavigation.Name</p>
                         </div>
                     </div>
                 }
@@ -44,11 +45,10 @@
                 {
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><a href="https://yandex.ru/search/?text=@{@component.Processor?.Name} драйвера">@component.Processor?.Name</a></h5>
+                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Processor?.Name} драйвера">@component.Processor?.Name</a></h5>
                             <p class="card-text">Количество ядер: @component.Processor?.PhysicalCores</p>
                             <p class="card-text">Количество логических ядер: @component.Processor?.LogicalCores</p>
                             <p class="card-text">Максимальная частота: @component.Processor?.MaxClockSpeed</p>
-                            <p class="card-text">Рабочее место: @component.IdWorkplaceNavigation.Name</p>
                         </div>
                     </div>
                 }
@@ -65,9 +65,8 @@
                 {
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><a href="https://yandex.ru/search/?text=@{@component.Gpu?.Name} драйвера">@component.Gpu?.Name</a></h5>
+                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Gpu?.Name} драйвера">@component.Gpu?.Name</a></h5>
                             <p class="card-text">Объём памяти: @component.Gpu?.AdapterRam</p>
-                            <p class="card-text">Рабочее место: @component.IdWorkplaceNavigation.Name</p>
                         </div>
                     </div>
                 }
@@ -106,7 +105,7 @@
                 {
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><a href="https://yandex.ru/search/?text=@{@component.NetAdapter?.Name} драйвера">@component.NetAdapter?.Name</a></h5>
+                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.NetAdapter?.Name} драйвера">@component.NetAdapter?.Name</a></h5>
                             <p class="card-text">MAC: @component.NetAdapter?.MacAddress</p>
                             <p class="card-text">Производитель: @component.NetAdapter?.IdManufacturerNavigation?.Name</p>
                             <p class="card-text">Тип адаптера: @component.NetAdapter?.AdapterTypeIdAdapterTypeNavigation?.Name</p>
@@ -127,7 +126,7 @@
                 {
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><a href="https://yandex.ru/search/?text=@{@component.Disk?.Model}">@component.Disk?.Model</a></h5>
+                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Disk?.Model}">@component.Disk?.Model</a></h5>
                             <p class="card-text">Объем: @component.Disk?.Size ГБ</p>
 
                         </div>

@@ -11,12 +11,12 @@
     --border-neon-purple: var(--secondary-color); /* Неоновая фиолетовая граница */
 
     --background-body: linear-gradient(135deg, #1a1a1a 50%, var(--main-color) 100%); /* Фоновый градиент */
-    --background-dark: rgba(15, 15, 15, 0.95); /* Темный фон */
+    --background-dark: rgba(25, 25, 25, 0.95); /* Темный фон */
     --background-darker: rgba(20, 20, 20, 0.95); /* Более темный фон */
-    --background-section: rgba(30, 30, 30, 0.9); /* Фон секции */
-    --background-input: rgb(30, 30, 30); /* Фон для ввода */
-    --background-input-focus: rgba(30, 30, 30, 0.8); /* Фон для ввода при фокусе */
-    --background-dropdown: rgba(30, 30, 30, 0.9); /* Фон выпадающего меню */
+    --background-section: rgba(35, 35, 35, 0.9); /* Фон секции */
+    --background-input: rgb(35, 35, 35); /* Фон для ввода */
+    --background-input-focus: rgba(35, 35, 35, 0.8); /* Фон для ввода при фокусе */
+    --background-dropdown: rgba(35, 35, 35, 0.9); /* Фон выпадающего меню */
     --background-card: rgba(42, 42, 42, 0.9); /* Фон карточки */
     --button-background: rgba(25, 25, 25, 0.9); /* Фон кнопки */
     --button-background-expanded: rgba(74, 44, 133); /* Фон кнопки при раскрытии */

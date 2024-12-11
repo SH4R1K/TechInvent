@@ -5,8 +5,6 @@
     border: 1px solid var(--border-neon-purple); /* Neon Purple Border */
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
-    background-color: transparent; /* No background for cards inside accordion */
-    border: none; /* Remove default border */
     margin: 1rem;
 }
 
