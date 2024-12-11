@@ -144,27 +144,9 @@ namespace WebMVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GenerateReportById(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var workplace = await GetWorkplacesQuery()
-                .FirstOrDefaultAsync(w => w.IdWorkplace == id);
-
-            if (workplace == null)
-            {
-                return NotFound();
-            }
-
-            return File(await _excelService.GenerateWorkplaceReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}.xlsx");
-        }
-
         [AllowAnonymous]
-        [HttpGet("{Controller}/PublicReport/{id}")]
-        public async Task<IActionResult> PublicGenerateReportById(Guid? id)
+        [HttpGet("{Controller}/PublicReportHardware/{id}")]
+        public async Task<IActionResult> PublicGenerateHardwareReportById(Guid? id)
         {
             if (id == null)
             {
@@ -179,10 +161,10 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            return File(await _excelService.GenerateWorkplaceReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}.xlsx");
+            return File(await _excelService.GenerateWorkplaceHardwareReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}Hardware.xlsx");
         }
 
-        public async Task<IActionResult> GenerateReportByIdCabinet(int? id)
+        public async Task<IActionResult> GenerateHardwareReportByIdCabinet(int? id)
         {
             if (id == null)
             {
@@ -198,20 +180,46 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            return File(await _excelService.GenerateWorkplacesReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}WorkplacesReport.xlsx");
+            return File(await _excelService.GenerateWorkplacesHardwareReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}HardwareWorkplacesReport.xlsx");
         }
 
-        public async Task<IActionResult> GenerateReport()
+        [AllowAnonymous]
+        [HttpGet("{Controller}/PublicReportSoftware/{id}")]
+        public async Task<IActionResult> PublicGenerateSoftwareReportById(Guid? id)
         {
-            var workplaces = await GetWorkplacesQuery().ToListAsync();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var workplace = await GetWorkplacesQuery()
+                .FirstOrDefaultAsync(w => w.Guid == id);
+
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            return File(await _excelService.GenerateWorkplaceSoftwareReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}Software.xlsx");
+        }
+
+        public async Task<IActionResult> GenerateSoftwareReportByIdCabinet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var workplaces = await GetWorkplacesQuery()
+                .Where(w => w.IdCabinet == id)
+                .ToListAsync();
 
             if (!workplaces.Any())
             {
                 return NotFound();
             }
 
-            return File(await _excelService.GenerateWorkplacesReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"WorkplacesReport.xlsx");
+            return File(await _excelService.GenerateWorkplacesSoftwareReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}SoftwareWorkplacesReport.xlsx");
         }
-
     }
 }

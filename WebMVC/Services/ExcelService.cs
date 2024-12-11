@@ -41,7 +41,39 @@ namespace WebMVC.Services
 
             return memoryStream;
         }
-        public async Task<MemoryStream> GenerateWorkplaceReportAsync(Workplace workplace)
+        public async Task<MemoryStream> GenerateWorkplaceSoftwareReportAsync(Workplace workplace)
+        {
+            var memoryStream = new MemoryStream();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add(workplace.Name ?? "Безымянный");
+                GenerateWorkplaceSoftwareWorksheet(worksheet, workplace);
+                await Task.Run(() => workbook.SaveAs(memoryStream));
+            }
+
+            memoryStream.Position = 0;
+            return memoryStream;
+        }
+        public async Task<MemoryStream> GenerateWorkplacesSoftwareReportAsync(List<Workplace> workplaces)
+        {
+            var memoryStream = new MemoryStream();
+
+            using (var workbook = new XLWorkbook())
+            {
+                foreach (var workplace in workplaces)
+                {
+                    var worksheet = workbook.Worksheets.Add(workplace.Name ?? "Безымянный");
+                    GenerateWorkplaceSoftwareWorksheet(worksheet, workplace);
+
+                }
+                await Task.Run(() => workbook.SaveAs(memoryStream));
+            }
+
+            memoryStream.Position = 0;
+            return memoryStream;
+        }
+        public async Task<MemoryStream> GenerateWorkplaceHardwareReportAsync(Workplace workplace)
         {
             var memoryStream = new MemoryStream();
 
@@ -55,7 +87,7 @@ namespace WebMVC.Services
             memoryStream.Position = 0;
             return memoryStream;
         }
-        public async Task<MemoryStream> GenerateWorkplacesReportAsync(List<Workplace> workplaces)
+        public async Task<MemoryStream> GenerateWorkplacesHardwareReportAsync(List<Workplace> workplaces)
         {
             var memoryStream = new MemoryStream();
 
@@ -151,6 +183,30 @@ namespace WebMVC.Services
                 addedComponents++;
             }
 
+            worksheet.Columns().AdjustToContents();
+        }
+        private void GenerateWorkplaceSoftwareWorksheet(IXLWorksheet worksheet, Workplace workplace)
+        {
+            int addedComponents = 0;
+            worksheet.Cell(1, 1).Value = "Название рабочего места";
+            worksheet.Cell(1, 2).Value = workplace.Name;
+
+            worksheet.Cell(2, 1).Value = "Операционная система";
+            worksheet.Cell(2, 2).Value = workplace.IdOsNavigation.OsName;
+            worksheet.Cell(3, 1).Value = "Количество установленных программ";
+            worksheet.Cell(3, 2).Value = workplace.InstalledSoftware.Count;
+
+            var groups = workplace.InstalledSoftware.GroupBy(s => s.SoftwareNavigation.IdManufacturer);
+            foreach (var group in groups)
+            {
+                worksheet.Cell(4 + addedComponents, 1).Value = group.FirstOrDefault()?.SoftwareNavigation.ManufacturerNavigation.Name;
+                foreach (var software in group)
+                {
+                    worksheet.Cell(4 + addedComponents, 2).Value = software.SoftwareNavigation?.Name;
+                    addedComponents++;
+                }
+                addedComponents--;
+            }
             worksheet.Columns().AdjustToContents();
         }
 
