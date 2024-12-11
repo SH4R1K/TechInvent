@@ -8,6 +8,9 @@
 
 @{
     var cabinets = Model.ToList();
+    <div>
+        <a class="btn btn-secondary" asp-action="GenerateReport">Экспортировать в Excel</a>
+    </div>
         <div class="row justify-content-center justify-content-md-start">
             @for (int j = 0; j < cabinets.Count; j++)
             {
@@ -16,6 +19,7 @@
                             <h5 class="card-title">@cabinets[j].Name</h5>
                             <p class="card-text">Количество рабочих мест: @cabinets[j].Workplaces.Count</p>
                             <a asp-controller="Workplaces" asp-action="Index" asp-route-id="@cabinets[j].IdCabinet" class="btn btn-primary">Подробнее</a>
+                            <a class="btn btn-secondary" asp-action="GenerateReportById" asp-route-id="@cabinets[j]?.IdCabinet">Экспортировать в Excel</a>
                         </div>
                     </div>
             }

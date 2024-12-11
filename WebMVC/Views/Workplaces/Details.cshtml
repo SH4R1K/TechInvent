@@ -8,6 +8,7 @@
     <h1>@ViewData["PCName"]</h1>
     <div style="padding-top: 1em;">
         <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
+        <a class="btn btn-secondary" asp-action="GenerateReportById" asp-route-id="@Model?.IdWorkplace">Экспортировать в Excel</a>
     </div>
     <div class="col-md-6">
         <h3 style="padding-top: 1em; padding-bottom: 1em;">Комплектующие</h3>
