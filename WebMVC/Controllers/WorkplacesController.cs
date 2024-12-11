@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using QRCoder;
 using WebMVC.Data;
 using WebMVC.Models;
+using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
@@ -11,10 +12,12 @@ namespace WebMVC.Controllers
     public class WorkplacesController : Controller
     {
         private readonly TechInventContext _context;
+        private readonly ExcelService _excelService;
 
-        public WorkplacesController(TechInventContext context)
+        public WorkplacesController(TechInventContext context, ExcelService exceltService)
         {
             _context = context;
+            _excelService = exceltService;
         }
 
         // GET: Workplaces
@@ -158,6 +161,40 @@ namespace WebMVC.Controllers
             ViewData["qrBinary"] = Convert.ToBase64String(qrCodeImage);
             ViewData["Reffer"] = Request.Headers["Referer"].ToString();
             return View();
+        }
+        public async Task<IActionResult> GenerateReport()
+        {
+            var workplaces = _context.Workplaces
+                .AsNoTracking()
+                .Include(w => w.IdCabinetNavigation)
+                .Include(w => w.IdOsNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Gpu)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Processor)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Mainboard)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.NetAdapter)
+                    .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.NetAdapter)
+                    .ThenInclude(n => n.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Ram)
+                    .ThenInclude(r => r.IdManufacturerNavigation)
+                .Include(w => w.Components)
+                    .ThenInclude(c => c.Disk)
+                .Include(w => w.InstalledSoftware)
+                    .ThenInclude(s => s.SoftwareNavigation)
+                        .ThenInclude(s => s.ManufacturerNavigation);
+
+            if (workplaces.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return File(await _excelService.GenerateWorkplacesReportAsync(await workplaces.ToListAsync()), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"WorkplacesReport.xlsx");
         }
     }
 }
