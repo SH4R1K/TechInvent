@@ -1,0 +1,38 @@
+﻿/* Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-scrollbar-track); /* Background of the scrollbar track */
+    border-radius: 10px; /* Rounded corners for track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--background-scrollbar-thumb); /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Rounded corners for thumb */
+    transition: background 0.3s ease; /* Smooth transition */
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--background-scrollbar-thumb-hover); /* Color of the scrollbar thumb on hover */
+    }
+
+/* Scrollable Divs */
+.scrollable-div {
+    max-height: 35em; /* Max height for scrolling */
+    overflow-y: auto; /* Enables vertical scrolling */
+    padding-right: 15px; /* Padding to prevent text from touching the scrollbar */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 576px) {
+    .transparent-div,
+    .section {
+        padding: 15px; /* Smaller padding on mobile */
+    }
+
+    .scrollable-div {
+        max-height: 300px; /* Smaller max height on mobile */
+    }
+}

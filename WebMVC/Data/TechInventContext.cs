@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WebMVC.Models;
 
 namespace WebMVC.Data;
@@ -39,6 +37,9 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<Workplace> Workplaces { get; set; }
 
     public virtual DbSet<Software> Softwares { get; set; }
+    public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<Role> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -269,12 +270,19 @@ public partial class TechInventContext : DbContext
 
             entity.HasIndex(e => e.IdOs, "fk_workplace_os1_idx");
 
+            entity.HasIndex(e => e.Guid, "uq_workplace_guid").IsUnique();
+
             entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
             entity.Property(e => e.IdOs).HasColumnName("id_os");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
+            entity.Property(e => e.Guid)
+                .HasDefaultValue(null)
+                .HasColumnName("guid");
+            entity.Property(e => e.LastUpdate)
+                .HasColumnName("last_update");
 
             entity.HasOne(d => d.IdCabinetNavigation).WithMany(p => p.Workplaces)
                 .HasForeignKey(d => d.IdCabinet)
@@ -307,8 +315,8 @@ public partial class TechInventContext : DbContext
                 .HasForeignKey(d => d.IdManufacturer)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_software_manufacturer");
-        }); 
-        
+        });
+
         modelBuilder.Entity<InstalledSoftware>(entity =>
         {
             entity.HasKey(e => new { e.IdSoftware, e.IdWorkplace }).HasName("PRIMARY");
@@ -328,8 +336,35 @@ public partial class TechInventContext : DbContext
                 .HasConstraintName("fk_workplace_installed_software");
         });
 
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.IdUser).HasName("PRIMARY");
+            entity.ToTable("user");
+
+            entity.Property(e => e.IdUser).HasColumnName("id_user");
+            entity.Property(e => e.IdRole).HasColumnName("id_role");
+            entity.Property(e => e.Login).HasColumnName("login").HasMaxLength(100);
+            entity.Property(e => e.Password).HasColumnName("password").HasMaxLength(255);
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
+                .HasForeignKey(d => d.IdRole)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_user_role");
+        });
+
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(e => e.IdRole).HasName("PRIMARY");
+            entity.ToTable("role");
+
+            entity.Property(e => e.IdRole).HasColumnName("id_role");
+            entity.Property(e => e.Name).HasColumnName("name").HasMaxLength(45);
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+public DbSet<WebMVC.Models.User> User { get; set; } = default!;
 }

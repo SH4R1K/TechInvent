@@ -1,0 +1,49 @@
+﻿/* Accordion Styles */
+.accordion {
+    background-color: var(--background-dark); /* Darker background for accordion */
+    border: none; /* Remove default border */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); /* Deeper shadow for more depth */
+}
+
+.accordion-item {
+    background-color: var(--background-dark);
+    border: none;
+    margin: 0.4em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.accordion-button {
+    background-color: var(--button-background); /* Darker button background */
+    color: var(--text-lighter); /* Slightly lighter text color */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    box-shadow: none;
+}
+
+    .accordion-button:not(.collapsed) {
+        box-shadow: none;
+        background-color: var(--button-background-expanded); /* Darker Neon Purple when expanded */
+        color: var(--text-light); /* Darker text for expanded button */
+    }
+
+    .accordion-button.collapsed {
+        box-shadow: none;
+    }
+
+    .accordion-button:hover {
+        background-color: var(--button-hover); /* Darker purple on hover */
+        color: var(--text-light); /* Darker text for expanded button */
+    }
+
+/* Accordion Item Header */
+.accordion-header {
+    margin-bottom: 0; /* Remove margin to avoid gaps */
+}
+
+/* Accordion Item Body */
+.accordion-body {
+    background-color: var(--background-darker); /* Darker background for body */
+    color: var(--text-lighter); /* Slightly lighter text color for body */
+    border-radius: 0 0 8px 8px; /* Rounded corners at the bottom */
+}

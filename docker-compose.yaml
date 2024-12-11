@@ -3,16 +3,16 @@ services:
     container_name: techinvent_api
     hostname: techinvent_api
     restart: always
+    ports:
+      - "5239:8080"
     depends_on:
       mysql_dbms:
         condition: service_healthy
         restart: true
     image: techinvent_api
-    build: 
+    build:
       context: ./TechInventAPI/.
       dockerfile: Dockerfile
-    environment:
-      - "MySQLConnString"
     env_file:
       - path: ./environment/default.env
         required: true
@@ -23,16 +23,16 @@ services:
     container_name: techinvent_mvc
     hostname: techinvent_mvc
     restart: always
+    ports:
+      - "80:8080"
     depends_on:
       mysql_dbms:
         condition: service_healthy
         restart: true
     image: techinvent_mvc
-    build: 
+    build:
       context: ./WebMVC/.
       dockerfile: Dockerfile
-    environment:
-      - "MySQLConnString"
     env_file:
       - path: ./environment/default.env
         required: true
@@ -47,11 +47,6 @@ services:
     volumes:
       - "./db/data:/var/lib/mysql"
       - "./db/init.sql:/docker-entrypoint-initdb.d/init.sql"
-    environment:
-      - MYSQL_ROOT_PASSWORD
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
     env_file:
       - path: ./environment/mysql.env
         required: true

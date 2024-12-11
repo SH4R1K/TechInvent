@@ -1,35 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QRCoder;
 using WebMVC.Data;
 using WebMVC.Models;
+using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
+    [Authorize(Roles = "user, admin")]
     public class WorkplacesController : Controller
     {
         private readonly TechInventContext _context;
+        private readonly ExcelService _excelService;
 
-        public WorkplacesController(TechInventContext context)
+        public WorkplacesController(TechInventContext context, ExcelService exceltService)
         {
             _context = context;
+            _excelService = exceltService;
         }
-
-        // GET: Workplaces
-        public async Task<IActionResult> Index(int? id)
+        private IQueryable<Workplace> GetWorkplacesQuery()
         {
-            var techInventContext = _context.Workplaces.AsNoTracking().Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
-            ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
-            return View(await techInventContext.ToListAsync());
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var workplace = await _context.Workplaces
+            return _context.Workplaces
                 .AsNoTracking()
                 .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.IdOsNavigation)
@@ -41,15 +33,36 @@ namespace WebMVC.Controllers
                     .ThenInclude(c => c.Mainboard)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
+                        .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.NetAdapter)
-                    .ThenInclude(n => n.IdManufacturerNavigation)
+                        .ThenInclude(n => n.IdManufacturerNavigation)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.Ram)
-                    .ThenInclude(r => r.IdManufacturerNavigation)
+                        .ThenInclude(r => r.IdManufacturerNavigation)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.Disk)
+                .Include(w => w.InstalledSoftware)
+                    .ThenInclude(s => s.SoftwareNavigation)
+                        .ThenInclude(s => s.ManufacturerNavigation);
+        }
+
+        // GET: Workplaces
+        public async Task<IActionResult> Index(int? id)
+        {
+            var techInventContext = _context.Workplaces.AsNoTracking().OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
+            ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
+            return View(await techInventContext.ToListAsync());
+        }
+
+        [HttpGet("{Controller}/Details/{id}")]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var workplace = await GetWorkplacesQuery()
                 .FirstOrDefaultAsync(m => m.IdWorkplace == id);
             if (workplace == null)
             {
@@ -60,7 +73,26 @@ namespace WebMVC.Controllers
 
             return View(workplace);
         }
+        [AllowAnonymous]
+        [HttpGet("{Controller}/Public/{id}")]
+        public async Task<IActionResult> Details(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var workplace = await GetWorkplacesQuery()
+                .FirstOrDefaultAsync(m => m.Guid == id);
 
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["PCName"] = workplace.Name;
+
+            return View(workplace);
+        }
         public async Task<IActionResult> SoftwareList(int? id)
         {
             if (id == null)
@@ -92,12 +124,17 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
+            var workplace = await _context.Workplaces.AsNoTracking().FirstOrDefaultAsync(w => w.IdWorkplace == id);
+            if (workplace == null)
+            {
+                return NotFound();
+            }
             byte[] qrCodeImage = null;
             byte[] data = null;
             string scheme = Request.Scheme;
             string url = Request.Host.ToString();
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
-            using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(Url.Action("Details", "Workplaces", new { id }, scheme, url), QRCodeGenerator.ECCLevel.Q)) //Url.Page("./Workplaces/Details/" + id)
+            using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(Url.Action("Public", "Workplaces", new { id = workplace.Guid }, scheme, url), QRCodeGenerator.ECCLevel.Q)) //Url.Page("./Workplaces/Details/" + id)
             using (PngByteQRCode qrCode = new PngByteQRCode(qrCodeData))
             {
                 qrCodeImage = qrCode.GetGraphic(5);
@@ -106,5 +143,75 @@ namespace WebMVC.Controllers
             ViewData["Reffer"] = Request.Headers["Referer"].ToString();
             return View();
         }
+
+        public async Task<IActionResult> GenerateReportById(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var workplace = await GetWorkplacesQuery()
+                .FirstOrDefaultAsync(w => w.IdWorkplace == id);
+
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            return File(await _excelService.GenerateWorkplaceReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}.xlsx");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{Controller}/PublicReport/{id}")]
+        public async Task<IActionResult> PublicGenerateReportById(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var workplace = await GetWorkplacesQuery()
+                .FirstOrDefaultAsync(w => w.Guid == id);
+
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            return File(await _excelService.GenerateWorkplaceReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}.xlsx");
+        }
+
+        public async Task<IActionResult> GenerateReportByIdCabinet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var workplaces = await GetWorkplacesQuery()
+                .Where(w => w.IdCabinet == id)
+                .ToListAsync();
+
+            if (!workplaces.Any())
+            {
+                return NotFound();
+            }
+
+            return File(await _excelService.GenerateWorkplacesReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}WorkplacesReport.xlsx");
+        }
+
+        public async Task<IActionResult> GenerateReport()
+        {
+            var workplaces = await GetWorkplacesQuery().ToListAsync();
+
+            if (!workplaces.Any())
+            {
+                return NotFound();
+            }
+
+            return File(await _excelService.GenerateWorkplacesReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"WorkplacesReport.xlsx");
+        }
+
     }
 }

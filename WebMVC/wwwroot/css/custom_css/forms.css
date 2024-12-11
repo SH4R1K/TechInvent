@@ -1,0 +1,24 @@
+﻿/* Custom Styles for Bootstrap Input */
+.form-control {
+    background-color: var(--background-input); /* Transparent background */
+    color: var(--text-light); /* Light text color */
+    border: 2px solid transparent; /* Initial transparent border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 15px; /* Padding for input */
+    font-size: 1.25rem; /* Large font size */
+    position: relative; /* Positioning for pseudo-element */
+    overflow: hidden; /* Hide overflow for pseudo-element */
+}
+
+    /* Input Focus Effect */
+    .form-control:focus {
+        outline: none; /* Remove default outline */
+        box-shadow: none; /* Remove default box shadow */
+        background-color: var(--background-input-focus); /* Transparent background */
+        color: var(--text-light); /* Light text color */
+    }
+
+    /* Placeholder Color */
+    .form-control::placeholder {
+        color: var(--text-light); /* Light color for placeholder */
+    }

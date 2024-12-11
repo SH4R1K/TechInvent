@@ -1,0 +1,7 @@
+﻿footer {
+    background-color: var(--footer-background); /* Цвет фона подвала */
+    color: var(--text-light); /* Цвет текста */
+    padding: 20px 0; /* Отступы */
+    text-align: center; /* Выравнивание текста по центру */
+    border-radius: 0px;
+}

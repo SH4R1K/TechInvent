@@ -16,7 +16,7 @@ namespace TechInventAPI.Service
 
         public Os GetOrCreateOs(string osName, string osVersion)
         {
-            var os = _context.Os.AsNoTracking().FirstOrDefault(o => o.OsName == osName && o.OsVersion == osVersion);
+            var os = _context.Os.FirstOrDefault(o => o.OsName == osName && o.OsVersion == osVersion);
             if (os == null)
             {
                 os = new Os { OsName = osName, OsVersion = osVersion };
@@ -40,7 +40,7 @@ namespace TechInventAPI.Service
 
         public AdapterType GetOrCreateAdapterType(string name)
         {
-            var adapterType = _context.AdapterTypes.AsNoTracking().FirstOrDefault(m => m.Name == name);
+            var adapterType = _context.AdapterTypes.FirstOrDefault(m => m.Name == name);
             if (adapterType == null)
             {
                 adapterType = new AdapterType { Name = name };
@@ -60,6 +60,7 @@ namespace TechInventAPI.Service
             }
             else
             {
+                workplace.LastUpdate = DateTime.UtcNow;
                 workplace.IdCabinetNavigation = cabinet;
                 workplace.IdOsNavigation = os;
                 workplace.Components.Clear();
@@ -78,7 +79,7 @@ namespace TechInventAPI.Service
 
         public Cabinet GetOrCreateCabinet(string name)
         {
-            var cabinet = _context.Cabinets.AsNoTracking().FirstOrDefault(m => m.Name == name);
+            var cabinet = _context.Cabinets.FirstOrDefault(m => m.Name == name);
             if (cabinet == null)
             {
                 cabinet = new Cabinet { Name = name };
@@ -90,7 +91,7 @@ namespace TechInventAPI.Service
 
         public Software GetOrCreateSoftware(string name, string version, int idManufacturer)
         {
-            var software = _context.Softwares.AsNoTracking().FirstOrDefault(s => s.Name == name && s.Version == version && s.IdManufacturer == s.IdManufacturer);
+            var software = _context.Softwares.FirstOrDefault(s => s.Name == name && s.Version == version && s.IdManufacturer == s.IdManufacturer);
             if (software == null)
             {
                 software = new Software { Name = name, Version = version, IdManufacturer = idManufacturer };

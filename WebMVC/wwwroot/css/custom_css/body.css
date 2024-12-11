@@ -1,0 +1,36 @@
+﻿/* General Body Styles */
+body {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: var(--background-body);
+    color: var(--text-light);
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Transparent Divs */
+* {
+    border-radius: 10px; /* Rounded corners */
+    color: var(--text-light);
+}
+
+/* Example of applying transparency to a section */
+.section {
+    background-color: var(--background-section);
+    border-radius: 8px; /* Rounded corners */
+    padding: 30px; /* Padding for sections */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 576px) {
+    header h1 {
+        font-size: 2rem; /* Smaller title on mobile */
+    }
+
+    header h2 {
+        font-size: 1.2rem; /* Smaller subtitle on mobile */
+    }
+
+    header nav a {
+        padding: 8px; /* Smaller padding for mobile links */
+    }
+}

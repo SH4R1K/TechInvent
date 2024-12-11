@@ -12,6 +12,8 @@ public partial class Workplace
     public int IdOs { get; set; }
 
     public string? Name { get; set; }
+    public Guid Guid { get; set; } = Guid.NewGuid();
+    public DateTime LastUpdate { get; set; } = DateTime.UtcNow;
 
     public virtual ICollection<Component> Components { get; set; } = new List<Component>();
 

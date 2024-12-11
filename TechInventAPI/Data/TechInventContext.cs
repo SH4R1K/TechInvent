@@ -269,12 +269,19 @@ public partial class TechInventContext : DbContext
 
             entity.HasIndex(e => e.IdOs, "fk_workplace_os1_idx");
 
+            entity.HasIndex(e => e.Guid, "uq_workplace_guid").IsUnique();
+
             entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
             entity.Property(e => e.IdOs).HasColumnName("id_os");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
+            entity.Property(e => e.Guid)
+                .HasDefaultValue(null)
+                .HasColumnName("guid");
+            entity.Property(e => e.LastUpdate)
+                .HasColumnName("last_update");
 
             entity.HasOne(d => d.IdCabinetNavigation).WithMany(p => p.Workplaces)
                 .HasForeignKey(d => d.IdCabinet)
@@ -296,10 +303,10 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdSoftware).HasColumnName("id_software");
             entity.Property(e => e.Name)
-                .HasMaxLength(100)
+                .HasMaxLength(255)
                 .HasColumnName("name"); ;
             entity.Property(e => e.Version)
-                .HasMaxLength(100)
+                .HasMaxLength(255)
                 .HasColumnName("version");
             entity.Property(e => e.IdManufacturer).HasColumnName("id_manufacturer");
 
@@ -327,6 +334,35 @@ public partial class TechInventContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_workplace_installed_software");
         });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.IdUser).HasName("PRIMARY");
+            entity.ToTable("user");
+
+            entity.Property(e => e.IdUser).HasColumnName("id_user");
+            entity.Property(e => e.IdRole).HasColumnName("id_role");
+            entity.Property(e => e.Login).HasColumnName("login").HasMaxLength(100);
+            entity.Property(e => e.Password).HasColumnName("password").HasMaxLength(255);
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
+                .HasForeignKey(d => d.IdRole)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_user_role");
+        });
+
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(e => e.IdRole).HasName("PRIMARY");
+            entity.ToTable("role");
+
+            entity.Property(e => e.IdRole).HasColumnName("id_role");
+            entity.Property(e => e.Name).HasColumnName("name").HasMaxLength(45);
+        });
+
+
+        modelBuilder.Entity<User>().HasData(InitialData.UsersList);
+        modelBuilder.Entity<Role>().HasData(InitialData.RolesList);
 
         OnModelCreatingPartial(modelBuilder);
     }
