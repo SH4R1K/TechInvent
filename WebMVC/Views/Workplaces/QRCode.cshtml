@@ -1,5 +1,6 @@
 ﻿@{
-    if (ViewData["qrBinary"] != null)
+    <div class="h-100 d-flex align-items-center justify-content-center">
+    @if (ViewData["qrBinary"] != null)
     {
         <img src="data:image/jpeg;base64,@ViewData["qrBinary"]" />
     }
@@ -7,7 +8,9 @@
     {
         <p>Странно, не нашли QR для этого рабочего места</p>
     }
-    <div style="padding-top: 1em">
+    </div>
+    <div class="d-flex align-items-center justify-content-center" style="padding-top: 1em; gap: 1em">
+        <a class="btn btn-secondary" href="data:image/jpeg;base64,@ViewData["qrBinary"]" download>Скачать QR-код</a>
         <a class="btn btn-secondary" href="@ViewData["Reffer"]">Назад</a>
     </div>
 
