@@ -12,7 +12,6 @@ namespace WebMVC.Services
             {
                 foreach (var cabinet in cabinets)
                 {
-                    var workplaces = cabinet.Workplaces.ToList();
                     var worksheet = workbook.Worksheets.Add(cabinet.Name ?? "Безымянный");
                     GenerateCabinetWorksheet(worksheet, cabinet);
 
@@ -30,7 +29,6 @@ namespace WebMVC.Services
 
             using (var workbook = new XLWorkbook())
             {
-                var workplaces = cabinet.Workplaces.ToList();
                 var worksheet = workbook.Worksheets.Add(cabinet.Name ?? "Безымянный");
                 GenerateCabinetWorksheet(worksheet, cabinet);
 
@@ -149,40 +147,31 @@ namespace WebMVC.Services
             var gpus = workplace.Components.Where(c => c.Gpu != null).ToList();
             foreach (var gpu in gpus)
             {
-                worksheet.Cell(5 + addedComponents, 2).Value = gpu.Name;
-                addedComponents++;
+                worksheet.Cell(5, 2).Value += $"{gpu.Name}{Environment.NewLine}";
             }
-            if (gpus.Count() > 0)
-                addedComponents--;
 
             worksheet.Cell(6 + addedComponents, 1).Value = "Оперативная память";
             var rams = workplace.Components.Where(c => c.Ram != null).ToList();
             foreach (Ram ram in rams)
             {
-                worksheet.Cell(6 + addedComponents, 2).Value = $"{ram.Name} - {ram.Capacity}";
-                addedComponents++;
+                worksheet.Cell(6, 2).Value += $"{ram.Name} - {ram.Capacity}{Environment.NewLine}";
             }
-            if (rams.Count() > 0)
-                addedComponents--;
 
             worksheet.Cell(7 + addedComponents, 1).Value = "Сетевые адаптеры";
             var netadapters = workplace.Components.Where(c => c.NetAdapter != null).ToList();
             foreach (var netadapter in netadapters)
             {
-                worksheet.Cell(7 + addedComponents, 2).Value = netadapter.Name;
-                addedComponents++;
+                worksheet.Cell(7, 2).Value += $"{netadapter.Name}{Environment.NewLine}";
             }
-            if (netadapters.Count() > 0)
-                addedComponents--;
 
-            worksheet.Cell(8 + addedComponents, 1).Value = "Диски";
+            worksheet.Cell(8, 1).Value = "Диски";
             var disks = workplace.Components.Where(c => c.Disk != null).ToList();
             foreach (Disk disk in disks)
             {
-                worksheet.Cell(8 + addedComponents, 2).Value = $"{disk.Model} - {disk.Size}Гб";
-                addedComponents++;
+                worksheet.Cell(8, 2).Value += $"{disk.Model} - {disk.Size}Гб{Environment.NewLine}";
             }
-
+            worksheet.Rows().AdjustToContents();
+            worksheet.Cells().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
             worksheet.Columns().AdjustToContents();
         }
         private void GenerateWorkplaceSoftwareWorksheet(IXLWorksheet worksheet, Workplace workplace)
