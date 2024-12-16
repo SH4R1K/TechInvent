@@ -130,7 +130,6 @@ namespace WebMVC.Services
         }
         private void GenerateWorkplaceHardwareWorksheet(IXLWorksheet worksheet, Workplace workplace)
         {
-            int addedComponents = 0;
             worksheet.Cell(1, 1).Value = "Название рабочего места";
             worksheet.Cell(1, 2).Value = workplace.Name;
 
@@ -150,14 +149,14 @@ namespace WebMVC.Services
                 worksheet.Cell(5, 2).Value += $"{gpu.Name}{Environment.NewLine}";
             }
 
-            worksheet.Cell(6 + addedComponents, 1).Value = "Оперативная память";
+            worksheet.Cell(6, 1).Value = "Оперативная память";
             var rams = workplace.Components.Where(c => c.Ram != null).ToList();
             foreach (Ram ram in rams)
             {
                 worksheet.Cell(6, 2).Value += $"{ram.Name} - {ram.Capacity}{Environment.NewLine}";
             }
 
-            worksheet.Cell(7 + addedComponents, 1).Value = "Сетевые адаптеры";
+            worksheet.Cell(7, 1).Value = "Сетевые адаптеры";
             var netadapters = workplace.Components.Where(c => c.NetAdapter != null).ToList();
             foreach (var netadapter in netadapters)
             {
