@@ -26,29 +26,10 @@ namespace WebMVC.Controllers
             return View(await techInventContext.ToListAsync());
         }
 
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User
-                .Include(u => u.Role)
-                .FirstOrDefaultAsync(m => m.IdUser == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
         // GET: Users/Create
         public IActionResult Create()
         {
-            ViewData["IdRole"] = new SelectList(_context.Set<Role>(), "IdRole", "IdRole");
+            ViewData["IdRole"] = new SelectList(_context.Set<Role>(), "IdRole", "Name");
             return View();
         }
 
@@ -77,7 +58,7 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdRole"] = new SelectList(_context.Set<Role>(), "IdRole", "IdRole", user.IdRole);
+            ViewData["IdRole"] = new SelectList(_context.Set<Role>(), "IdRole", "Name", user.IdRole);
             return View(user);
         }
 
