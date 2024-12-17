@@ -99,6 +99,21 @@ namespace WebMVC.Services
             memoryStream.Position = 0;
             return memoryStream;
         }
+        public async Task<MemoryStream> GenerateCabinetWorkplacesSoftwareReportAsync(List<Workplace> workplaces, List<Software> softwares)
+        {
+            var memoryStream = new MemoryStream();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add(workplaces.FirstOrDefault()?.IdCabinetNavigation.Name ?? "Безымянный");
+                GenerateCabinetWorkplacesSoftwareWorksheet(worksheet, workplaces, softwares);
+                await Task.Run(() => workbook.SaveAs(memoryStream));
+            }
+
+            memoryStream.Position = 0;
+            return memoryStream;
+        }
+
 
         private void GenerateCabinetWorksheet(IXLWorksheet worksheet, Cabinet cabinet)
         {
@@ -124,6 +139,33 @@ namespace WebMVC.Services
             }
             worksheet.Columns().AdjustToContents();
         }
+        private void GenerateCabinetWorkplacesSoftwareWorksheet(IXLWorksheet worksheet, List<Workplace> workplaces, List<Software> softwares)
+        {
+
+            for (int i = 0; i < workplaces.Count; i++)
+            {
+                worksheet.Cell(1, 1).Value = "Рабочее место";
+                worksheet.Cell(2, 1).Value = "Количество ПО";
+                worksheet.Cell(1, 2 + i).Value = workplaces[i].Name;
+                worksheet.Cell(2, 2 + i).Value = workplaces[i].InstalledSoftware.Count;
+                for (int j = 0; j < softwares.Count; j++)
+                {
+                    if (i == 0)
+                    {
+                        worksheet.Cell(3 + j, 1).Value = softwares[j].Name;
+                    }
+                    if (workplaces[i].InstalledSoftware.Any(s => s.IdSoftware == softwares[j].IdSoftware))
+                    {
+                        worksheet.Cell(3 + j, 2 + i).Value = "+";
+                    }
+                }
+            }
+
+            worksheet.Rows().AdjustToContents();
+            worksheet.Cells().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
+            worksheet.Columns().AdjustToContents();
+        }
+
         private void GenerateCabinetWorkplacesHardwareWorksheet(IXLWorksheet worksheet, List<Workplace> workplaces)
         {
             worksheet.Cell(1, 1).Value = "Количество рабочих мест";

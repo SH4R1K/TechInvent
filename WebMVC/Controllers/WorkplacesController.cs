@@ -220,13 +220,14 @@ namespace WebMVC.Controllers
             var workplaces = await GetWorkplacesQuery()
                 .Where(w => w.IdCabinet == id)
                 .ToListAsync();
+            var software = await _context.Softwares.ToListAsync();
 
             if (!workplaces.Any())
             {
                 return NotFound();
             }
 
-            return File(await _excelService.GenerateWorkplacesSoftwareReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}SoftwareWorkplacesReport.xlsx");
+            return File(await _excelService.GenerateCabinetWorkplacesSoftwareReportAsync(workplaces, software), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}SoftwareWorkplacesReport.xlsx");
         }
     }
 }
