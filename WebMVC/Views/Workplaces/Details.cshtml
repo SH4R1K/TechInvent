@@ -66,7 +66,14 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Gpu?.Name} драйвера">@component.Gpu?.Name</a></h5>
-                            <p class="card-text">Объём памяти: @component.Gpu?.AdapterRam</p>
+                                @if (@component.Gpu?.AdapterRam != string.Empty && @component.Gpu?.AdapterRam != null)
+                                {
+                                    <p class="card-text">Объём памяти: @component.Gpu?.AdapterRam</p>
+                                }
+                                @if (@component.Gpu?.Uuid != string.Empty && @component.Gpu?.Uuid != null)
+                                {
+                                    <p class="card-text">Уникальный ID: @component.Gpu?.Uuid</p>
+                                }
                         </div>
                     </div>
                 }
