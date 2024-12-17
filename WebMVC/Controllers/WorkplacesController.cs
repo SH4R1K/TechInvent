@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using QRCoder;
 using WebMVC.Data;
 using WebMVC.Models;
@@ -13,11 +15,13 @@ namespace WebMVC.Controllers
     {
         private readonly TechInventContext _context;
         private readonly ExcelService _excelService;
+        private readonly IMemoryCache _cache;
 
-        public WorkplacesController(TechInventContext context, ExcelService exceltService)
+        public WorkplacesController(TechInventContext context, ExcelService exceltService, IMemoryCache cache)
         {
             _context = context;
             _excelService = exceltService;
+            _cache = cache;
         }
         private IQueryable<Workplace> GetWorkplacesQuery()
         {
@@ -61,12 +65,19 @@ namespace WebMVC.Controllers
             if (id == null)
             {
                 return NotFound();
-            }
-            var workplace = await GetWorkplacesQuery()
-                .FirstOrDefaultAsync(m => m.IdWorkplace == id);
+            }            
+            _cache.TryGetValue(id, out Workplace? workplace);
+            
             if (workplace == null)
             {
-                return NotFound();
+                workplace = await GetWorkplacesQuery()
+                    .FirstOrDefaultAsync(m => m.IdWorkplace == id);
+
+                if (workplace == null)
+                {
+                    return NotFound();
+                }
+                _cache.Set(workplace.IdWorkplace, workplace, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
             }
 
             ViewData["PCName"] = workplace.Name;
@@ -81,50 +92,33 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
-            var workplace = await GetWorkplacesQuery()
-                .FirstOrDefaultAsync(m => m.Guid == id);
+            _cache.TryGetValue(id, out Workplace? workplace);
 
             if (workplace == null)
             {
-                return NotFound();
+                workplace = await GetWorkplacesQuery()
+                    .FirstOrDefaultAsync(m => m.Guid == id);
+
+                if (workplace == null)
+                {
+                    return NotFound();
+                }
+                _cache.Set(workplace.Guid, workplace, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
             }
 
             ViewData["PCName"] = workplace.Name;
 
             return View(workplace);
         }
-        public async Task<IActionResult> SoftwareList(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            ViewBag.workplaceId = id;
-            var workplace = await _context.Workplaces
-                .AsNoTracking()
-                .Include(w => w.IdCabinetNavigation)
-                .Include(w => w.InstalledSoftware)
-                    .ThenInclude(s => s.SoftwareNavigation)
-                        .ThenInclude(s => s.ManufacturerNavigation)
-                .FirstOrDefaultAsync(m => m.IdWorkplace == id);
-            if (workplace == null)
-            {
-                return NotFound();
-            }
-
-            ViewData["PCName"] = workplace.Name;
-            var groups = workplace.InstalledSoftware.GroupBy(g => g.SoftwareNavigation.IdManufacturer);
-
-            return View(groups);
-        }
-
         public async Task<IActionResult> QRCode(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+
             var workplace = await _context.Workplaces.AsNoTracking().FirstOrDefaultAsync(w => w.IdWorkplace == id);
+
             if (workplace == null)
             {
                 return NotFound();
@@ -144,45 +138,33 @@ namespace WebMVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GenerateReportById(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var workplace = await GetWorkplacesQuery()
-                .FirstOrDefaultAsync(w => w.IdWorkplace == id);
-
-            if (workplace == null)
-            {
-                return NotFound();
-            }
-
-            return File(await _excelService.GenerateWorkplaceReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}.xlsx");
-        }
-
         [AllowAnonymous]
-        [HttpGet("{Controller}/PublicReport/{id}")]
-        public async Task<IActionResult> PublicGenerateReportById(Guid? id)
+        [HttpGet("{Controller}/PublicReportHardware/{id}")]
+        public async Task<IActionResult> PublicGenerateHardwareReportById(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var workplace = await GetWorkplacesQuery()
-                .FirstOrDefaultAsync(w => w.Guid == id);
+            _cache.TryGetValue(id, out Workplace? workplace);
 
             if (workplace == null)
             {
-                return NotFound();
+                workplace = await GetWorkplacesQuery()
+                    .FirstOrDefaultAsync(m => m.Guid == id);
+
+                if (workplace == null)
+                {
+                    return NotFound();
+                }
+                _cache.Set(workplace.Guid, workplace, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
             }
 
-            return File(await _excelService.GenerateWorkplaceReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}.xlsx");
+            return File(await _excelService.GenerateWorkplaceHardwareReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}Hardware.xlsx");
         }
 
-        public async Task<IActionResult> GenerateReportByIdCabinet(int? id)
+        public async Task<IActionResult> GenerateHardwareReportByIdCabinet(int? id)
         {
             if (id == null)
             {
@@ -198,20 +180,53 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            return File(await _excelService.GenerateWorkplacesReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}WorkplacesReport.xlsx");
+            return File(await _excelService.GenerateCabinetWorkplacesHardwareReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}HardwareWorkplacesReport.xlsx");
         }
 
-        public async Task<IActionResult> GenerateReport()
+        [AllowAnonymous]
+        [HttpGet("{Controller}/PublicReportSoftware/{id}")]
+        public async Task<IActionResult> PublicGenerateSoftwareReportById(Guid? id)
         {
-            var workplaces = await GetWorkplacesQuery().ToListAsync();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+
+            _cache.TryGetValue(id, out Workplace? workplace);
+
+            if (workplace == null)
+            {
+                workplace = await GetWorkplacesQuery()
+                    .FirstOrDefaultAsync(m => m.Guid == id);
+
+                if (workplace == null)
+                {
+                    return NotFound();
+                }
+                _cache.Set(workplace.Guid, workplace, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
+            }
+
+            return File(await _excelService.GenerateWorkplaceSoftwareReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}Software.xlsx");
+        }
+
+        public async Task<IActionResult> GenerateSoftwareReportByIdCabinet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var workplaces = await GetWorkplacesQuery()
+                .Where(w => w.IdCabinet == id)
+                .ToListAsync();
 
             if (!workplaces.Any())
             {
                 return NotFound();
             }
 
-            return File(await _excelService.GenerateWorkplacesReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"WorkplacesReport.xlsx");
+            return File(await _excelService.GenerateWorkplacesSoftwareReportAsync(workplaces), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}SoftwareWorkplacesReport.xlsx");
         }
-
     }
 }
