@@ -204,7 +204,7 @@ namespace WebMVC.Controllers
                 {
                     return NotFound();
                 }
-                _cache.Set(workplace.Guid, workplace, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
+                _cache.Set(workplace.Guid, workplace, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(2)));
             }
 
             return File(await _excelService.GenerateWorkplaceSoftwareReportAsync(workplace), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplace.Name}Software.xlsx");
