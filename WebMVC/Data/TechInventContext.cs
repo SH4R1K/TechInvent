@@ -36,6 +36,7 @@ public partial class TechInventContext : DbContext
 
     public virtual DbSet<Workplace> Workplaces { get; set; }
 
+    public virtual DbSet<InstalledSoftware> InstalledSoftwares { get; set; }
     public virtual DbSet<Software> Softwares { get; set; }
     public virtual DbSet<User> Users { get; set; }
 
@@ -332,7 +333,7 @@ public partial class TechInventContext : DbContext
 
             entity.HasOne(d => d.WorkplaceNavigation).WithMany(p => p.InstalledSoftware)
                 .HasForeignKey(d => d.IdWorkplace)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_workplace_installed_software");
         });
 

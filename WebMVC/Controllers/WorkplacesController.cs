@@ -229,5 +229,23 @@ namespace WebMVC.Controllers
 
             return File(await _excelService.GenerateCabinetWorkplacesSoftwareReportAsync(workplaces, software), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{workplaces.First().IdCabinetNavigation.Name}SoftwareWorkplacesReport.xlsx");
         }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var workplace = await _context.Workplaces.FirstOrDefaultAsync(w => w.IdWorkplace == id);
+
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            _context.Workplaces.Remove(workplace);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index), new {id = workplace.IdCabinet});
+        }
     }
 }
