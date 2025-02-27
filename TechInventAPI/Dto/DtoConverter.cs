@@ -1,7 +1,6 @@
 ﻿using TechInventAPI.DtoModels;
 using TechInventAPI.Models;
 using TechInventAPI.Service;
-using Cabinet = TechInventAPI.Models.Cabinet;
 
 namespace TechInventAPI.Dto
 {
