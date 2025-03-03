@@ -20,6 +20,7 @@ namespace TechInvent.BLL.Converters.FrontendDto
 
             return new WorkplaceDto
             {
+                Id = source.IdWorkplace,
                 CompName = source.Name,
                 OsName = source.Os.OsName,
                 Version = source.Os.OsVersion,

@@ -2,7 +2,7 @@
 
 namespace TechInvent.BLL.Dto
 {
-    public class WorkplaceDto
+    public class WorkplaceDto : BaseDto
     {
         [JsonPropertyName("comp_name")]
         public string CompName { get; set; }
