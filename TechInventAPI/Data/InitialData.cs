@@ -1,4 +1,4 @@
-﻿using TechInventAPI.Models;
+﻿using TechInvent.DM.Models;
 
 namespace TechInventAPI.Data
 {

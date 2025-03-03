@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebMVC.Models;
+using TechInvent.DM.Models;
 
 namespace WebMVC.Data;
 
@@ -367,5 +367,5 @@ public partial class TechInventContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-public DbSet<WebMVC.Models.User> User { get; set; } = default!;
+public DbSet<TechInvent.DM.Models.User> User { get; set; } = default!;
 }

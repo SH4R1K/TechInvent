@@ -1,5 +1,5 @@
 ﻿using ClosedXML.Excel;
-using WebMVC.Models;
+using TechInvent.DM.Models;
 namespace WebMVC.Services
 {
     public class ExcelService

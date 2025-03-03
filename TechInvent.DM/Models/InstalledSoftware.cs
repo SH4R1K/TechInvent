@@ -1,4 +1,4 @@
-﻿namespace TechInventAPI.Models
+﻿namespace TechInvent.DM.Models
 {
     public class InstalledSoftware
     {

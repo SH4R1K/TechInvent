@@ -21,7 +21,7 @@ namespace TechInventAPI.Migrations
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("TechInventAPI.Models.AdapterType", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.AdapterType", b =>
                 {
                     b.Property<int>("IdAdapterType")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace TechInventAPI.Migrations
                     b.ToTable("adapter_type", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Cabinet", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Cabinet", b =>
                 {
                     b.Property<int>("IdCabinet")
                         .ValueGeneratedOnAdd()
@@ -63,7 +63,7 @@ namespace TechInventAPI.Migrations
                     b.ToTable("cabinet", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Component", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Component", b =>
                 {
                     b.Property<int>("IdComponent")
                         .ValueGeneratedOnAdd()
@@ -89,7 +89,7 @@ namespace TechInventAPI.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.InstalledSoftware", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.InstalledSoftware", b =>
                 {
                     b.Property<int>("IdSoftware")
                         .HasColumnType("int")
@@ -107,7 +107,7 @@ namespace TechInventAPI.Migrations
                     b.ToTable("installed_software", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Manufacturer", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Manufacturer", b =>
                 {
                     b.Property<int>("IdManufacturer")
                         .ValueGeneratedOnAdd()
@@ -129,7 +129,7 @@ namespace TechInventAPI.Migrations
                     b.ToTable("manufacturer", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Os", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Os", b =>
                 {
                     b.Property<int>("IdOs")
                         .ValueGeneratedOnAdd()
@@ -155,7 +155,7 @@ namespace TechInventAPI.Migrations
                     b.ToTable("os", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Software", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Software", b =>
                 {
                     b.Property<int>("IdSoftware")
                         .ValueGeneratedOnAdd()
@@ -186,7 +186,7 @@ namespace TechInventAPI.Migrations
                     b.ToTable("software", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Workplace", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Workplace", b =>
                 {
                     b.Property<int>("IdWorkplace")
                         .ValueGeneratedOnAdd()
@@ -264,9 +264,9 @@ namespace TechInventAPI.Migrations
                     b.ToTable("user", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Disk", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Disk", b =>
                 {
-                    b.HasBaseType("TechInventAPI.Models.Component");
+                    b.HasBaseType("TechInvent.DM.Models.Component");
 
                     b.Property<string>("Model")
                         .IsRequired()
@@ -281,9 +281,9 @@ namespace TechInventAPI.Migrations
                     b.ToTable("disk", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Gpu", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Gpu", b =>
                 {
-                    b.HasBaseType("TechInventAPI.Models.Component");
+                    b.HasBaseType("TechInvent.DM.Models.Component");
 
                     b.Property<string>("AdapterRam")
                         .HasMaxLength(100)
@@ -298,9 +298,9 @@ namespace TechInventAPI.Migrations
                     b.ToTable("gpu", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Mainboard", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Mainboard", b =>
                 {
-                    b.HasBaseType("TechInventAPI.Models.Component");
+                    b.HasBaseType("TechInvent.DM.Models.Component");
 
                     b.Property<string>("SerialNumber")
                         .HasMaxLength(100)
@@ -310,9 +310,9 @@ namespace TechInventAPI.Migrations
                     b.ToTable("mainboard", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.NetAdapter", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.NetAdapter", b =>
                 {
-                    b.HasBaseType("TechInventAPI.Models.Component");
+                    b.HasBaseType("TechInvent.DM.Models.Component");
 
                     b.Property<int>("AdapterTypeIdAdapterType")
                         .HasColumnType("int")
@@ -336,9 +336,9 @@ namespace TechInventAPI.Migrations
                     b.ToTable("net_adapter", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Processor", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Processor", b =>
                 {
-                    b.HasBaseType("TechInventAPI.Models.Component");
+                    b.HasBaseType("TechInvent.DM.Models.Component");
 
                     b.Property<string>("LogicalCores")
                         .HasMaxLength(100)
@@ -358,9 +358,9 @@ namespace TechInventAPI.Migrations
                     b.ToTable("processor", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Ram", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Ram", b =>
                 {
-                    b.HasBaseType("TechInventAPI.Models.Component");
+                    b.HasBaseType("TechInvent.DM.Models.Component");
 
                     b.Property<string>("Capacity")
                         .HasMaxLength(100)
@@ -396,9 +396,9 @@ namespace TechInventAPI.Migrations
                     b.ToTable("ram", (string)null);
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Component", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Component", b =>
                 {
-                    b.HasOne("TechInventAPI.Models.Workplace", "IdWorkplaceNavigation")
+                    b.HasOne("TechInvent.DM.Models.Workplace", "IdWorkplaceNavigation")
                         .WithMany("Components")
                         .HasForeignKey("IdWorkplace")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -408,15 +408,15 @@ namespace TechInventAPI.Migrations
                     b.Navigation("IdWorkplaceNavigation");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.InstalledSoftware", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.InstalledSoftware", b =>
                 {
-                    b.HasOne("TechInventAPI.Models.Software", "SoftwareNavigation")
+                    b.HasOne("TechInvent.DM.Models.Software", "SoftwareNavigation")
                         .WithMany("InstalledSoftware")
                         .HasForeignKey("IdSoftware")
                         .IsRequired()
                         .HasConstraintName("fk_software_installed_software");
 
-                    b.HasOne("TechInventAPI.Models.Workplace", "WorkplaceNavigation")
+                    b.HasOne("TechInvent.DM.Models.Workplace", "WorkplaceNavigation")
                         .WithMany("InstalledSoftware")
                         .HasForeignKey("IdWorkplace")
                         .IsRequired()
@@ -427,9 +427,9 @@ namespace TechInventAPI.Migrations
                     b.Navigation("WorkplaceNavigation");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Software", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Software", b =>
                 {
-                    b.HasOne("TechInventAPI.Models.Manufacturer", "ManufacturerNavigation")
+                    b.HasOne("TechInvent.DM.Models.Manufacturer", "ManufacturerNavigation")
                         .WithMany("Softwares")
                         .HasForeignKey("IdManufacturer")
                         .IsRequired()
@@ -438,15 +438,15 @@ namespace TechInventAPI.Migrations
                     b.Navigation("ManufacturerNavigation");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Workplace", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Workplace", b =>
                 {
-                    b.HasOne("TechInventAPI.Models.Cabinet", "IdCabinetNavigation")
+                    b.HasOne("TechInvent.DM.Models.Cabinet", "IdCabinetNavigation")
                         .WithMany("Workplaces")
                         .HasForeignKey("IdCabinet")
                         .IsRequired()
                         .HasConstraintName("fk_workplace_cabinet");
 
-                    b.HasOne("TechInventAPI.Models.Os", "IdOsNavigation")
+                    b.HasOne("TechInvent.DM.Models.Os", "IdOsNavigation")
                         .WithMany("Workplaces")
                         .HasForeignKey("IdOs")
                         .IsRequired()
@@ -468,11 +468,11 @@ namespace TechInventAPI.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Disk", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Disk", b =>
                 {
-                    b.HasOne("TechInventAPI.Models.Component", "IdComponentNavigation")
+                    b.HasOne("TechInvent.DM.Models.Component", "IdComponentNavigation")
                         .WithOne("Disk")
-                        .HasForeignKey("TechInventAPI.Models.Disk", "IdComponent")
+                        .HasForeignKey("TechInvent.DM.Models.Disk", "IdComponent")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_disk_component1");
@@ -480,11 +480,11 @@ namespace TechInventAPI.Migrations
                     b.Navigation("IdComponentNavigation");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Gpu", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Gpu", b =>
                 {
-                    b.HasOne("TechInventAPI.Models.Component", "IdComponentNavigation")
+                    b.HasOne("TechInvent.DM.Models.Component", "IdComponentNavigation")
                         .WithOne("Gpu")
-                        .HasForeignKey("TechInventAPI.Models.Gpu", "IdComponent")
+                        .HasForeignKey("TechInvent.DM.Models.Gpu", "IdComponent")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_gpu_component1");
@@ -492,11 +492,11 @@ namespace TechInventAPI.Migrations
                     b.Navigation("IdComponentNavigation");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Mainboard", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Mainboard", b =>
                 {
-                    b.HasOne("TechInventAPI.Models.Component", "IdComponentNavigation")
+                    b.HasOne("TechInvent.DM.Models.Component", "IdComponentNavigation")
                         .WithOne("Mainboard")
-                        .HasForeignKey("TechInventAPI.Models.Mainboard", "IdComponent")
+                        .HasForeignKey("TechInvent.DM.Models.Mainboard", "IdComponent")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_mainboard_component1");
@@ -504,22 +504,22 @@ namespace TechInventAPI.Migrations
                     b.Navigation("IdComponentNavigation");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.NetAdapter", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.NetAdapter", b =>
                 {
-                    b.HasOne("TechInventAPI.Models.AdapterType", "AdapterTypeIdAdapterTypeNavigation")
+                    b.HasOne("TechInvent.DM.Models.AdapterType", "AdapterTypeIdAdapterTypeNavigation")
                         .WithMany("NetAdapters")
                         .HasForeignKey("AdapterTypeIdAdapterType")
                         .IsRequired()
                         .HasConstraintName("fk_net_adapter_adapter_type1");
 
-                    b.HasOne("TechInventAPI.Models.Component", "IdComponentNavigation")
+                    b.HasOne("TechInvent.DM.Models.Component", "IdComponentNavigation")
                         .WithOne("NetAdapter")
-                        .HasForeignKey("TechInventAPI.Models.NetAdapter", "IdComponent")
+                        .HasForeignKey("TechInvent.DM.Models.NetAdapter", "IdComponent")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_ram_component1");
 
-                    b.HasOne("TechInventAPI.Models.Manufacturer", "IdManufacturerNavigation")
+                    b.HasOne("TechInvent.DM.Models.Manufacturer", "IdManufacturerNavigation")
                         .WithMany("NetAdapters")
                         .HasForeignKey("IdManufacturer")
                         .IsRequired()
@@ -532,11 +532,11 @@ namespace TechInventAPI.Migrations
                     b.Navigation("IdManufacturerNavigation");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Processor", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Processor", b =>
                 {
-                    b.HasOne("TechInventAPI.Models.Component", "IdComponentNavigation")
+                    b.HasOne("TechInvent.DM.Models.Component", "IdComponentNavigation")
                         .WithOne("Processor")
-                        .HasForeignKey("TechInventAPI.Models.Processor", "IdComponent")
+                        .HasForeignKey("TechInvent.DM.Models.Processor", "IdComponent")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_processor_component1");
@@ -544,16 +544,16 @@ namespace TechInventAPI.Migrations
                     b.Navigation("IdComponentNavigation");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Ram", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Ram", b =>
                 {
-                    b.HasOne("TechInventAPI.Models.Component", "IdComponentNavigation")
+                    b.HasOne("TechInvent.DM.Models.Component", "IdComponentNavigation")
                         .WithOne("Ram")
-                        .HasForeignKey("TechInventAPI.Models.Ram", "IdComponent")
+                        .HasForeignKey("TechInvent.DM.Models.Ram", "IdComponent")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_net_adapter_component1");
 
-                    b.HasOne("TechInventAPI.Models.Manufacturer", "IdManufacturerNavigation")
+                    b.HasOne("TechInvent.DM.Models.Manufacturer", "IdManufacturerNavigation")
                         .WithMany("Rams")
                         .HasForeignKey("IdManufacturer")
                         .IsRequired()
@@ -564,17 +564,17 @@ namespace TechInventAPI.Migrations
                     b.Navigation("IdManufacturerNavigation");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.AdapterType", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.AdapterType", b =>
                 {
                     b.Navigation("NetAdapters");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Cabinet", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Cabinet", b =>
                 {
                     b.Navigation("Workplaces");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Component", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Component", b =>
                 {
                     b.Navigation("Disk");
 
@@ -589,7 +589,7 @@ namespace TechInventAPI.Migrations
                     b.Navigation("Ram");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Manufacturer", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Manufacturer", b =>
                 {
                     b.Navigation("NetAdapters");
 
@@ -598,17 +598,17 @@ namespace TechInventAPI.Migrations
                     b.Navigation("Softwares");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Os", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Os", b =>
                 {
                     b.Navigation("Workplaces");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Software", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Software", b =>
                 {
                     b.Navigation("InstalledSoftware");
                 });
 
-            modelBuilder.Entity("TechInventAPI.Models.Workplace", b =>
+            modelBuilder.Entity("TechInvent.DM.Models.Workplace", b =>
                 {
                     b.Navigation("Components");
 

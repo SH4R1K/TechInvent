@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebMVC.Models;
+namespace TechInvent.DM.Models;
 
 public partial class Processor : Component
 {

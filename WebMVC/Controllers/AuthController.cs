@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Common;
 using WebMVC.Data;
-using WebMVC.Models;
+using TechInvent.DM.Models;
 using WebMVC.Services;
 
 namespace WebMVC.Controllers

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TechInventAPI.Models;
+namespace TechInvent.DM.Models;
 
 public partial class Ram : Component
 {

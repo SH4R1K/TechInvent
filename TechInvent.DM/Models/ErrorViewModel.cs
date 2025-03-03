@@ -1,4 +1,4 @@
-namespace WebMVC.Models
+namespace TechInvent.DM.Models
 {
     public class ErrorViewModel
     {

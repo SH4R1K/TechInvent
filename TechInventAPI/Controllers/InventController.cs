@@ -4,7 +4,7 @@ using NuGet.Protocol;
 using TechInventAPI.Data;
 using TechInventAPI.Dto;
 using TechInventAPI.DtoModels;
-using TechInventAPI.Models;
+using TechInvent.DM.Models;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TechInventAPI.Controllers

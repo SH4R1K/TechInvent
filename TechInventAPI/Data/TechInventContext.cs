@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using TechInventAPI.Models;
+using TechInvent.DM.Models;
 
 namespace TechInventAPI.Data;
 

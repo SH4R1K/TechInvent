@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TechInventAPI.Models;
+namespace TechInvent.DM.Models;
 
 public partial class AdapterType
 {
@@ -9,5 +9,5 @@ public partial class AdapterType
 
     public string? Name { get; set; }
 
-    public virtual ICollection<NetAdapter> NetAdapters { get; set; } = new List<NetAdapter>();
+    public virtual List<NetAdapter> NetAdapters { get; set; } = new List<NetAdapter>();
 }

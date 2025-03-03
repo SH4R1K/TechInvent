@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TechInventAPI.Models;
+namespace TechInvent.DM.Models;
 
 public partial class Cabinet
 {
@@ -9,5 +9,5 @@ public partial class Cabinet
 
     public string? Name { get; set; }
 
-    public virtual ICollection<Workplace> Workplaces { get; set; } = new List<Workplace>();
+    public virtual List<Workplace> Workplaces { get; set; } = new List<Workplace>();
 }

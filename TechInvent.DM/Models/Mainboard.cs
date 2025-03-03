@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TechInventAPI.Models;
+namespace TechInvent.DM.Models;
 
-public partial class Gpu : Component
+public partial class Mainboard : Component
 {
     public int IdComponent { get; set; }
 
-    public string? AdapterRam { get; set; }
-
-    public string? Uuid { get; set; }
+    public string? SerialNumber { get; set; }
 
     public virtual Component IdComponentNavigation { get; set; } = null!;
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TechInventAPI.Models;
+namespace TechInvent.DM.Models;
 
 public partial class Os
 {
@@ -11,5 +11,5 @@ public partial class Os
 
     public string? OsVersion { get; set; }
 
-    public virtual ICollection<Workplace> Workplaces { get; set; } = new List<Workplace>();
+    public virtual List<Workplace> Workplaces { get; set; } = new List<Workplace>();
 }
