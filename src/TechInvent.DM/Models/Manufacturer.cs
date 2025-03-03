@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TechInvent.DM.Models;
+﻿namespace TechInvent.DM.Models;
 
 public partial class Manufacturer
 {

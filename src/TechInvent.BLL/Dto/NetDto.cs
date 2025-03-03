@@ -1,22 +1,20 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace TechInvent.BLL.Dto
 {
-    public class NetDto
+    public class NetDto : BaseDto
     {
-        public int IdNet { get; set; }
-        public int IdHardwareInfo { get; set; }
-        public HardwareInfo HardwareInfo { get; set; }
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("manufacturer")]
+        [JsonPropertyName("manufacturer")]
         public string Manufacturer { get; set; }
 
-        [JsonProperty("mac_address")]
+        [JsonPropertyName("mac_address")]
         public string MacAddress { get; set; }
 
-        [JsonProperty("adapter_type")]
+        [JsonPropertyName("adapter_type")]
         public string AdapterType { get; set; }
     }
 

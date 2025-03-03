@@ -11,7 +11,7 @@ namespace TechInvent.BLL.Interfaces
     {
         Task<List<WorkplaceDto>?> GetAllAsync();
         Task<WorkplaceDto?> GetByIdAsync(int id);
-        Task<WorkplaceDto?> CreateAsync(WorkplaceDto workplaceDto);
+        Task<WorkplaceDto?> AddAsync(WorkplaceDto workplaceDto);
         Task<WorkplaceDto?> UpdateAsync(int id, WorkplaceDto workplaceDto);
         Task DeleteAsync(int id);
     }

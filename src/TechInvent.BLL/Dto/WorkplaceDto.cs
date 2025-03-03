@@ -1,24 +1,21 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace TechInvent.BLL.Dto
 {
     public class WorkplaceDto
     {
-        public int IdWorkplace { get; set; }
-        [JsonProperty("comp_name")]
+        [JsonPropertyName("comp_name")]
         public string CompName { get; set; }
 
-        [JsonProperty("os_name")]
+        [JsonPropertyName("os_name")]
         public string OsName { get; set; }
 
-        [JsonProperty("version")]
+        [JsonPropertyName("version")]
         public string Version { get; set; }
 
-        [JsonProperty("hardware_info")]
+        [JsonPropertyName("hardware_info")]
         public HardwareInfo? HardwareInfo { get; set; }
-        public int IdCabinet { get; set; }
-        public CabinetDto Cabinet { get; set; }
-        [JsonProperty("software")]
+        [JsonPropertyName("software")]
         public List<SoftwareDto> Software { get; set; }
     }
 

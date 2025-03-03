@@ -86,7 +86,7 @@ public partial class TechInventContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("name");
 
-            entity.HasOne(d => d.IdWorkplaceNavigation).WithMany(p => p.Components)
+            entity.HasOne(d => d.Workplace).WithMany(p => p.Components)
                 .HasForeignKey(d => d.IdWorkplace)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_hardware_component_workplace1");
@@ -104,7 +104,7 @@ public partial class TechInventContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("uuid");
 
-            entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Gpu)
+            entity.HasOne(d => d.Component).WithOne(p => p.Gpu)
                 .HasForeignKey<Gpu>(d => d.IdComponent)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_gpu_component1");
@@ -120,7 +120,7 @@ public partial class TechInventContext : DbContext
             entity.Property(e => e.Size)
                 .HasColumnName("size");
 
-            entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Disk)
+            entity.HasOne(d => d.Component).WithOne(p => p.Disk)
                 .HasForeignKey<Disk>(d => d.IdComponent)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_disk_component1");
@@ -135,7 +135,7 @@ public partial class TechInventContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("serial_number");
 
-            entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Mainboard)
+            entity.HasOne(d => d.Component).WithOne(p => p.Mainboard)
                 .HasForeignKey<Mainboard>(d => d.IdComponent)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_mainboard_component1");
@@ -159,30 +159,30 @@ public partial class TechInventContext : DbContext
         {
             entity.ToTable("net_adapter");
 
-            entity.HasIndex(e => e.AdapterTypeIdAdapterType, "fk_net_adapter_adapter_type1_idx");
+            entity.HasIndex(e => e.IdAdapterType, "fk_net_adapter_adapter_type1_idx");
 
             entity.HasIndex(e => e.IdManufacturer, "fk_net_adapter_manufacturer2_idx");
 
             entity.HasIndex(e => e.IdComponent, "fk_ram_component1_idx");
 
             entity.Property(e => e.IdComponent).HasColumnName("id_component");
-            entity.Property(e => e.AdapterTypeIdAdapterType).HasColumnName("adapter_type_id_adapter_type");
+            entity.Property(e => e.IdAdapterType).HasColumnName("adapter_type_id_adapter_type");
             entity.Property(e => e.IdManufacturer).HasColumnName("id_manufacturer");
             entity.Property(e => e.MacAddress)
                 .HasMaxLength(100)
                 .HasColumnName("mac_address");
 
-            entity.HasOne(d => d.AdapterTypeIdAdapterTypeNavigation).WithMany(p => p.NetAdapters)
-                .HasForeignKey(d => d.AdapterTypeIdAdapterType)
+            entity.HasOne(d => d.AdapterType).WithMany(p => p.NetAdapters)
+                .HasForeignKey(d => d.IdAdapterType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_net_adapter_adapter_type1");
 
-            entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.NetAdapter)
+            entity.HasOne(d => d.Component).WithOne(p => p.NetAdapter)
                 .HasForeignKey<NetAdapter>(d => d.IdComponent)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_ram_component1");
 
-            entity.HasOne(d => d.IdManufacturerNavigation).WithMany(p => p.NetAdapters)
+            entity.HasOne(d => d.Manufacturer).WithMany(p => p.NetAdapters)
                 .HasForeignKey(d => d.IdManufacturer)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_net_adapter_manufacturer2");
@@ -220,7 +220,7 @@ public partial class TechInventContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("physical_cores");
 
-            entity.HasOne(d => d.IdComponentNavigation).WithOne(p => p.Processor)
+            entity.HasOne(d => d.Component).WithOne(p => p.Processor)
                 .HasForeignKey<Processor>(d => d.IdComponent)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_processor_component1");
@@ -255,7 +255,7 @@ public partial class TechInventContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_net_adapter_component1");
 
-            entity.HasOne(d => d.IdManufacturerNavigation).WithMany(p => p.Rams)
+            entity.HasOne(d => d.Manufacturer).WithMany(p => p.Rams)
                 .HasForeignKey(d => d.IdManufacturer)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_net_adapter_manufacturer1");
@@ -284,12 +284,12 @@ public partial class TechInventContext : DbContext
             entity.Property(e => e.LastUpdate)
                 .HasColumnName("last_update");
 
-            entity.HasOne(d => d.IdCabinetNavigation).WithMany(p => p.Workplaces)
+            entity.HasOne(d => d.Cabinet).WithMany(p => p.Workplaces)
                 .HasForeignKey(d => d.IdCabinet)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_workplace_cabinet");
 
-            entity.HasOne(d => d.IdOsNavigation).WithMany(p => p.Workplaces)
+            entity.HasOne(d => d.Os).WithMany(p => p.Workplaces)
                 .HasForeignKey(d => d.IdOs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_workplace_os1");
@@ -311,7 +311,7 @@ public partial class TechInventContext : DbContext
                 .HasColumnName("version");
             entity.Property(e => e.IdManufacturer).HasColumnName("id_manufacturer");
 
-            entity.HasOne(d => d.ManufacturerNavigation).WithMany(p => p.Softwares)
+            entity.HasOne(d => d.Manufacturer).WithMany(p => p.Softwares)
                 .HasForeignKey(d => d.IdManufacturer)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_software_manufacturer");
@@ -325,12 +325,12 @@ public partial class TechInventContext : DbContext
             entity.Property(e => e.IdSoftware).HasColumnName("id_software");
             entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
 
-            entity.HasOne(d => d.SoftwareNavigation).WithMany(p => p.InstalledSoftware)
+            entity.HasOne(d => d.Software).WithMany(p => p.InstalledSoftware)
                 .HasForeignKey(d => d.IdSoftware)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_software_installed_software");
 
-            entity.HasOne(d => d.WorkplaceNavigation).WithMany(p => p.InstalledSoftware)
+            entity.HasOne(d => d.Workplace).WithMany(p => p.InstalledSoftware)
                 .HasForeignKey(d => d.IdWorkplace)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_workplace_installed_software");

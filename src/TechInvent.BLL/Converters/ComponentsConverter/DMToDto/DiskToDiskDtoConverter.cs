@@ -2,15 +2,16 @@
 using TechInvent.BLL.Interfaces.Converter;
 using TechInvent.DM.Models;
 
-namespace TechInvent.BLL.Converters
+namespace TechInvent.BLL.Converters.ComponentsConverter
 {
     // Преобразование DiskDto -> Disk.
-    public class DiskDtoToDiskConverter : IConverter<DiskDto, Disk>
+    public class DiskToDiskDtoConverter : IConverter<Disk, DiskDto>
     {
-        public Disk Convert(DiskDto source)
+        public DiskDto Convert(Disk source)
         {
-            return new Disk
+            return new DiskDto
             {
+                Id = source.IdComponent,
                 Model = source.Model,
                 Size = source.Size
             };

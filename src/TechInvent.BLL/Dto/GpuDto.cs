@@ -1,20 +1,17 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace TechInvent.BLL.Dto
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-    public class GpuDto
+    public class GpuDto : BaseDto
     {
-        public int IdGpu { get; set; }
-        public int IdHardwareInfo { get; set; }
-        public HardwareInfo HardwareInfo { get; set; }
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public required string Name { get; set; }
 
-        [JsonProperty("adapter_ram")]
+        [JsonPropertyName("adapter_ram")]
         public double? AdapterRam { get; set; }
 
-        [JsonProperty("uuid")]
+        [JsonPropertyName("uuid")]
         public string? Uuid { get; set; }
     }
 }

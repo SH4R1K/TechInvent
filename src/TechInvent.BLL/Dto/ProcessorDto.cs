@@ -1,22 +1,20 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace TechInvent.BLL.Dto
 {
-    public class ProcessorDto
+    public class ProcessorDto : BaseDto
     {
-        public int IdProcessor { get; set; }
-        public int IdHardwareInfo { get; set; }
-        public HardwareInfo HardwareInfo { get; set; }
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("physical_cores")]
+        [JsonPropertyName("physical_cores")]
         public int PhysicalCores { get; set; }
 
-        [JsonProperty("logical_cores")]
+        [JsonPropertyName("logical_cores")]
         public int LogicalCores { get; set; }
 
-        [JsonProperty("max_clock_speed")]
+        [JsonPropertyName("max_clock_speed")]
         public int MaxClockSpeed { get; set; }
     }
 

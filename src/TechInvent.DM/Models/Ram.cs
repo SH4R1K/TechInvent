@@ -21,5 +21,5 @@ public partial class Ram : Component
 
     public virtual Component IdComponentNavigation { get; set; } = null!;
 
-    public virtual Manufacturer IdManufacturerNavigation { get; set; } = null!;
+    public virtual Manufacturer Manufacturer { get; set; } = null!;
 }

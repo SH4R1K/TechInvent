@@ -13,7 +13,7 @@ public partial class Component
 
     public virtual Gpu? Gpu { get; set; }
 
-    public virtual Workplace IdWorkplaceNavigation { get; set; } = null!;
+    public virtual Workplace Workplace { get; set; } = null!;
 
     public virtual Mainboard? Mainboard { get; set; }
 

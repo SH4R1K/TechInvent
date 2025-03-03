@@ -2,7 +2,7 @@
 using TechInvent.BLL.Interfaces.Converter;
 using TechInvent.DM.Models;
 
-namespace TechInvent.BLL.Converters
+namespace TechInvent.BLL.Converters.ComponentsConverter.DtoToDM
 {
     // Преобразование RamDto -> Ram.
     public class RamDtoToRamConverter : IConverter<RamDto, Ram>
@@ -17,7 +17,7 @@ namespace TechInvent.BLL.Converters
                 MemoryType = source.MemoryType.ToString(),
                 PartNumber = source.PartNumber,
                 SerialNumber = source.SerialNumber,
-                IdManufacturerNavigation = new Manufacturer { Name = source.Manufacturer }
+                Manufacturer = new Manufacturer { Name = source.Manufacturer }
             };
         }
     }

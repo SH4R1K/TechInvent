@@ -11,11 +11,11 @@ public partial class NetAdapter : Component
 
     public int IdManufacturer { get; set; }
 
-    public int AdapterTypeIdAdapterType { get; set; }
+    public int IdAdapterType { get; set; }
 
-    public virtual AdapterType AdapterTypeIdAdapterTypeNavigation { get; set; } = null!;
+    public virtual AdapterType AdapterType { get; set; } = null!;
 
-    public virtual Component IdComponentNavigation { get; set; } = null!;
+    public virtual Component Component { get; set; } = null!;
 
-    public virtual Manufacturer IdManufacturerNavigation { get; set; } = null!;
+    public virtual Manufacturer Manufacturer { get; set; } = null!;
 }

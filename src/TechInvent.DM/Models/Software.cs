@@ -7,6 +7,6 @@
         public string Version { get; set; }
         public int IdManufacturer { get; set; }
         public virtual ICollection<InstalledSoftware> InstalledSoftware { get; set; } = new List<InstalledSoftware>();
-        public Manufacturer ManufacturerNavigation { get; set; }
+        public Manufacturer Manufacturer { get; set; }
     }
 }

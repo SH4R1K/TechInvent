@@ -11,6 +11,6 @@ namespace TechInvent.DAL.Interfaces
 {
     public interface ICabinetRepository: IRepository<Cabinet>
     {
-        public Task<Cabinet?> FindAsync(Expression<Func<Cabinet, bool>> predicate);
+        public Task<Workplace?> AddWorkplaceAsync(int id, Workplace workplace);
     }
 }

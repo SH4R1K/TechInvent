@@ -1,16 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace TechInvent.BLL.Dto
 {
-    public class DiskDto
+    public class DiskDto : BaseDto
     {
-        public int IdDisk { get; set; }
-        public int IdHardwareInfo { get; set; }
-        public HardwareInfo HardwareInfo { get; set; }
-        [JsonProperty("model")]
+        [JsonPropertyName("model")]
         public string Model { get; set; }
 
-        [JsonProperty("size")]
+        [JsonPropertyName("size")]
         public int Size { get; set; }
     }
 }

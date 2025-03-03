@@ -10,9 +10,9 @@ namespace TechInvent.BLL.Interfaces
     public interface ICabinetService
     {
         Task<List<CabinetDto>?> GetAllAsync();
-        Task<CabinetDto?> GetByIdAsync(int id);
-        Task<CabinetDto?> CreateAsync(CabinetDto cabinetDto);
-        Task<CabinetDto?> UpdateAsync(int id, CabinetDto cabinetDto);
+        Task<InventCabinetDto?> GetByIdAsync(int id);
+        Task<InventCabinetDto?> AddAsync(InventCabinetDto cabinetDto);
+        Task<InventCabinetDto?> UpdateAsync(int id, InventCabinetDto cabinetDto);
         Task DeleteAsync(int id);
     }
 }

@@ -1,16 +1,17 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace TechInvent.BLL.Dto
 {
-    public class SoftwareDto
+    public class SoftwareDto : BaseDto
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("version")]
+        [JsonPropertyName("version")]
         public string Version { get; set; }
 
-        [JsonProperty("vendor")]
+        [JsonPropertyName("vendor")]
         public string Vendor { get; set; }
     }
 }

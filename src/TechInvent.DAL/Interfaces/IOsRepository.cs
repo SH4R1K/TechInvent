@@ -9,5 +9,6 @@ namespace TechInvent.DAL.Interfaces
 {
     public interface IOsRepository : IRepository<Os>
     {
+        public Task<Os> GetOrCreateAsync(string name, string osVersion);
     }
 }

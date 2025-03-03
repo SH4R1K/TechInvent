@@ -2,7 +2,7 @@
 using TechInvent.BLL.Interfaces.Converter;
 using TechInvent.DM.Models;
 
-namespace TechInvent.BLL.Converters
+namespace TechInvent.BLL.Converters.InventDto
 {
     // Преобразование SoftwareDto -> Software.
     public class SoftwareDtoToSoftwareConverter : IConverter<SoftwareDto, Software>
@@ -13,10 +13,7 @@ namespace TechInvent.BLL.Converters
             {
                 Name = source.Name,
                 Version = source.Version,
-                // Создаём производителя на основе vendor.
-                // Обратите внимание: в реальном приложении может потребоваться механизм переиспользования,
-                // чтобы не создавать дубликаты.
-                ManufacturerNavigation = new Manufacturer { Name = source.Vendor }
+                Manufacturer = new Manufacturer { Name = source.Vendor }
             };
         }
     }

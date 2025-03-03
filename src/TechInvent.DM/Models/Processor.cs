@@ -13,5 +13,5 @@ public partial class Processor : Component
 
     public string? MaxClockSpeed { get; set; }
 
-    public virtual Component IdComponentNavigation { get; set; } = null!;
+    public virtual Component Component { get; set; } = null!;
 }

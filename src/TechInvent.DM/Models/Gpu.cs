@@ -11,5 +11,5 @@ public partial class Gpu : Component
 
     public string? Uuid { get; set; }
 
-    public virtual Component IdComponentNavigation { get; set; } = null!;
+    public virtual Component Component { get; set; } = null!;
 }

@@ -9,5 +9,5 @@ public partial class Mainboard : Component
 
     public string? SerialNumber { get; set; }
 
-    public virtual Component IdComponentNavigation { get; set; } = null!;
+    public virtual Component Component { get; set; } = null!;
 }

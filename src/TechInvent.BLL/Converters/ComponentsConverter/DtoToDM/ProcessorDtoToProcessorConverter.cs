@@ -2,7 +2,7 @@
 using TechInvent.BLL.Interfaces.Converter;
 using TechInvent.DM.Models;
 
-namespace TechInvent.BLL.Converters
+namespace TechInvent.BLL.Converters.ComponentsConverter.DtoToDM
 {
     // Преобразование ProcessorDto -> Processor.
     public class ProcessorDtoToProcessorConverter : IConverter<ProcessorDto, Processor>

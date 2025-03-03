@@ -14,7 +14,16 @@ namespace TechInvent.DAL.Repositories
             _context = context;
         }
 
-        public async Task<Cabinet?> CreateAsync(Cabinet cabinet)
+        public async Task<Workplace?> AddWorkplaceAsync(int id, Workplace workplace)
+        {
+            var cabinet = await _context.Cabinets.Include(c => c.Workplaces).FirstOrDefaultAsync(c => c.IdCabinet == id);
+            cabinet.Workplaces.Add(workplace);
+            _context.Update(cabinet);
+            await _context.SaveChangesAsync();
+            return workplace;
+        }
+
+        public async Task<Cabinet?> AddAsync(Cabinet cabinet)
         {
             _context.Cabinets.Add(cabinet);
             await _context.SaveChangesAsync();
@@ -30,12 +39,12 @@ namespace TechInvent.DAL.Repositories
 
         public async Task<Cabinet?> FindAsync(Expression<Func<Cabinet, bool>> predicate)
         {
-            return await _context.Cabinets.FindAsync(predicate);
+            return await _context.Cabinets.FirstOrDefaultAsync(predicate);
         }
 
         public async Task<List<Cabinet>?> GetAllAsync()
         {
-            return await _context.Cabinets.ToListAsync();
+            return await _context.Cabinets.Include(c => c.Workplaces).ThenInclude(c => c.Os).ToListAsync();
         }
 
         public async Task<Cabinet?> GetByIdAsync(int id)
@@ -45,9 +54,12 @@ namespace TechInvent.DAL.Repositories
 
         public async Task<Cabinet?> UpdateAsync(int id, Cabinet cabinet)
         {
-            _context.Cabinets.Update(cabinet);
+            var existingCabinet = await _context.Cabinets.FindAsync(id);
+            if (existingCabinet == null) return null;
+
+            _context.Entry(existingCabinet).CurrentValues.SetValues(cabinet);
             await _context.SaveChangesAsync();
-            return cabinet;
+            return existingCabinet;
         }
     }
 }

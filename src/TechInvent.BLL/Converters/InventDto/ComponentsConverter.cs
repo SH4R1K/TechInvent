@@ -2,7 +2,7 @@
 using TechInvent.BLL.Interfaces.Converter;
 using TechInvent.DM.Models;
 
-namespace TechInvent.BLL.Converters
+namespace TechInvent.BLL.Converters.InventDto
 {
     // Преобразование HardwareInfo -> List<Component>
     // Каждый тип компонента конвертируется через свой конвертер.

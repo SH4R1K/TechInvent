@@ -6,7 +6,7 @@ using TechInventAPI.Models;
 namespace TechInventAPI.Service
 {
     public class EntityCheckerService
-    {
+    {   
         private readonly TechInventContext _context;
 
         public EntityCheckerService(TechInventContext context)

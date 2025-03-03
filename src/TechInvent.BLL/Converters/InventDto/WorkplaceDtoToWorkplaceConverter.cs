@@ -2,7 +2,7 @@
 using TechInvent.BLL.Interfaces.Converter;
 using TechInvent.DM.Models;
 
-namespace TechInvent.BLL.Converters
+namespace TechInvent.BLL.Converters.InventDto
 {
     public class WorkplaceDtoToWorkplaceConverter : IConverter<WorkplaceDto, Workplace>
     {
@@ -37,11 +37,11 @@ namespace TechInvent.BLL.Converters
             return new Workplace
             {
                 Name = source.CompName,
-                IdOsNavigation = os,
+                Os = os,
                 Components = components,
                 // Преобразуем список ПО в коллекцию установленных программ
                 InstalledSoftware = softwareList
-                    .Select(s => new InstalledSoftware { SoftwareNavigation = s })
+                    .Select(s => new InstalledSoftware { Software = s })
                     .ToList()
             };
         }
