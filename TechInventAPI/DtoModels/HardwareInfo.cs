@@ -1,31 +1,26 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace TechInventAPI.DtoModels
 {
     public class HardwareInfo
     {
-        public int IdHardwareInfo { get; set; }
-        [JsonProperty("mainboard")]
+        [JsonPropertyName("mainboard")]
         public MainboardDto? Mainboard { get; set; }
 
-        [JsonProperty("processor")]
+        [JsonPropertyName("processor")]
         public List<ProcessorDto>? Processor { get; set; }
 
-        [JsonProperty("ram")]
+        [JsonPropertyName("ram")]
         public List<RamDto>? Ram { get; set; }
 
-        [JsonProperty("net")]
+        [JsonPropertyName("net")]
         public List<NetDto>? Net { get; set; }
 
-        [JsonProperty("gpu")]
+        [JsonPropertyName("gpu")]
         public List<GpuDto> Gpu { get; set; }
         
-        [JsonProperty("disk")]
+        [JsonPropertyName("disk")]
         public List<DiskDto> Disks { get; set; }
-
-        [JsonProperty("perifery")]
-        public Perifery? Perifery { get; set; }
-        public int IdWorkplace { get; set; }
-        public WorkplaceDto Workplace { get; set; }
     }
 }

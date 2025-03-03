@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace TechInventAPI.DtoModels
 {
     public class CabinetDto
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string? Name { get; set; }
-        [JsonProperty("workplace")]
+        [JsonPropertyName("workplace")]
         public WorkplaceDto? Workplace { get; set; }
     }
 

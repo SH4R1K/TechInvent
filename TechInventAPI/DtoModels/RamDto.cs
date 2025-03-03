@@ -1,31 +1,29 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace TechInventAPI.DtoModels
 {
     public class RamDto
     {
-        public int IdRam { get; set; }
-        public int IdHardwareInfo { get; set; }
-        public HardwareInfo HardwareInfo { get; set; }
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("manufacturer")]
+        [JsonPropertyName("manufacturer")]
         public string Manufacturer { get; set; }
 
-        [JsonProperty("speed")]
+        [JsonPropertyName("speed")]
         public int Speed { get; set; }
 
-        [JsonProperty("capacity")]
+        [JsonPropertyName("capacity")]
         public string Capacity { get; set; }
 
-        [JsonProperty("memory_type")]
+        [JsonPropertyName("memory_type")]
         public int MemoryType { get; set; }
 
-        [JsonProperty("part_number")]
+        [JsonPropertyName("part_number")]
         public string? PartNumber { get; set; }
 
-        [JsonProperty("serial_number")]
+        [JsonPropertyName("serial_number")]
         public string? SerialNumber { get; set; }
     }
 

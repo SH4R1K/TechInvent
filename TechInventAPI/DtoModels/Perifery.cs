@@ -1,22 +1,20 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace TechInventAPI.DtoModels
 {
     public class Perifery
     {
-        public int IdPerifery { get; set; }
-        public int IdHardwareInfo { get; set; }
-        public HardwareInfo HardwareInfo { get; set; }
-        [JsonProperty("monitors")]
+        [JsonPropertyName("monitors")]
         public List<Monitor> Monitors { get; set; }
 
-        [JsonProperty("mice")]
+        [JsonPropertyName("mice")]
         public List<Mouse> Mice { get; set; }
 
-        [JsonProperty("keyboards")]
+        [JsonPropertyName("keyboards")]
         public List<Keyboard> Keyboards { get; set; }
 
-        [JsonProperty("printers")]
+        [JsonPropertyName("printers")]
         public List<Printer> Printers { get; set; }
     }
 

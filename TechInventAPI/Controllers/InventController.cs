@@ -21,11 +21,10 @@ namespace TechInventAPI.Controllers
             _dtoConverter = dtoConverter;
         }
         [HttpPost(Name = "PostInvent")]
-        public IActionResult Post(object json)
+        public IActionResult Post([FromBody] CabinetDto cabinetDto)
         {
             try
             {
-                var cabinetDto = JsonConvert.DeserializeObject<CabinetDto>(json.ToString());
                 _dtoConverter.ConvertDtoCabinet(cabinetDto);
                 Console.WriteLine("Cabinet updated");
                 return StatusCode(200);
