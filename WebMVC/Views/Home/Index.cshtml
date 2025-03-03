@@ -9,8 +9,7 @@
         <a asp-controller="Cabinets" asp-action="Index" class="btn btn-primary" style="width: 18rem; margin: 1rem;">Список кабинетов</a>
         @if (Context.User.IsInRole("admin"))
         {
-        <a asp-controller="Users" asp-action="Index" class="btn btn-primary" style="width: 18rem; margin: 1rem;">Управление пользователями</a>
+            <a asp-controller="Users" asp-action="Index" class="btn btn-primary" style="width: 18rem; margin: 1rem;">Управление пользователями</a>
         }
     </div>
-
 </div>

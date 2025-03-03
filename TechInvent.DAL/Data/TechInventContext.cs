@@ -39,6 +39,7 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<Software> Softwares { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<TechRequest> TechRequests { get; set; }
+    public virtual DbSet<TechRequestWorkplace> TechRequestWorkplaces { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -12,7 +12,7 @@ namespace TechInvent.DM.Models
         public int IdWorkplace { get; set; }
         public int IdTechRequest { get; set; }
         public bool IsActive { get; set; } = true;
-        public required Workplace Workplace { get; set; }
-        public required TechRequest TechRequest { get; set; }
+        public Workplace Workplace { get; set; }
+        public TechRequest TechRequest { get; set; }
     }
 }

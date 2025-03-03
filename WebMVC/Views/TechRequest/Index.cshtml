@@ -1,0 +1,28 @@
+﻿@model IEnumerable<TechRequest>
+@{
+    ViewData["Title"] = "Заявки";
+}
+
+<h1>Заявки на техническое обслуживание</h1>
+
+@{
+    var techRequests = Model.ToList();
+        <div>
+            <a class="btn btn-secondary" asp-action="GenerateReport">Экспортировать в Excel</a>
+        </div>
+        <div class="row justify-content-center justify-content-md-start">
+        @for (int j = 0; j < techRequests.Count; j++)
+        {
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">@techRequests[j].Title</h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">Статус: @(techRequests[j].IsActive ? "Активен" : "Неактивен")</h6>
+                            <p class="card-text">@(techRequests[j].Description)</p>
+                        </div>
+                        <div class="row justify-content-center justify-content-md-start">
+                            <a asp-controller="TechRequest" asp-action="Details" asp-route-id="@techRequests[j].IdRequest" class="btn btn-primary">Подробнее</a>
+                        </div>
+                    </div>
+        }
+        </div>
+}

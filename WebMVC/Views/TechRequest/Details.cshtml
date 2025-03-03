@@ -1,0 +1,45 @@
+﻿@model TechRequest
+
+@{
+    ViewBag.Title = "Детали технического запроса";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">Детали технического запроса</h2>
+
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">@Model.Title</h4>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>Описание:</strong> @Model.Description</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Дата создания:</strong> @Model.CreationDate.ToString("yyyy-MM-dd")</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>Статус:</strong> @(Model.IsActive ? "Активен" : "Неактивен")</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <p><strong>Рабочие места:</strong></p>
+                    <ul class="list-group">
+                        @foreach (var workplace in Model.AttachedWorkplaces)
+                        {
+                            <li class="list-group-item">@workplace.Workplace.Name</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Index", "TechRequest")" class="btn btn-secondary">Назад к списку</a>
+    </div>
+</div>
