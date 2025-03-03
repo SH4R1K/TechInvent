@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NuGet.Protocol;
-using TechInventAPI.Data;
 using TechInventAPI.Dto;
 using TechInventAPI.DtoModels;
 using TechInvent.DM.Models;
+using TechInvent.DAL.Data;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TechInventAPI.Controllers

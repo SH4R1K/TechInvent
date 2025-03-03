@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TechInvent.DM.Models;
 
-namespace WebMVC.Data;
+namespace TechInvent.DAL.Data;
 
 public partial class TechInventContext : DbContext
 {
@@ -35,12 +35,10 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<Ram> Rams { get; set; }
 
     public virtual DbSet<Workplace> Workplaces { get; set; }
-
     public virtual DbSet<InstalledSoftware> InstalledSoftwares { get; set; }
     public virtual DbSet<Software> Softwares { get; set; }
     public virtual DbSet<User> Users { get; set; }
-
-    public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<TechRequest> TechRequests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -305,10 +303,10 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdSoftware).HasColumnName("id_software");
             entity.Property(e => e.Name)
-                .HasMaxLength(100)
+                .HasMaxLength(255)
                 .HasColumnName("name"); ;
             entity.Property(e => e.Version)
-                .HasMaxLength(100)
+                .HasMaxLength(255)
                 .HasColumnName("version");
             entity.Property(e => e.IdManufacturer).HasColumnName("id_manufacturer");
 
@@ -362,10 +360,44 @@ public partial class TechInventContext : DbContext
             entity.Property(e => e.Name).HasColumnName("name").HasMaxLength(45);
         });
 
+        modelBuilder.Entity<TechRequest>(entity =>
+        {
+            entity.HasKey(e => e.IdRequest).HasName("PRIMARY");
+            entity.ToTable("tech_request");
+
+            entity.Property(e => e.IdRequest).HasColumnName("id_request");
+            entity.Property(e => e.Title).HasMaxLength(100).HasColumnName("title");
+            entity.Property(e => e.Description).HasMaxLength(255).HasColumnName("description");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+            entity.Property(e => e.CreationDate).HasColumnName("creation_date");
+        });
+
+        modelBuilder.Entity<TechRequestWorkplace>(entity =>
+        {
+            entity.HasKey(e => new { e.IdTechRequest, e.IdWorkplace }).HasName("PRIMARY");
+            entity.ToTable("techrequest_has_workplace");
+
+            entity.Property(e => e.IdTechRequest).HasColumnName("id_request");
+            entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
+
+            entity.HasOne(d => d.TechRequest).WithMany(p => p.AttachedWorkplaces)
+                .HasForeignKey(d => d.IdTechRequest)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_techrequest_workplace");
+
+            entity.HasOne(d => d.Workplace).WithMany(p => p.AttachedTechRequests)
+                .HasForeignKey(d => d.IdWorkplace)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_workplace_techrequest");
+        });
+
+
+        modelBuilder.Entity<User>().HasData(InitialData.UsersList);
+        modelBuilder.Entity<Role>().HasData(InitialData.RolesList);
+
         OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-public DbSet<TechInvent.DM.Models.User> User { get; set; } = default!;
 }

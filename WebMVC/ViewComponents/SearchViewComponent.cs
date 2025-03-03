@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebMVC.Data;
+using TechInvent.DAL.Data;
 
 namespace WebMVC.ViewComponents
 {

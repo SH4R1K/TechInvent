@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using WebMVC.Data;
+using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 
 namespace WebMVC.Controllers
@@ -22,7 +22,7 @@ namespace WebMVC.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var techInventContext = _context.User.Include(u => u.Role);
+            var techInventContext = _context.Users.Include(u => u.Role);
             return View(await techInventContext.ToListAsync());
         }
 
@@ -53,7 +53,7 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -101,7 +101,7 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            var user = await _context.Users
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(m => m.IdUser == id);
             if (user == null)
@@ -117,10 +117,10 @@ namespace WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
-                _context.User.Remove(user);
+                _context.Users.Remove(user);
             }
 
             await _context.SaveChangesAsync();
@@ -129,7 +129,7 @@ namespace WebMVC.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.User.Any(e => e.IdUser == id);
+            return _context.Users.Any(e => e.IdUser == id);
         }
     }
 }

@@ -4,22 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TechInventAPI.Data;
+using TechInvent.DAL.Data;
 
 #nullable disable
 
 namespace TechInventAPI.Migrations
 {
     [DbContext(typeof(TechInventContext))]
-    [Migration("20241231120210_cascade_for_installedsoft")]
-    partial class cascade_for_installedsoft
+    [Migration("20250303084432_addTechRequest")]
+    partial class addTechRequest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("TechInvent.DM.Models.AdapterType", b =>
@@ -216,6 +216,55 @@ namespace TechInventAPI.Migrations
                     b.HasIndex(new[] { "IdManufacturer" }, "fk_software_manufacturer");
 
                     b.ToTable("software", (string)null);
+                });
+
+            modelBuilder.Entity("TechInvent.DM.Models.TechRequest", b =>
+                {
+                    b.Property<int>("IdRequest")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_request");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("description");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("title");
+
+                    b.HasKey("IdRequest")
+                        .HasName("PRIMARY");
+
+                    b.ToTable("tech_request", (string)null);
+                });
+
+            modelBuilder.Entity("TechInvent.DM.Models.TechRequestWorkplace", b =>
+                {
+                    b.Property<int>("IdTechRequest")
+                        .HasColumnType("int")
+                        .HasColumnName("id_request");
+
+                    b.Property<int>("IdWorkplace")
+                        .HasColumnType("int")
+                        .HasColumnName("id_workplace");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_active");
+
+                    b.HasKey("IdTechRequest", "IdWorkplace")
+                        .HasName("PRIMARY");
+
+                    b.HasIndex("IdWorkplace");
+
+                    b.ToTable("techrequest_has_workplace", (string)null);
                 });
 
             modelBuilder.Entity("TechInvent.DM.Models.User", b =>
@@ -474,6 +523,25 @@ namespace TechInventAPI.Migrations
                     b.Navigation("ManufacturerNavigation");
                 });
 
+            modelBuilder.Entity("TechInvent.DM.Models.TechRequestWorkplace", b =>
+                {
+                    b.HasOne("TechInvent.DM.Models.TechRequest", "TechRequest")
+                        .WithMany("AttachedWorkplaces")
+                        .HasForeignKey("IdTechRequest")
+                        .IsRequired()
+                        .HasConstraintName("fk_techrequest_workplace");
+
+                    b.HasOne("TechInvent.DM.Models.Workplace", "Workplace")
+                        .WithMany("AttachedTechRequests")
+                        .HasForeignKey("IdWorkplace")
+                        .IsRequired()
+                        .HasConstraintName("fk_workplace_techrequest");
+
+                    b.Navigation("TechRequest");
+
+                    b.Navigation("Workplace");
+                });
+
             modelBuilder.Entity("TechInvent.DM.Models.User", b =>
                 {
                     b.HasOne("TechInvent.DM.Models.Role", "Role")
@@ -649,8 +717,15 @@ namespace TechInventAPI.Migrations
                     b.Navigation("InstalledSoftware");
                 });
 
+            modelBuilder.Entity("TechInvent.DM.Models.TechRequest", b =>
+                {
+                    b.Navigation("AttachedWorkplaces");
+                });
+
             modelBuilder.Entity("TechInvent.DM.Models.Workplace", b =>
                 {
+                    b.Navigation("AttachedTechRequests");
+
                     b.Navigation("Components");
 
                     b.Navigation("InstalledSoftware");

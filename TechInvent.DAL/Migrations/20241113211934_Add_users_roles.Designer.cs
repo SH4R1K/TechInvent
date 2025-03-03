@@ -3,15 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TechInventAPI.Data;
+using TechInvent.DAL.Data;
+
 
 #nullable disable
 
 namespace TechInventAPI.Migrations
 {
     [DbContext(typeof(TechInventContext))]
-    [Migration("20241113212140_fix_column_sizes")]
-    partial class fix_column_sizes
+    [Migration("20241113211934_Add_users_roles")]
+    partial class Add_users_roles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -248,14 +249,12 @@ namespace TechInventAPI.Migrations
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
+                        .HasColumnType("longtext")
                         .HasColumnName("login");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("longtext")
                         .HasColumnName("password");
 
                     b.HasKey("IdUser")

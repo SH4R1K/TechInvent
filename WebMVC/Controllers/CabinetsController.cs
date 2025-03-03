@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebMVC.Data;
+using TechInvent.DAL.Data;
 using WebMVC.Services;
 
 namespace WebMVC.Controllers

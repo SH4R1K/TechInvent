@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using QRCoder;
-using WebMVC.Data;
+using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 using WebMVC.Services;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
+using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
-using TechInventAPI.Data;
 
 namespace TechInventAPI.Service
 {

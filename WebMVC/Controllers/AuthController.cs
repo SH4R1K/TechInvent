@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Common;
-using WebMVC.Data;
+using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 using WebMVC.Services;
 
@@ -27,7 +26,7 @@ namespace WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Login,Password")] User user)
         {
-            var existUser = _context.User.Include(u => u.Role).FirstOrDefault(u => u.Login == user.Login && u.Password == user.Password);
+            var existUser = _context.Users.Include(u => u.Role).FirstOrDefault(u => u.Login == user.Login && u.Password == user.Password);
             if (existUser != null)
             {
                 var token = _tokenService.CreateToken(existUser);

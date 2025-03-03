@@ -1,6 +1,6 @@
 ﻿using TechInvent.DM.Models;
 
-namespace TechInventAPI.Data
+namespace TechInvent.DAL.Data
 {
     public static class InitialData
     {

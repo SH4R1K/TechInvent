@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
-using WebMVC.Data;
+using TechInvent.DAL.Data;
 using WebMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);

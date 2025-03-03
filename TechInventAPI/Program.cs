@@ -1,8 +1,8 @@
-using TechInventAPI.Data;
 using TechInventAPI.Dto;
 using TechInventAPI.Service;
 using TechInventAPI.RabbitMQ;
 using Microsoft.EntityFrameworkCore;
+using TechInvent.DAL.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
