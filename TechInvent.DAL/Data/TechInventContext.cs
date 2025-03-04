@@ -40,6 +40,7 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<TechRequest> TechRequests { get; set; }
     public virtual DbSet<TechRequestWorkplace> TechRequestWorkplaces { get; set; }
+    public virtual DbSet<RequestType> RequestTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -368,9 +369,14 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdRequest).HasColumnName("id_request");
             entity.Property(e => e.Title).HasMaxLength(100).HasColumnName("title");
-            entity.Property(e => e.Description).HasMaxLength(255).HasColumnName("description");
+            entity.Property(e => e.Description).HasMaxLength(1000).HasColumnName("description");
             entity.Property(e => e.IsActive).HasColumnName("is_active");
             entity.Property(e => e.CreationDate).HasColumnName("creation_date");
+
+            entity.HasOne(e => e.RequestType).WithMany(e => e.TechRequests)
+                .HasForeignKey(e => e.IdRequestType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("techrequest_requesttype");
         });
 
         modelBuilder.Entity<TechRequestWorkplace>(entity =>
@@ -384,17 +390,26 @@ public partial class TechInventContext : DbContext
 
             entity.HasOne(d => d.TechRequest).WithMany(p => p.AttachedWorkplaces)
                 .HasForeignKey(d => d.IdTechRequest)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_techrequest_workplace");
 
             entity.HasOne(d => d.Workplace).WithMany(p => p.AttachedTechRequests)
                 .HasForeignKey(d => d.IdWorkplace)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_workplace_techrequest");
         });
 
+        modelBuilder.Entity<RequestType>(entity =>
+        {
+            entity.HasKey(e => e.IdRequestType).HasName("PRIMARY");
+            entity.ToTable("request_type");
+
+            entity.Property(e => e.IdRequestType).HasColumnName("id_request_type");
+            entity.Property(e => e.Name).HasMaxLength(100).HasColumnName("name");
+        });
 
         modelBuilder.Entity<User>().HasData(InitialData.UsersList);
+        modelBuilder.Entity<RequestType>().HasData(InitialData.RequestTypes);
         modelBuilder.Entity<Role>().HasData(InitialData.RolesList);
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,41 +1,49 @@
 ﻿@model TechRequest
 
 @{
-    ViewBag.Title = "Create Tech Request";
+    ViewBag.Title = "Запрос технической поддержки";
 }
 
-<h2>Create Tech Request</h2>
+<h2>Создание технического запроса</h2>
 
 @using (Html.BeginForm("Create", "TechRequest", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Title)
-        @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Title)
+        <label asp-for="Title">Заголовок</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Description)
-        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Description)
+        <label asp-for="Description">Описание</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="IdRequestType" class="control-label">Тип заявки</label>
+        <select asp-for="IdRequestType" class="form-control" asp-items="ViewBag.IdRequestType" data-val-required="Тип не может быть пустым"></select>
+        <span asp-validation-for="IdRequestType" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AttachedWorkplaces" class="control-label">Рабочие места</label>
+        <div>
+            @foreach (var workplace in ViewBag.Workplaces)
+            {
+                <label>
+                    <input type="checkbox" name="selectedWorkplaces" value="@workplace.IdWorkplace" />
+                    @workplace.Name
+                </label>
+
+                <br />
+            }
+        </div>
     </div>
 
     <div class="form-group">
-        @Html.Label("Select Workplaces")<br />
-        @foreach (var workplace in ViewBag.Workplaces)
-        {
-            <label>
-                <input type="checkbox" name="selectedWorkplaces" value="@workplace.IdWorkplace" />
-                @workplace.Name
-            </label>
-
-            <br />
-        }
-    </div>
-
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">Создать</button>
     </div>
 }

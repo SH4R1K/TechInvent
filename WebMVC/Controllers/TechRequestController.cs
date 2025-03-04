@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 
 namespace WebMVC.Controllers
 {
+    [Authorize(Roles = "user, admin")]
     public class TechRequestController : Controller
     {
         private readonly TechInventContext _context;
@@ -21,6 +24,7 @@ namespace WebMVC.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.Workplaces = _context.Workplaces.ToList();
+            ViewData["IdRequestType"] = new SelectList(_context.RequestTypes, "IdRequestType", "Name");
             return View();
         }
         public ActionResult Details(int id)
@@ -42,23 +46,33 @@ namespace WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(TechRequest model, int[] selectedWorkplaces)
         {
-            if (ModelState.IsValid)
+            model.CreationDate = DateTime.UtcNow;
+            if (selectedWorkplaces != null)
             {
-                model.CreationDate = DateTime.UtcNow;
-                if (selectedWorkplaces != null)
-                {
-                    model.AttachedWorkplaces = selectedWorkplaces
-                        .Select(id => new TechRequestWorkplace { IdWorkplace = id, IdTechRequest = model.IdRequest })
-                        .ToList();
-                }
-
-                _context.TechRequests.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
+                model.AttachedWorkplaces = selectedWorkplaces
+                    .Select(id => new TechRequestWorkplace { IdWorkplace = id, IdTechRequest = model.IdRequest })
+                    .ToList();
             }
 
-            ViewBag.Workplaces = _context.Workplaces.ToList();
-            return View(model);
+            _context.TechRequests.Add(model);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var techRequest = await _context.TechRequests.FindAsync(id);
+            if (techRequest == null)
+            {
+                return NotFound();
+            }
+
+            _context.TechRequests.Remove(techRequest);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
     }
 }

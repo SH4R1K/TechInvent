@@ -8,21 +8,25 @@
 @{
     var techRequests = Model.ToList();
         <div>
-            <a class="btn btn-secondary" asp-action="GenerateReport">Экспортировать в Excel</a>
+            <a class="btn btn-secondary" asp-action="Create">Создать заявку</a>
         </div>
         <div class="row justify-content-center justify-content-md-start">
         @for (int j = 0; j < techRequests.Count; j++)
         {
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">@techRequests[j].Title</h5>
-                            <h6 class="card-subtitle mb-2 text-body-secondary">Статус: @(techRequests[j].IsActive ? "Активен" : "Неактивен")</h6>
-                            <p class="card-text">@(techRequests[j].Description)</p>
-                        </div>
-                        <div class="row justify-content-center justify-content-md-start">
-                            <a asp-controller="TechRequest" asp-action="Details" asp-route-id="@techRequests[j].IdRequest" class="btn btn-primary">Подробнее</a>
-                        </div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title overflow-hidden text-truncate">@techRequests[j].Title</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Статус: @(techRequests[j].IsActive ? "Активен" : "Неактивен")</h6>
+                    <p class="card-text overflow-auto" style="max-height: 5rem;">@techRequests[j].Description</p>
+                    <form asp-action="Delete" method="post" onsubmit="return confirm('Вы уверены?');">
+                        <input type="hidden" name="id" value="@techRequests[j].IdRequest" />
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                    <div class="row gy-2 justify-content-center justify-content-md-start mt-auto">
+                        <a asp-controller="TechRequest" asp-action="Details" asp-route-id="@techRequests[j].IdRequest" class="btn btn-primary">Подробнее</a>
                     </div>
+                </div>
+            </div>
         }
         </div>
 }
