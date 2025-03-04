@@ -25,6 +25,7 @@ namespace WebMVC.Controllers
         {
             ViewBag.Workplaces = _context.Workplaces.ToList();
             ViewData["IdRequestType"] = new SelectList(_context.RequestTypes, "IdRequestType", "Name");
+            ViewData["IdCabinet"] = new SelectList(_context.Cabinets, "IdCabinet", "Name");
             return View();
         }
         public ActionResult Details(int id)

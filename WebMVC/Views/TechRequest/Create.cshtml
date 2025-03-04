@@ -28,6 +28,13 @@
         <select asp-for="IdRequestType" class="form-control" asp-items="ViewBag.IdRequestType" data-val-required="Тип не может быть пустым"></select>
         <span asp-validation-for="IdRequestType" class="text-danger"></span>
     </div>
+
+    <div class="form-group">
+        <label asp-for="IdCabinet" class="control-label">Кабинет</label>
+        <select asp-for="IdCabinet" class="form-control" asp-items="ViewBag.IdCabinet" data-val-required="Кабинет не может быть пустым"></select>
+        <span asp-validation-for="IdCabinet" class="text-danger"></span>
+    </div>
+
     <div class="form-group">
         <label asp-for="AttachedWorkplaces" class="control-label">Рабочие места</label>
         <div>

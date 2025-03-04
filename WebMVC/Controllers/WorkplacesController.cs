@@ -71,6 +71,7 @@ namespace WebMVC.Controllers
             if (workplace == null)
             {
                 workplace = await GetWorkplacesQuery()
+                    .Include(w => w.AttachedTechRequests.Where(tr => tr.IsActive))
                     .FirstOrDefaultAsync(m => m.IdWorkplace == id);
 
                 if (workplace == null)

@@ -6,6 +6,7 @@ namespace TechInvent.DM.Models
     {
         public int IdRequest { get; set; }
         public int IdRequestType { get; set; }
+        public int? IdCabinet { get; set; } = null!;
         [Required(ErrorMessage = "Заголовок обязателен")]
         [StringLength(100, ErrorMessage = "Заголовок не может превышать 100 символов")]
         public string Title { get; set; }
@@ -17,5 +18,6 @@ namespace TechInvent.DM.Models
         public bool IsActive { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.UtcNow;
         public List<TechRequestWorkplace> AttachedWorkplaces { get; set; } = new List<TechRequestWorkplace>();
+        public Cabinet? Cabinet { get; set; }
     }
 }
