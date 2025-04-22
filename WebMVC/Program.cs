@@ -9,10 +9,12 @@ using WebMVC.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddScoped<JWTokenService>();
 builder.Services.AddScoped<ExcelService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddDbContextPool<TechInventContext>(options =>
 {
     options.UseMySQL(Environment.GetEnvironmentVariable("MySQLConnString") ?? builder.Configuration.GetConnectionString("DefaultConnectionMysql") ?? "server=;user=;password=;database=;");

@@ -1,7 +1,9 @@
-﻿@model TechRequest
+﻿@using System.Globalization
+@model TechRequest
 
 @{
     ViewBag.Title = "Детали технического запроса";
+    var user = Context.User;
 }
 
 <div class="container mt-4">
@@ -16,9 +18,6 @@
                 <div class="col-md-6">
                     <p><strong>Описание:</strong> @Model.Description</p>
                 </div>
-                <div class="col-md-6">
-                    <p><strong>Дата создания:</strong> @Model.CreationDate.ToString("yyyy-MM-dd")</p>
-                </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -27,18 +26,89 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <p><strong>Рабочие места:</strong></p>
-                    <ul class="list-group">
-                        @foreach (var workplace in Model.AttachedWorkplaces)
+                    @{
+                        var activeWorkplace = Model.AttachedWorkplaces.Where(a => a.IsActive);
+                        var inactiveWorkplace = Model.AttachedWorkplaces.Where(a => !a.IsActive);
+                        if (activeWorkplace.Count() > 0)
                         {
-                            <li class="list-group-item">@workplace.Workplace.Name</li>
+                            <p><strong>Ожидающие обслуживания места:</strong></p>
+                            <ul class="list-group">
+                                @foreach (var workplace in activeWorkplace)
+                                {
+                                    <li class="list-group-item">
+                                        <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
+                                            @workplace.Workplace.Name
+                                        </a>
+
+                                        <a class="text-decoration-none" asp-action="CompleteWorkplace" asp-controller="TechRequest" asp-route-id="@Model.IdRequest" asp-route-idWorkplace="@workplace.IdWorkplace">
+                                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 24 24" class="float-end">
+                                                <path d="M 19.980469 5.9902344 A 1.0001 1.0001 0 0 0 19.292969 6.2929688 L 9 16.585938 L 5.7070312 13.292969 A 1.0001 1.0001 0 1 0 4.2929688 14.707031 L 8.2929688 18.707031 A 1.0001 1.0001 0 0 0 9.7070312 18.707031 L 20.707031 7.7070312 A 1.0001 1.0001 0 0 0 19.980469 5.9902344 z"></path>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
                         }
-                    </ul>
+                        if (inactiveWorkplace.Count() > 0)
+                        {
+                            <p><strong>Обслуженные места:</strong></p>
+                            <ul class="list-group">
+                                @foreach (var workplace in inactiveWorkplace)
+                                {
+                                    <li class="list-group-item">
+                                        <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
+                                            @workplace.Workplace.Name
+                                        </a>
+
+                                        <a class="text-decoration-none" asp-action="RestoreWorkplace" asp-controller="TechRequest" asp-route-id="@Model.IdRequest" asp-route-idWorkplace="@workplace.IdWorkplace">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="float-end" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw-square-icon lucide-rotate-ccw-square"><path d="M20 9V7a2 2 0 0 0-2-2h-6" /><path d="m15 2-3 3 3 3" /><path d="M20 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2" /></svg>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    }
                 </div>
             </div>
+
+            <small class="float-end">@Model.CreationDate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</small>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="card my-4">
+            <h5 class="card-header">Комментарии</h5>
 
+            <form asp-action="CommentRequest" asp-controller="TechRequest" method="post">
+                <div class="card-body demo-vertical-spacing demo-only-element">
+                    <div class="form-group">
+                        <textarea class="form-control" name="message" rows="2" placeholder="Комментарий..."></textarea>
+                        <br />
+                        <input name="id" type="hidden" value="@Model.IdRequest" />
+                        <input type="submit" value="Отправить" class="btn btn-primary" />
+            </form>
+
+            @{
+                var comments = Model.Comments.OrderByDescending(c => c.CommentDate);
+                foreach (TechRequestComment item in comments)
+                    {
+                    <div class="card">
+                        <div class="card-body">
+                        @if (user.FindFirst("id").Value == item.Author.IdUser.ToString())
+                        {
+                                <h5 class="card-title">Вы</h5>
+                        }
+                        else
+                        {
+                                <h5 class="card-title">@item.Author.Login</h5>
+                        }
+                            <p class="card-text">@item.Message</p>
+                            <small class="float-end">@item.CommentDate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</small>
+                        </div>
+                    </div>
+                    }
+                }
+        </div>
+    </div>
     <div class="text-center mt-4">
         <a href="@Url.Action("Index", "TechRequest")" class="btn btn-secondary">Назад к списку</a>
     </div>

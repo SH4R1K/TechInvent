@@ -3,26 +3,119 @@
     ViewData["Title"] = "Заявки";
 }
 
-<h1>Заявки на техническое обслуживание</h1>
+<h1>Техническое обслуживание</h1>
 
 @{
     var techRequests = Model.ToList();
         <div>
             <a class="btn btn-secondary" asp-action="Create">Создать заявку</a>
         </div>
-        <div class="row justify-content-center justify-content-md-start">
-        @for (int j = 0; j < techRequests.Count; j++)
-        {
-            <div class="card" style="width: 18rem;">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title overflow-hidden text-truncate">@techRequests[j].Title</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Статус: @(techRequests[j].IsActive ? "Активен" : "Неактивен")</h6>
-                    <p class="card-text overflow-auto" style="max-height: 5rem;">@techRequests[j].Description</p>
-                    <div class="row gy-2 justify-content-center justify-content-md-start mt-auto">
-                        <a asp-controller="TechRequest" asp-action="Details" asp-route-id="@techRequests[j].IdRequest" class="btn btn-primary">Подробнее</a>
-                    </div>
-                </div>
-            </div>
-        }
-        </div>
 }
+<h1> Активные заявки</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                Описание
+            </th>
+            <th>
+                Тип заявки
+            </th>
+            <th>
+                Дата создания
+            </th>
+            <th>
+                Кабинет
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in techRequests.Where(t => t.IsActive))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @{
+                        var description = item.Description;
+                        var truncatedDescription = description.Length > 100 ? description.Substring(0, 100) + "..." : description;
+                    }
+                    @truncatedDescription
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cabinet.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdRequest">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdRequest">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdRequest">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<h1> Архив заявок</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                Описание
+            </th>
+            <th>
+                Тип заявки
+            </th>
+            <th>
+                Дата создания
+            </th>
+            <th>
+                Кабинет
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in techRequests.Where(t => !t.IsActive))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @{
+                        var description = item.Description;
+                        var truncatedDescription = description.Length > 100 ? description.Substring(0, 100) + "..." : description;
+                    }
+                    @truncatedDescription
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cabinet.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdRequest">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdRequest">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdRequest">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

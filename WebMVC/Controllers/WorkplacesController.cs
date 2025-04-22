@@ -17,10 +17,10 @@ namespace WebMVC.Controllers
         private readonly ExcelService _excelService;
         private readonly IMemoryCache _cache;
 
-        public WorkplacesController(TechInventContext context, ExcelService exceltService, IMemoryCache cache)
+        public WorkplacesController(TechInventContext context, ExcelService excelService, IMemoryCache cache)
         {
             _context = context;
-            _excelService = exceltService;
+            _excelService = excelService;
             _cache = cache;
         }
         private IQueryable<Workplace> GetWorkplacesQuery()
@@ -65,9 +65,9 @@ namespace WebMVC.Controllers
             if (id == null)
             {
                 return NotFound();
-            }            
+            }
             _cache.TryGetValue(id, out Workplace? workplace);
-            
+           // Workplace? workplace = null;
             if (workplace == null)
             {
                 workplace = await GetWorkplacesQuery()
@@ -78,7 +78,7 @@ namespace WebMVC.Controllers
                 {
                     return NotFound();
                 }
-                _cache.Set(workplace.IdWorkplace, workplace, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
+                //_cache.Set(workplace.IdWorkplace, workplace, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
             }
 
             ViewData["PCName"] = workplace.Name;

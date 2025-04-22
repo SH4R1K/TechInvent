@@ -31,7 +31,7 @@ namespace WebMVC.Services
             var tokenDesciptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(30), // _config["JWT:TTL"]
+                Expires = DateTime.Now.AddMinutes(3000), // _config["JWT:TTL"]
                 SigningCredentials = creds,
                 Issuer = Environment.GetEnvironmentVariable("JWTIssuer") ?? _config["JWT:Issuer"],
                 Audience = Environment.GetEnvironmentVariable("JWTAudience") ?? _config["JWT:Audience"]

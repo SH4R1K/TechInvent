@@ -41,6 +41,7 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<TechRequest> TechRequests { get; set; }
     public virtual DbSet<TechRequestWorkplace> TechRequestWorkplaces { get; set; }
     public virtual DbSet<RequestType> RequestTypes { get; set; }
+    public virtual DbSet<TechRequestComment> Comments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -412,6 +413,29 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdRequestType).HasColumnName("id_request_type");
             entity.Property(e => e.Name).HasMaxLength(100).HasColumnName("name");
+        });
+
+        modelBuilder.Entity<TechRequestComment>(entity =>
+        {
+            entity.HasKey(e => e.IdComment).HasName("PRIMARY");
+            entity.ToTable("tech_request_comment");
+
+            entity.Property(e => e.IdComment).HasColumnName("id_comment");
+            entity.Property(e => e.IdUser).HasColumnName("id_user");
+            entity.Property(e => e.IdRequest).HasColumnName("id_request");
+            entity.Property(e => e.CommentDate).HasColumnName("comment_date");
+            entity.Property(e => e.Message).HasMaxLength(2000)
+                                           .HasColumnName("message");
+
+            entity.HasOne(d => d.TechRequest).WithMany(p => p.Comments)
+                  .HasForeignKey(d => d.IdRequest)
+                  .OnDelete(DeleteBehavior.Cascade)
+                  .HasConstraintName("fk_techrequest_comment");
+
+            entity.HasOne(d => d.Author).WithMany(p => p.Comments)
+                  .HasForeignKey(d => d.IdUser)
+                  .OnDelete(DeleteBehavior.Cascade)
+                  .HasConstraintName("fk_user_comments");
         });
 
         modelBuilder.Entity<User>().HasData(InitialData.UsersList);

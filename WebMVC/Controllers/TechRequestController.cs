@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
+using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
@@ -11,15 +12,17 @@ namespace WebMVC.Controllers
     public class TechRequestController : Controller
     {
         private readonly TechInventContext _context;
+        private readonly UserService _userService;
 
-        public TechRequestController(TechInventContext context)
+        public TechRequestController(TechInventContext context, UserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TechRequests.AsNoTracking().ToListAsync());
+            return View(await _context.TechRequests.Include(t => t.Cabinet).Include(t => t.RequestType).AsNoTracking().ToListAsync());
         }
         public async Task<IActionResult> Create()
         {
@@ -33,6 +36,8 @@ namespace WebMVC.Controllers
             var techRequest = _context.TechRequests
                 .Include(tr => tr.AttachedWorkplaces)
                     .ThenInclude(aw => aw.Workplace)
+                .Include(tr => tr.Comments)
+                    .ThenInclude(c => c.Author)
                 .FirstOrDefault(tr => tr.IdRequest == id);
 
             if (techRequest == null)
@@ -60,6 +65,45 @@ namespace WebMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> CompleteWorkplace(int id, int idWorkplace)
+        {
+            var techRequest = await _context.TechRequests.Include(tr => tr.AttachedWorkplaces).FirstOrDefaultAsync(tr => tr.IdRequest == id);
+            if (techRequest == null)
+            {
+                return NotFound();
+            }
+
+            var workplace = techRequest.AttachedWorkplaces.FirstOrDefault(a => a.IdWorkplace == idWorkplace);
+
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            workplace.IsActive = false;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { id });
+        }
+        public async Task<IActionResult> RestoreWorkplace(int id, int idWorkplace)
+        {
+            var techRequest = await _context.TechRequests.Include(tr => tr.AttachedWorkplaces).FirstOrDefaultAsync(tr => tr.IdRequest == id);
+            if (techRequest == null)
+            {
+                return NotFound();
+            }
+
+            var workplace = techRequest.AttachedWorkplaces.FirstOrDefault(a => a.IdWorkplace == idWorkplace);
+
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            workplace.IsActive = true;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { id });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
@@ -74,6 +118,28 @@ namespace WebMVC.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CommentRequest(int id, string message)
+        {
+            var techRequest = await _context.TechRequests.FindAsync(id);
+            if (techRequest == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FindAsync(_userService.GetUserId());
+
+            if (user == null)
+                return Unauthorized();
+
+            TechRequestComment comment = new TechRequestComment { Author = user, TechRequest = techRequest, Message = message, CommentDate = DateTime.UtcNow };
+            techRequest.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id });
         }
     }
 }

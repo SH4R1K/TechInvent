@@ -15,9 +15,10 @@ namespace TechInvent.DM.Models
         public string Description { get; set; }
         [Required(ErrorMessage = "Тип заявки обязателен")]
         public RequestType RequestType { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public DateTime CreationDate { get; set; } = DateTime.UtcNow;
-        public List<TechRequestWorkplace> AttachedWorkplaces { get; set; } = new List<TechRequestWorkplace>();
-        public Cabinet? Cabinet { get; set; }
+        public virtual List<TechRequestWorkplace> AttachedWorkplaces { get; set; } = new List<TechRequestWorkplace>();
+        public virtual Cabinet? Cabinet { get; set; }
+        public virtual List<TechRequestComment> Comments { get; set; } = new List<TechRequestComment>();
     }
 }
