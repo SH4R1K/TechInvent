@@ -104,6 +104,36 @@ namespace WebMVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", new { id });
         }
+        public async Task<IActionResult> CloseRequest(int id)
+        {
+            var techRequest = await _context.TechRequests.Include(tr => tr.AttachedWorkplaces).FirstOrDefaultAsync(tr => tr.IdRequest == id);
+            if (techRequest == null)
+            {
+                return NotFound();
+            }
+            
+            techRequest.AttachedWorkplaces.ForEach(aw => aw.IsActive = false);
+
+            techRequest.IsActive = false;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> ReopenRequest(int id)
+        {
+            var techRequest = await _context.TechRequests.Include(tr => tr.AttachedWorkplaces).FirstOrDefaultAsync(tr => tr.IdRequest == id);
+            if (techRequest == null)
+            {
+                return NotFound();
+            }
+
+            techRequest.IsActive = true;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

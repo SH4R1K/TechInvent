@@ -8,7 +8,6 @@
 
 <div class="container mt-4">
     <h2 class="text-center">Детали технического запроса</h2>
-
     <div class="card">
         <div class="card-header">
             <h4 class="card-title">@Model.Title</h4>
@@ -63,13 +62,24 @@
                     }
                 </div>
             </div>
-
-            <small class="float-end">@Model.CreationDate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</small>
+            <div class="d-flex flex-column justify-content-between">
+                @if (Model.IsActive) 
+                {
+                    <a class="btn btn-secondary" asp-action="CloseRequest" asp-route-id="@Model?.IdRequest">Закрыть заявку</a>
+                }
+                else
+                {
+                    <a class="btn btn-secondary" asp-action="ReopenRequest" asp-route-id="@Model?.IdRequest">Возобновить заявку</a>
+                }
+                <small class="text-end mt-2">@Model.CreationDate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</small>
+            </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="card my-4">
-            <h5 class="card-header">Комментарии</h5>
+            <div class="card-header">
+                <h4 class="card-title">Комментарии</h4>
+            </div>
 
             <form asp-action="CommentRequest" asp-controller="TechRequest" method="post">
                 <div class="card-body demo-vertical-spacing demo-only-element">
@@ -102,7 +112,8 @@
                 }
         </div>
     </div>
-    <div class="text-center mt-4">
-        <a href="@Url.Action("Index", "TechRequest")" class="btn btn-secondary">Назад к списку</a>
-    </div>
+</div>
+
+<div class="d-flex flex-column">
+    <a href="@Url.Action("Index", "TechRequest")" class="btn btn-secondary">Назад к списку</a>
 </div>
