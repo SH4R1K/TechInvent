@@ -14,16 +14,9 @@
             <h4 class="card-title">@Model.Title</h4>
         </div>
         <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <p><strong>Описание:</strong> @Model.Description</p>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <p><strong>Статус:</strong> @(Model.IsActive ? "Активен" : "Неактивен")</p>
-                </div>
-            </div>
+            <p><strong>Описание:</strong> @Model.Description</p>
+            <p><strong>Кабинет:</strong> @Model.Cabinet.Name</p>
+            <p><strong>Статус:</strong> @(Model.IsActive ? "Активен" : "Неактивен")</p>
             <div class="row mb-3">
                 <div class="col-md-12">
                     @{

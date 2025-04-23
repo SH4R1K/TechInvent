@@ -36,6 +36,7 @@ namespace WebMVC.Controllers
             var techRequest = _context.TechRequests
                 .Include(tr => tr.AttachedWorkplaces)
                     .ThenInclude(aw => aw.Workplace)
+                .Include(tr => tr.Cabinet)
                 .Include(tr => tr.Comments)
                     .ThenInclude(c => c.Author)
                 .FirstOrDefault(tr => tr.IdRequest == id);
