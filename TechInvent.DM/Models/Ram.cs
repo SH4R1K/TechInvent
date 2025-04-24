@@ -22,4 +22,19 @@ public partial class Ram : Component
     public virtual Component IdComponentNavigation { get; set; } = null!;
 
     public virtual Manufacturer IdManufacturerNavigation { get; set; } = null!;
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Ram other)
+        {
+            return Name == other.Name &&
+                   Speed == other.Speed &&
+                   Capacity == other.Capacity &&
+                   MemoryType == other.MemoryType &&
+                   PartNumber == other.PartNumber &&
+                   SerialNumber == other.SerialNumber &&
+                   IdManufacturer == other.IdManufacturer;
+        }
+        return false;
+    }
 }

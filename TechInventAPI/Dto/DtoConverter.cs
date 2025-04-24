@@ -45,7 +45,7 @@ namespace TechInventAPI.Dto
         public List<Component> ConvertDtoComponents(HardwareInfo hardwareInfo)
         {
             var components = new List<Component>();
-
+            
             components.AddRange(hardwareInfo.Ram.Select(ConvertDtoRam));
             components.AddRange(hardwareInfo.Gpu.Select(ConvertDtoGpu));
             components.AddRange(hardwareInfo.Processor.Select(ConvertDtoProcessor));
@@ -58,6 +58,7 @@ namespace TechInventAPI.Dto
 
         public Ram ConvertDtoRam(RamDto ramDto)
         {
+            var manufacturer = _entityChecker.GetOrCreateManufacturer(ramDto.Manufacturer);
             return new Ram
             {
                 Name = ramDto.Name,
@@ -66,7 +67,8 @@ namespace TechInventAPI.Dto
                 MemoryType = ramDto.MemoryType.ToString(),
                 PartNumber = ramDto.PartNumber,
                 SerialNumber = ramDto.SerialNumber,
-                IdManufacturerNavigation = _entityChecker.GetOrCreateManufacturer(ramDto.Manufacturer)
+                IdManufacturer = manufacturer.IdManufacturer,
+                IdManufacturerNavigation = manufacturer,
             };
         }
 
@@ -100,12 +102,16 @@ namespace TechInventAPI.Dto
 
         public NetAdapter ConvertDtoNetAdapter(NetDto netDto)
         {
+            var manufacturer = _entityChecker.GetOrCreateManufacturer(netDto.Manufacturer);
+            var adapterType = _entityChecker.GetOrCreateAdapterType(netDto.AdapterType);
             return new NetAdapter
             {
                 Name = netDto.Name,
                 MacAddress = netDto.MacAddress,
-                IdManufacturerNavigation = _entityChecker.GetOrCreateManufacturer(netDto.Manufacturer),
-                AdapterTypeIdAdapterTypeNavigation = _entityChecker.GetOrCreateAdapterType(netDto.AdapterType)
+                IdManufacturer = manufacturer.IdManufacturer,
+                IdManufacturerNavigation = manufacturer,
+                AdapterTypeIdAdapterType = adapterType.IdAdapterType,
+                AdapterTypeIdAdapterTypeNavigation = adapterType
             };
         }
 

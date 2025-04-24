@@ -62,11 +62,11 @@ namespace TechInventAPI.Service
                 workplace.LastUpdate = DateTime.UtcNow;
                 workplace.IdCabinetNavigation = cabinet;
                 workplace.IdOsNavigation = os;
-                workplace.Components.Clear();
+                workplace.Components.RemoveAll(c => !components.Contains(c));
                 workplace.InstalledSoftware.Clear();
             }
-
-            foreach (var component in components)
+            var filteredComponents = components.Where(c => !workplace.Components.Contains(c));
+            foreach (var component in filteredComponents)
             {
                 component.IdWorkplaceNavigation = workplace;
                 workplace.Components.Add(component);

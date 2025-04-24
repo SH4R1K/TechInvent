@@ -17,5 +17,16 @@ public partial class NetAdapter : Component
 
     public virtual Component IdComponentNavigation { get; set; } = null!;
 
-    public virtual Manufacturer IdManufacturerNavigation { get; set; } = null!;
+    public virtual Manufacturer IdManufacturerNavigation { get; set; } = null!; 
+    public override bool Equals(object? obj)
+    {
+        if (obj is NetAdapter other)
+        {
+            return Name == other.Name &&
+                   MacAddress == other.MacAddress &&
+                   IdManufacturer == other.IdManufacturer &&
+                   AdapterTypeIdAdapterType == other.AdapterTypeIdAdapterType;
+        }
+        return false;
+    }
 }
