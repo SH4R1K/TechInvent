@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TechInvent.DAL.Data;
+using TechInvent.DM.Models;
 using WebMVC.Services;
 
 namespace WebMVC.Controllers
@@ -22,6 +23,14 @@ namespace WebMVC.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Cabinets.AsNoTracking().Include(c => c.Workplaces).ToListAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Cabinet cabinet)
+        {
+            _context.Cabinets.Add(cabinet);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> GenerateReport()

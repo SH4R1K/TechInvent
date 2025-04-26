@@ -10,6 +10,7 @@
     var cabinets = Model.ToList();
     <div>
         <a class="btn btn-secondary" asp-action="GenerateReport">Экспортировать в Excel</a>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCabinetModal">Добавить кабинет</button>
     </div>
     <div class="row justify-content-center justify-content-md-start">
         @for (int j = 0; j < cabinets.Count; j++)
@@ -27,3 +28,22 @@
         }
     </div>
 }
+<div class="modal fade" id="addCabinetModal" tabindex="-1" aria-labelledby="addCabinetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCabinetModalLabel">Добавить кабинет</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" method="post">
+                    <div class="mb-3">
+                        <label for="CabinetName" class="form-label">Название кабинета</label>
+                        <input type="text" class="form-control" id="CabinetName" name="Name" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
