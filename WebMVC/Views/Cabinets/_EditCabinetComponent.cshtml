@@ -1,0 +1,36 @@
+﻿<div class="modal fade" id="editCabinetModal" tabindex="-1" aria-labelledby="editCabinetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCabinetModalLabel">Редактировать кабинет</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Edit" method="post">
+                    <div class="mb-3">
+                        <input type="hidden" class="form-control" id="EditIdCabinet" name="IdCabinet" required/>
+                        <label for="EditCabinetName" class="form-label">Название кабинета</label>
+                        <input type="text" class="form-control" id="EditCabinetName" name="Name" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Обновить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var buttons = document.querySelectorAll('[data-bs-target="#editCabinetModal"]');
+
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var cabinetId = this.getAttribute('data-cabinet-id');
+                var cabinetName = this.getAttribute('data-cabinet-name');
+
+                document.getElementById('EditIdCabinet').value = cabinetId;
+                document.getElementById('EditCabinetName').value = cabinetName;
+            });
+        });
+    });
+</script>

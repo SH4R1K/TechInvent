@@ -1,9 +1,10 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using LinqKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using QRCoder;
+using System.Linq.Expressions;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 using WebMVC.Services;
@@ -58,6 +59,27 @@ namespace WebMVC.Controllers
             ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
             return View(await techInventContext.ToListAsync());
         }
+        public async Task<IActionResult> Search(string? query, bool searchByComponent = true, bool searchBySoftware = true)
+        {
+            var workplaces = _context.Workplaces
+                .Include(w => w.Components)
+                .Include(w => w.InstalledSoftware)
+                    .ThenInclude(s => s.SoftwareNavigation)
+                .AsQueryable();
+
+            ViewBag.query = query;
+            Expression<Func<Workplace, bool>> predicate = PredicateBuilder.New<Workplace>(workplaces => workplaces.Name.Contains(query, StringComparison.OrdinalIgnoreCase));
+            
+            if (searchByComponent)
+               predicate = predicate.Or(w => w.Components.Any(c => c.Name.Contains(query, StringComparison.OrdinalIgnoreCase)));
+
+            if (searchBySoftware)
+                predicate = predicate.Or(w => w.InstalledSoftware.Any(s => s.SoftwareNavigation.Name.Contains(query, StringComparison.OrdinalIgnoreCase)));
+
+            workplaces = workplaces.Where(predicate);
+
+            return View(await workplaces.ToListAsync());
+        }
 
         [HttpGet("{Controller}/Details/{id}")]
         public async Task<IActionResult> Details(int? id)
@@ -67,7 +89,7 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
             _cache.TryGetValue(id, out Workplace? workplace);
-           // Workplace? workplace = null;
+            // Workplace? workplace = null;
             if (workplace == null)
             {
                 workplace = await GetWorkplacesQuery()
@@ -246,7 +268,7 @@ namespace WebMVC.Controllers
 
             _context.Workplaces.Remove(workplace);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new {id = workplace.IdCabinet});
+            return RedirectToAction(nameof(Index), new { id = workplace.IdCabinet });
         }
     }
 }

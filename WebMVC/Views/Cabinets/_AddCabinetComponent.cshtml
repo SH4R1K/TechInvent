@@ -1,0 +1,33 @@
+﻿<div class="modal fade" id="addCabinetModal" tabindex="-1" aria-labelledby="addCabinetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCabinetModalLabel">Добавить кабинет</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" method="post">
+                    <div class="mb-3">
+                        <label for="CabinetName" class="form-label">Название кабинета</label>
+                        <input type="text" class="form-control" id="CabinetName" name="Name" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var buttons = document.querySelectorAll('[data-bs-toggle="modal"]');
+
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var cabinetName = this.getAttribute('data-cabinet-name');
+
+                document.getElementById('CabinetName').value = cabinetName;
+            });
+        });
+    });
+</script>
