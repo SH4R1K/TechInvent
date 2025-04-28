@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechInvent.DAL.Data;
 
@@ -10,9 +11,11 @@ using TechInvent.DAL.Data;
 namespace TechInventAPI.Migrations
 {
     [DbContext(typeof(TechInventContext))]
-    partial class TechInventContextModelSnapshot : ModelSnapshot
+    [Migration("20250428203447_addinventnumber")]
+    partial class addinventnumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

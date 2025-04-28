@@ -280,9 +280,15 @@ public partial class TechInventContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
+
+            entity.Property(e => e.InventNumber)
+                .HasMaxLength(100)
+                .HasColumnName("invent_number");
+
             entity.Property(e => e.Guid)
                 .HasDefaultValue(null)
                 .HasColumnName("guid");
+
             entity.Property(e => e.LastUpdate)
                 .HasColumnName("last_update");
 

@@ -6,8 +6,10 @@
 
 <div class="container row mt-4">
     <h1>@ViewData["PCName"]</h1>
+    <h2>@Model.InventNumber</h2>
     <div style="padding-top: 1em;">
         <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
+        <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Изменить инвентарный номер</a>
         <a class="btn btn-secondary" asp-controller="TechRequest" asp-action="Index" asp-route-id="@Model?.IdWorkplace">@Model?.AttachedTechRequests.Count</a>
     </div>
     <div class="col-md-6">
