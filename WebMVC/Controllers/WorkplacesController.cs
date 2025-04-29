@@ -59,6 +59,26 @@ namespace WebMVC.Controllers
             ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
             return View(await techInventContext.ToListAsync());
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateInventNumber(int id, string? inventNumber)
+        {
+            var workplace = await _context.Workplaces.FindAsync(id);
+
+            if (workplace == null)
+                return NotFound();
+
+            if (inventNumber != null)
+            {
+                inventNumber = inventNumber?.Trim();
+            }
+
+            workplace.InventNumber = inventNumber;
+
+            _context.Workplaces.Update(workplace);
+            _context.SaveChanges();
+            return RedirectToAction("Details", new { id });
+        }
         public async Task<IActionResult> Search(string? query, bool searchByComponent = true, bool searchBySoftware = true)
         {
             var workplaces = _context.Workplaces
@@ -68,7 +88,9 @@ namespace WebMVC.Controllers
                 .AsQueryable();
 
             ViewBag.query = query;
-            Expression<Func<Workplace, bool>> predicate = PredicateBuilder.New<Workplace>(workplaces => workplaces.Name.Contains(query, StringComparison.OrdinalIgnoreCase));
+            Expression<Func<Workplace, bool>> predicate = PredicateBuilder.New<Workplace>(
+                workplaces => workplaces.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || 
+                workplaces.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase));
             
             if (searchByComponent)
                predicate = predicate.Or(w => w.Components.Any(c => c.Name.Contains(query, StringComparison.OrdinalIgnoreCase)));

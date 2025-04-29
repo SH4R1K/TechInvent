@@ -8,7 +8,7 @@ public partial class Component
 {
     public int IdComponent { get; set; }
 
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     public int IdWorkplace { get; set; }
 

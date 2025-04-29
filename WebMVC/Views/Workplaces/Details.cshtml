@@ -9,7 +9,7 @@
     <h2>@Model.InventNumber</h2>
     <div style="padding-top: 1em;">
         <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
-        <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Изменить инвентарный номер</a>
+        <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdWorkplace" data-bs-target="#editWorkplaceModal">Изменить инвентарный номер</a>
         <a class="btn btn-secondary" asp-controller="TechRequest" asp-action="Index" asp-route-id="@Model?.IdWorkplace">@Model?.AttachedTechRequests.Count</a>
     </div>
     <div class="col-md-6">
@@ -136,7 +136,7 @@
                 {
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Disk?.Model}">@component.Disk?.Model</a></h5>
+                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Disk?.Name}">@component.Disk?.Name</a></h5>
                             <p class="card-text">Объем: @component.Disk?.Size ГБ</p>
 
                         </div>
@@ -179,3 +179,6 @@
         }
     </div>
 </div>
+
+
+<partial name="_EditInventNumberComponent.cshtml" />

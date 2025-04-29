@@ -84,7 +84,7 @@ namespace TechInventAPI.Dto
         {
             return new Disk
             {
-                Model = diskDto.Model,
+                Name = diskDto.Model,
                 Size = diskDto.Size
             };
         }

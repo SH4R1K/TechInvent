@@ -191,7 +191,7 @@ namespace WebMVC.Services
                 worksheet.Cell(5 + i, 6).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Gpu != null).Select(g => $"{g.Name}").ToList());
                 worksheet.Cell(5 + i, 7).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Ram != null).Select(r => $"{r.Name} - {r.Ram.Capacity}").ToList());
                 worksheet.Cell(5 + i, 8).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.NetAdapter != null).Select(n => $"{n.Name}").ToList());
-                worksheet.Cell(5 + i, 9).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Disk != null).Select(d => $"{d.Disk.Model} - {d.Disk.Size}Гб").ToList());
+                worksheet.Cell(5 + i, 9).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Disk != null).Select(d => $"{d.Name} - {d.Disk.Size}Гб").ToList());
             }
             worksheet.Rows().AdjustToContents();
             worksheet.Cells().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
@@ -236,7 +236,7 @@ namespace WebMVC.Services
             var disks = workplace.Components.Where(c => c.Disk != null).ToList();
             foreach (Disk disk in disks)
             {
-                worksheet.Cell(8, 2).Value += $"{disk.Model} - {disk.Size}Гб{Environment.NewLine}";
+                worksheet.Cell(8, 2).Value += $"{disk.Name} - {disk.Size}Гб{Environment.NewLine}";
             }
             worksheet.Rows().AdjustToContents();
             worksheet.Cells().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);

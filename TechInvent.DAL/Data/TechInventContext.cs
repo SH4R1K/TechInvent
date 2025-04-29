@@ -116,9 +116,6 @@ public partial class TechInventContext : DbContext
             entity.ToTable("disk");
 
             entity.Property(e => e.IdComponent).HasColumnName("id_component");
-            entity.Property(e => e.Model)
-                .HasMaxLength(100)
-                .HasColumnName("model");
             entity.Property(e => e.Size)
                 .HasColumnName("size");
 
