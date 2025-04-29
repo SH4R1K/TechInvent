@@ -29,9 +29,16 @@ namespace WebMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Cabinet cabinet)
         {
-            _context.Cabinets.Add(cabinet);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                _context.Cabinets.Add(cabinet);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPost]

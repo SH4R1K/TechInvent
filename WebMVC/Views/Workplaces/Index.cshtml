@@ -38,6 +38,7 @@
                         </a>
                     </div>
                     <p class="card-text"><small class="text-body-secondary">Последнее обновление: @workplaces[i].LastUpdate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</small></p> <!-- Ну в перспективе надо написать определение часового пояса пользователя-->
+                    <p class="card-text"><small class="text-body-secondary">Инвентарный номер: @workplaces[i].InventNumber</small></p> 
 
                     <div class="row gy-2 justify-content-center justify-content-md-start">
                         <a asp-action="Details" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">Подробнее</a>

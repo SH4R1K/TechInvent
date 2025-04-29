@@ -65,7 +65,7 @@ public partial class TechInventContext : DbContext
 
             entity.ToTable("cabinet");
 
-            entity.HasIndex(e => e.IdCabinet, "id_cabinet_UNIQUE").IsUnique();
+            entity.HasIndex(e => e.Name, "name_cabinet_UNIQUE").IsUnique();
 
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
             entity.Property(e => e.Name)

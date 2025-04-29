@@ -23,7 +23,9 @@
 .card-text {
     color: var(--text-light); /* Light Color for Card Text */
 }
-
+.list-group-item {
+    background: var(--background-input);
+}
 /* Media Queries for Responsiveness */
 @media (max-width: 576px) {
     .card-body {
