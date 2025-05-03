@@ -372,7 +372,6 @@ public partial class TechInventContext : DbContext
             entity.ToTable("tech_request");
 
             entity.Property(e => e.IdRequest).HasColumnName("id_request");
-            entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
             entity.Property(e => e.Title).HasMaxLength(100).HasColumnName("title");
             entity.Property(e => e.Description).HasMaxLength(1000).HasColumnName("description");
             entity.Property(e => e.IsActive).HasColumnName("is_active");
@@ -382,11 +381,6 @@ public partial class TechInventContext : DbContext
                 .HasForeignKey(e => e.IdRequestType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("techrequest_requesttype"); 
-
-            entity.HasOne(e => e.Cabinet).WithMany(e => e.AttachedTechRequests)
-                .HasForeignKey(e => e.IdCabinet)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("techrequest_cabinet");
         });
 
         modelBuilder.Entity<TechRequestWorkplace>(entity =>

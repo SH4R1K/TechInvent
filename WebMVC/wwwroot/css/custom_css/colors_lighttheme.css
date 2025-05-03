@@ -22,7 +22,7 @@
     --button-background-expanded: rgba(74, 44, 133); /* Фон кнопки при раскрытии */
     --button-hover: rgba(74, 44, 133, 0.7); /* Фон кнопки при наведении */
     --button-text: (var (--text-light));
-
+   
     --background-scrollbar-track: rgba(25, 25, 25, 0.8); /* Фон трека скроллбара */
     --background-scrollbar-thumb: var(--main-color); /* Цвет ползунка скроллбара */
     --background-scrollbar-thumb-hover: rgba(74, 43, 133, 0.8); /* Цвет ползунка скроллбара при наведении */

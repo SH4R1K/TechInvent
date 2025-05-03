@@ -10,5 +10,4 @@ public partial class Cabinet
     public string? Name { get; set; }
 
     public virtual List<Workplace> Workplaces { get; set; } = new List<Workplace>();
-    public virtual List<TechRequest> AttachedTechRequests { get; set; } = new List<TechRequest>();
 }

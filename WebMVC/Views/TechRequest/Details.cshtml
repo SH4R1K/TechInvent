@@ -14,7 +14,6 @@
         </div>
         <div class="card-body">
             <p><strong>Описание:</strong> @Model.Description</p>
-            <p><strong>Кабинет:</strong> @Model.Cabinet.Name</p>
             <p><strong>Статус:</strong> @(Model.IsActive ? "Активен" : "Неактивен")</p>
             <div class="row mb-3">
                 <div class="col-md-12">
@@ -29,7 +28,7 @@
                                 {
                                     <li class="list-group-item" style="background: var(--background-input)">
                                         <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
-                                            @workplace.Workplace.Name
+                                            @workplace.Workplace.IdCabinetNavigation.Name @workplace.Workplace.Name
                                         </a>
 
                                         <a class="text-decoration-none" asp-action="CompleteWorkplace" asp-controller="TechRequest" asp-route-id="@Model.IdRequest" asp-route-idWorkplace="@workplace.IdWorkplace">
@@ -49,7 +48,7 @@
                                 {
                                     <li class="list-group-item" style="background: var(--background-input)">
                                         <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
-                                            @workplace.Workplace.Name
+                                            @workplace.Workplace.IdCabinetNavigation.Name @workplace.Workplace.Name
                                         </a>
 
                                         <a class="text-decoration-none" asp-action="RestoreWorkplace" asp-controller="TechRequest" asp-route-id="@Model.IdRequest" asp-route-idWorkplace="@workplace.IdWorkplace">

@@ -22,13 +22,12 @@ namespace WebMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TechRequests.Include(t => t.Cabinet).Include(t => t.RequestType).AsNoTracking().ToListAsync());
+            return View(await _context.TechRequests.Include(t => t.RequestType).AsNoTracking().ToListAsync());
         }
         public async Task<IActionResult> Create()
         {
             ViewBag.Workplaces = _context.Workplaces.ToList();
             ViewData["IdRequestType"] = new SelectList(_context.RequestTypes, "IdRequestType", "Name");
-            ViewData["IdCabinet"] = new SelectList(_context.Cabinets, "IdCabinet", "Name");
             return View();
         }
         public ActionResult Details(int id)
@@ -36,7 +35,7 @@ namespace WebMVC.Controllers
             var techRequest = _context.TechRequests
                 .Include(tr => tr.AttachedWorkplaces)
                     .ThenInclude(aw => aw.Workplace)
-                .Include(tr => tr.Cabinet)
+                    .ThenInclude(w => w.IdCabinetNavigation)
                 .Include(tr => tr.Comments)
                     .ThenInclude(c => c.Author)
                 .FirstOrDefault(tr => tr.IdRequest == id);

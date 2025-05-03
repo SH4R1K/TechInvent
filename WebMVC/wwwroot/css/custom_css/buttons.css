@@ -14,7 +14,7 @@ a {
 /* Buttons */
 .btn {
     background-color: var(--main-color); /* Transparent background */
-    color: var(--text-light); /* Light text color */
+    color: var(--text-button); /* Light text color */
     border: none; /* Initial transparent border */
     padding: 10px 20px; /* Padding for button */
     font-size: 16px; /* Font size */
@@ -25,10 +25,10 @@ a {
     }
 
 .nav-link {
-    color: var(--text-light); /* Light text color */
+    color: var(--text-button); /* Light text color */
 }
 
     .nav-link:hover, .nav-link:focus {
         text-shadow: 0 0 10px var(--text-neon-pink); /* Neon glow effect on hover */
-        color: var(--text-light); /* Light text color */
+        color: var(--text-button); /* Light text color */
     }

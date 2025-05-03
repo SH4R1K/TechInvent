@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using QRCoder;
+using System.Linq;
 using System.Linq.Expressions;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
@@ -81,11 +82,6 @@ namespace WebMVC.Controllers
         }
         public async Task<IActionResult> Search(string? query, bool searchByComponent = true, bool searchBySoftware = true)
         {
-            var workplaces = _context.Workplaces
-                .Include(w => w.Components)
-                .Include(w => w.InstalledSoftware)
-                    .ThenInclude(s => s.SoftwareNavigation)
-                .AsQueryable();
 
             ViewBag.query = query;
             Expression<Func<Workplace, bool>> predicate = PredicateBuilder.New<Workplace>(
@@ -98,9 +94,18 @@ namespace WebMVC.Controllers
             if (searchBySoftware)
                 predicate = predicate.Or(w => w.InstalledSoftware.Any(s => s.SoftwareNavigation.Name.Contains(query, StringComparison.OrdinalIgnoreCase)));
 
-            workplaces = workplaces.Where(predicate);
+            var cabinets = _context.Cabinets
+                .Include(w => w.Workplaces.AsQueryable().Where(predicate))
+                    .ThenInclude(w => w.Components)
+                .Include(w => w.Workplaces.AsQueryable().Where(predicate))
+                    .ThenInclude(w => w.InstalledSoftware)
+                        .ThenInclude(s => s.SoftwareNavigation)
+                .AsQueryable();
 
-            return View(await workplaces.ToListAsync());
+            cabinets = cabinets.Where(c => c.Workplaces.AsQueryable().Any(predicate));
+            
+
+            return View(await cabinets.ToListAsync());
         }
 
         [HttpGet("{Controller}/Details/{id}")]
