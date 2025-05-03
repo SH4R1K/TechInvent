@@ -26,7 +26,7 @@ namespace WebMVC.Controllers
         }
         public async Task<IActionResult> Create()
         {
-            ViewBag.Workplaces = _context.Workplaces.ToList();
+            ViewBag.Workplaces = await _context.Workplaces.Include(w => w.IdCabinetNavigation).ToListAsync();
             ViewData["IdRequestType"] = new SelectList(_context.RequestTypes, "IdRequestType", "Name");
             return View();
         }

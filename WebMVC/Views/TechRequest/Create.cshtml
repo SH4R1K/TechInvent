@@ -32,11 +32,11 @@
     <div class="form-group">
         <label asp-for="AttachedWorkplaces" class="control-label">Рабочие места</label>
         <div>
-            @foreach (var workplace in ViewBag.Workplaces)
+            @foreach (Workplace workplace in ViewBag.Workplaces)
             {
                 <label>
                     <input type="checkbox" name="selectedWorkplaces" value="@workplace.IdWorkplace" />
-                    @workplace.Name
+                    (@workplace.IdCabinetNavigation.Name) @workplace.Name
                 </label>
 
                 <br />

@@ -18,7 +18,7 @@
         return;
     }
     var workplaces = Model.ToList();
-    <div>
+    <div class="row gy-2 justify-content-center justify-content-md-start">
         <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="Index">Назад</a>
         <a class="btn btn-secondary" asp-action="GenerateHardwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel комплектующие</a>
         <a class="btn btn-secondary" asp-action="GenerateSoftwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel ПО</a>

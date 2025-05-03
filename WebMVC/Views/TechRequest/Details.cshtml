@@ -23,12 +23,12 @@
                         if (activeWorkplace.Count() > 0)
                         {
                             <p><strong>Ожидающие обслуживания места:</strong></p>
-                            <ul class="list-group">
+                            <ul class="list-group mb-2">
                                 @foreach (var workplace in activeWorkplace)
                                 {
                                     <li class="list-group-item" style="background: var(--background-input)">
                                         <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
-                                            @workplace.Workplace.IdCabinetNavigation.Name @workplace.Workplace.Name
+                                            (@workplace.Workplace.IdCabinetNavigation.Name) @workplace.Workplace.Name
                                         </a>
 
                                         <a class="text-decoration-none" asp-action="CompleteWorkplace" asp-controller="TechRequest" asp-route-id="@Model.IdRequest" asp-route-idWorkplace="@workplace.IdWorkplace">
@@ -48,7 +48,7 @@
                                 {
                                     <li class="list-group-item" style="background: var(--background-input)">
                                         <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
-                                            @workplace.Workplace.IdCabinetNavigation.Name @workplace.Workplace.Name
+                                            (@workplace.Workplace.IdCabinetNavigation.Name) @workplace.Workplace.Name
                                         </a>
 
                                         <a class="text-decoration-none" asp-action="RestoreWorkplace" asp-controller="TechRequest" asp-route-id="@Model.IdRequest" asp-route-idWorkplace="@workplace.IdWorkplace">
