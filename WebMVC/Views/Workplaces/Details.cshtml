@@ -7,21 +7,67 @@
 
 <div class="container row mt-4">
     <div class="card">
-        <h4 class="card-header card-title">@ViewData["PCName"]</h4>
+            <h4 class="card-header card-title">
+                Рабочее место (@Model.IdCabinetNavigation.Name)
+            </h4>
         <div class="card-body">
-            <p class="card-text">Инвентарный номер: <small class="text-body-secondary">@Model.InventNumber</small></p>
+            <p class="card-text">Имя компьютера: @ViewData["PCName"]</p>
+            @if (Model.InventNumber != null){
+                <p class="card-text">Инвентарный номер: <small class="text-body-secondary">@Model.InventNumber</small></p>
+            }
             <p class="card-text">Операционная система: <small class="text-body-secondary">@Model.IdOsNavigation.OsName</small></p>
             <p class="card-text">ID для публичного доступа: <small class="text-body-secondary">@Model.Guid</small></p>
             <p class="card-text">Количество установленного ПО: <small class="text-body-secondary">@Model.InstalledSoftware.Count</small></p>
             <p class="card-text">Последнее обновление: <small class="text-body-secondary">@Model.LastUpdate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</small></p> <!-- Ну в перспективе надо написать определение часового пояса пользователя-->
-
         </div>
     </div>
-    <div style="padding-top: 1em;">
-        <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
-        <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdWorkplace" data-bs-target="#editWorkplaceModal">Изменить инвентарный номер</a>
-        @* <a class="btn btn-secondary" asp-controller="TechRequest" asp-action="Index" asp-route-id="@Model?.IdWorkplace">@Model?.AttachedTechRequests.Count</a> *@
+    @* <div style="padding-top: 1em;"> *@
+    @*     <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a> *@
+    @*     <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdWorkplace" data-bs-target="#editWorkplaceModal">Изменить инвентарный номер</a> *@
+    @*     @* <a class="btn btn-secondary" asp-controller="TechRequest" asp-action="Index" asp-route-id="@Model?.IdWorkplace">@Model?.AttachedTechRequests.Count</a> *@ 
+    @* </div> *@
+
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMonitor">
+                Мониторы
+            </button>
+        </h2>
+        <div id="collapseMonitor" class="accordion-collapse collapse">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Название монитора
+                        </th>
+                        <th>
+                            Инвентарный номер
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Monitors)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.InventNumber)
+                            </td>
+                            <td>
+                                <form asp-action="DetachMonitor" asp-route-id="@Model.IdWorkplace" asp-route-idMonitor="@item.IdMonitor" method="POST">
+                                    <button class="fbtn-link" type="submit">Отвязать</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
+
     <div class="col-md-6">
         <h3 style="padding-top: 1em; padding-bottom: 1em;">Комплектующие</h3>
         <a class="btn btn-secondary" asp-action="PublicGenerateHardwareReportById" asp-route-id="@Model?.Guid">Экспортировать в Excel</a>

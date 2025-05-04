@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TechInvent.DM.Models;
+using Monitor = TechInvent.DM.Models.Monitor;
 
 namespace TechInvent.DAL.Data;
 
@@ -42,6 +43,7 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<TechRequestWorkplace> TechRequestWorkplaces { get; set; }
     public virtual DbSet<RequestType> RequestTypes { get; set; }
     public virtual DbSet<TechRequestComment> Comments { get; set; }
+    public virtual DbSet<Monitor> Monitors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -433,6 +435,26 @@ public partial class TechInventContext : DbContext
                   .HasForeignKey(d => d.IdUser)
                   .OnDelete(DeleteBehavior.Cascade)
                   .HasConstraintName("fk_user_comments");
+        });
+
+        modelBuilder.Entity<Monitor>(entity =>
+        {
+            entity.HasKey(e => e.IdMonitor).HasName("PRIMARY");
+
+            entity.ToTable("monitor");
+            entity.Property(e => e.IdMonitor).HasColumnName("id_monitor");
+            entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
+            entity.Property(e => e.InventNumber)
+                .HasMaxLength(100)
+                .HasColumnName("invent_number");
+
+            entity.HasOne(d => d.Workplace).WithMany(p => p.Monitors)
+                .HasForeignKey(d => d.IdWorkplace)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("fk_monitor_workplace");
         });
 
         modelBuilder.Entity<User>().HasData(InitialData.UsersList);

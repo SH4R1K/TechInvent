@@ -15,6 +15,7 @@ public partial class Workplace
     public string? InventNumber { get; set; }
     public Guid Guid { get; set; } = Guid.NewGuid();
     public DateTime LastUpdate { get; set; } = DateTime.UtcNow;
+    public virtual List<Monitor> Monitors { get; set; } = new List<Monitor>();
 
     public virtual List<TechRequestWorkplace> AttachedTechRequests { get; set; } = new List<TechRequestWorkplace>();
     public virtual List<Component> Components { get; set; } = new List<Component>();

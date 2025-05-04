@@ -27,9 +27,10 @@
         @for (int i = 0; i < workplaces.Count; i++)
         {
             <div class="card" style="width: 18rem;">
+                <h5 class="card-header card-title">@workplaces[i].Name</h5>
                 <div class="card-body">
-                    <h5 class="card-title">@workplaces[i].Name</h5>
                     <p class="card-text">ОС: @workplaces[i].IdOsNavigation.OsName</p>
+                    <p class="card-text">Последнее обновление: @workplaces[i].LastUpdate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</p>
                     <div class="position-absolute top-0 end-0 m-2">
                         <a asp-action="Delete" asp-route-id="@workplaces[i].IdWorkplace">
                             <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -37,14 +38,15 @@
                             </svg>
                         </a>
                     </div>
-                    <p class="card-text"><small class="text-body-secondary">Последнее обновление: @workplaces[i].LastUpdate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</small></p> <!-- Ну в перспективе надо написать определение часового пояса пользователя-->
-                    <p class="card-text"><small class="text-body-secondary">Инвентарный номер: @workplaces[i].InventNumber</small></p> 
-
+                    @if (@workplaces[i].InventNumber != null)
+                    {
+                    <p class="card-text">Инвентарный номер: @workplaces[i].InventNumber</p> 
+                    }
                     <div class="row gy-2 justify-content-center justify-content-md-start">
                         <a asp-action="Details" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">Подробнее</a>
                         <a asp-action="QRCode" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">QR-Код</a>
                     </div>
-                 </div>
+                </div>
             </div>
         }
     </div>

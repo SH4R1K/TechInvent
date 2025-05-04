@@ -1,13 +1,14 @@
 ﻿/* Links and Buttons */
-a {
+a, .fbtn-link {
     color: var(--text-neon-purple); /* Neon Purple Link Color */
     transition: color 0.3s ease; /* Smooth transition for links */
     text-shadow: 0 0 5px var(--text-neon-purple); /* Neon glow effect */
     border: none;
     box-shadow: none;
+    background: none;
 }
 
-    a:hover, a:focus {
+    a:hover, a:focus, .fbtn-link:hover, .fbtn-link:focus {
         color: var(--text-neon-pink); /* Neon Pink on hover */
     }
 

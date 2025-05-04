@@ -31,6 +31,7 @@ namespace WebMVC.Controllers
                 .AsNoTracking()
                 .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.IdOsNavigation)
+                .Include(w => w.Monitors)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.Gpu)
                 .Include(w => w.Components)
@@ -61,6 +62,25 @@ namespace WebMVC.Controllers
             return View(await techInventContext.ToListAsync());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DetachMonitor(int id, int idMonitor)
+        {
+            var monitor = await _context.Monitors.FindAsync(idMonitor);
+
+            if (monitor == null)
+                return NotFound();
+
+            if (monitor.IdWorkplace != id)
+                return BadRequest("Монитор не связан с этим рабочим местом");
+
+
+            monitor.IdWorkplace = null;
+
+            _context.Monitors.Update(monitor);
+            _context.SaveChanges();
+
+            return RedirectToAction("Details", new { id });
+        }
         [HttpPost]
         public async Task<IActionResult> UpdateInventNumber(int id, string? inventNumber)
         {
