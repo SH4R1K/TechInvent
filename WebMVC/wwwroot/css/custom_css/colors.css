@@ -10,22 +10,21 @@
     --text-neon-pink: #d5006d; /* Неоновый розовый */
     --border-neon-purple: var(--secondary-color); /* Неоновая фиолетовая граница */
 
-    --background-body: linear-gradient(135deg, #1a1a1a 50%, var(--main-color) 100%); /* Фоновый градиент */
-    --background-dark: rgba(25, 25, 25, 0.95); /* Темный фон */
-    --background-darker: rgba(20, 20, 20, 0.95); /* Более темный фон */
-    --background-section: rgba(35, 35, 35, 0.9); /* Фон секции */
-    --background-input: rgb(35, 35, 35); /* Фон для ввода */
-    --background-input-focus: rgba(35, 35, 35, 0.8); /* Фон для ввода при фокусе */
-    --background-dropdown: rgba(35, 35, 35, 0.9); /* Фон выпадающего меню */
+    --background-body: linear-gradient(135deg, #1a1a1a 20%, var(--main-color) 100%); /* Фоновый градиент */
+    --background-dark: rgba(35, 35, 35, 0.95); /* Темный фон */
+    --background-darker: rgba(30, 30, 30, 0.95); /* Более темный фон */
+    --background-section: rgba(45, 45, 45, 0.9); /* Фон секции */
+    --background-input: rgb(45, 45, 45); /* Фон для ввода */
+    --background-input-focus: rgba(45, 45, 45, 0.8); /* Фон для ввода при фокусе */
+    --background-dropdown: rgba(45, 45, 45, 0.9); /* Фон выпадающего меню */
     --background-card: rgba(42, 42, 42, 0.9); /* Фон карточки */
-    --button-background: rgba(25, 25, 25, 0.9); /* Фон кнопки */
+    --button-background: rgba(35, 35, 35, 0.9); /* Фон кнопки */
     --button-background-expanded: rgba(74, 44, 133); /* Фон кнопки при раскрытии */
     --button-hover: rgba(74, 44, 133, 0.7); /* Фон кнопки при наведении */
     --button-text: (var (--text-light));
-
     --background-scrollbar-track: rgba(25, 25, 25, 0.8); /* Фон трека скроллбара */
     --background-scrollbar-thumb: var(--main-color); /* Цвет ползунка скроллбара */
     --background-scrollbar-thumb-hover: rgba(74, 43, 133, 0.8); /* Цвет ползунка скроллбара при наведении */
     --footer-background: rgba(13, 13, 13, 0.8); /* Фон подвала */
-    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23a020f0' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
