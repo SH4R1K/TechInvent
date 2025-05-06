@@ -15,6 +15,7 @@
         <div class="card-body">
             <p><strong>Описание:</strong> @Model.Description</p>
             <p><strong>Статус:</strong> @(Model.IsActive ? "Активен" : "Неактивен")</p>
+            <p><strong>Создал:</strong> @(Model.User.Login)</p>
             <div class="row mb-3">
                 <div class="col-md-12">
                     @{

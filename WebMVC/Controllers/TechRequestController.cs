@@ -38,6 +38,7 @@ namespace WebMVC.Controllers
                     .ThenInclude(w => w.IdCabinetNavigation)
                 .Include(tr => tr.Comments)
                     .ThenInclude(c => c.Author)
+                .Include(tr => tr.User)
                 .FirstOrDefault(tr => tr.IdRequest == id);
 
             if (techRequest == null)
