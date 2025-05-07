@@ -22,7 +22,12 @@ namespace WebMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TechRequests.Include(t => t.RequestType).AsNoTracking().ToListAsync());
+            var techrequest = _context.TechRequests.Include(t => t.RequestType).AsNoTracking();
+
+            if (_userService.GetUserRole() != "admin")
+                techrequest = techrequest.Where(tr => tr.IdUser == _userService.GetUserId());
+
+            return View(await techrequest.ToListAsync());
         }
         public async Task<IActionResult> Create()
         {
@@ -65,7 +70,8 @@ namespace WebMVC.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        [Authorize(Roles = "admin")]
+        [HttpPost]
         public async Task<IActionResult> CompleteWorkplace(int id, int idWorkplace)
         {
             var techRequest = await _context.TechRequests.Include(tr => tr.AttachedWorkplaces).FirstOrDefaultAsync(tr => tr.IdRequest == id);
@@ -85,6 +91,8 @@ namespace WebMVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", new { id });
         }
+        [Authorize(Roles = "admin")]
+        [HttpPost]
         public async Task<IActionResult> RestoreWorkplace(int id, int idWorkplace)
         {
             var techRequest = await _context.TechRequests.Include(tr => tr.AttachedWorkplaces).FirstOrDefaultAsync(tr => tr.IdRequest == id);

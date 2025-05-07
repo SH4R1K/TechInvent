@@ -18,5 +18,11 @@ namespace WebMVC.Services
                 return null;
             return int.Parse(userId);
         }
+
+        public string? GetUserRole()
+        {
+            var userRole = _httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimsIdentity.DefaultRoleClaimType);
+            return userRole;
+        }
     }
 }
