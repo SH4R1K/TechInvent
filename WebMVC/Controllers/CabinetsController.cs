@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 using WebMVC.Services;
@@ -26,6 +25,7 @@ namespace WebMVC.Controllers
             return View(await _context.Cabinets.AsNoTracking().Include(c => c.Workplaces).ToListAsync());
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Create(Cabinet cabinet)
         {
@@ -41,6 +41,7 @@ namespace WebMVC.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(Cabinet cabinet)
         {
@@ -56,12 +57,17 @@ namespace WebMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var cabinet = await _context.Cabinets.Include(c => c.Workplaces).FirstOrDefaultAsync(c => c.IdCabinet == id);
 
             if (cabinet == null)
                 return NotFound();
+
+            if (cabinet.Name == "Не определённый")
+                return RedirectToAction("Index");
+
             var undifinedCabinet = await _context.Cabinets.FirstOrDefaultAsync(c => c.Name == "Не определённый");
             if (undifinedCabinet == null)
             {

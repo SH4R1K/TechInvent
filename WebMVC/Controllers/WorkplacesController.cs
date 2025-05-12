@@ -62,6 +62,7 @@ namespace WebMVC.Controllers
             return View(await techInventContext.ToListAsync());
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> DetachMonitor(int id, int idMonitor)
         {
@@ -81,6 +82,8 @@ namespace WebMVC.Controllers
 
             return RedirectToAction("Details", new { id });
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> UpdateInventNumber(int id, string? inventNumber)
         {
@@ -100,6 +103,7 @@ namespace WebMVC.Controllers
             _context.SaveChanges();
             return RedirectToAction("Details", new { id });
         }
+
         public async Task<IActionResult> Search(string? query, bool searchByComponent = true, bool searchBySoftware = true)
         {
 
@@ -154,6 +158,7 @@ namespace WebMVC.Controllers
 
             return View(workplace);
         }
+
         [AllowAnonymous]
         [HttpGet("{Controller}/Public/{id}")]
         public async Task<IActionResult> Details(Guid? id)
@@ -180,6 +185,7 @@ namespace WebMVC.Controllers
 
             return View(workplace);
         }
+
         public async Task<IActionResult> QRCode(int? id)
         {
             if (id == null)

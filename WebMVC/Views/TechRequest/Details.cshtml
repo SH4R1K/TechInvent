@@ -32,9 +32,12 @@
                                             <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
                                                 (@workplace.Workplace.IdCabinetNavigation.Name) @workplace.Workplace.Name
                                             </a>
-                                            <button class="btn-none float-end" type="submit">
-                                                <img src="~/images/check.svg" />
-                                            </button>
+                                            @if (Context.User.IsInRole("admin"))
+                                            {
+                                                <button class="btn-none float-end" type="submit">
+                                                    <img src="~/images/check.svg" />
+                                                </button>
+                                            }
                                         </form>
                                     </li>
                                 }
@@ -51,9 +54,12 @@
                                             <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
                                                 (@workplace.Workplace.IdCabinetNavigation.Name) @workplace.Workplace.Name
                                             </a>
+                                            @if (Context.User.IsInRole("admin"))
+                                            {
                                             <button class="btn-none float-end" type="submit">
                                                 <img src="~/images/restore.svg" />
                                             </button>
+                                            }
                                         </form>
                                     </li>
                                 }

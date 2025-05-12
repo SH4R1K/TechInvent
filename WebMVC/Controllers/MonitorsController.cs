@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Monitor = TechInvent.DM.Models.Monitor;
 
 namespace WebMVC.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class MonitorsController : Controller
     {
         private readonly TechInventContext _context;
@@ -27,16 +29,14 @@ namespace WebMVC.Controllers
             return View(await techInventContext.ToListAsync());
         }
 
-        // GET: Monitors/Create
+
         public IActionResult Create()
         {
             ViewData["IdWorkplace"] = new SelectList(_context.Workplaces, "IdWorkplace", "Name");
             return View();
         }
 
-        // POST: Monitors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdMonitor,Name,InventNumber,IdWorkplace")] Monitor monitor)
@@ -51,7 +51,7 @@ namespace WebMVC.Controllers
             return View(monitor);
         }
 
-        // GET: Monitors/Edit/5
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -68,9 +68,6 @@ namespace WebMVC.Controllers
             return View(monitor);
         }
 
-        // POST: Monitors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdMonitor,Name,InventNumber,IdWorkplace")] Monitor monitor)
@@ -104,7 +101,6 @@ namespace WebMVC.Controllers
             return View(monitor);
         }
 
-        // GET: Monitors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,7 +119,6 @@ namespace WebMVC.Controllers
             return View(monitor);
         }
 
-        // POST: Monitors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

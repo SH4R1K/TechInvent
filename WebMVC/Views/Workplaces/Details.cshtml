@@ -7,8 +7,10 @@
 
 <div style="padding-top: 1em;">
     <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
+    @if (Context.User.IsInRole("admin"))
+    {
     <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdWorkplace" data-bs-target="#editWorkplaceModal">Изменить инвентарный номер</a>
-    <a class="btn btn-secondary" asp-controller="TechRequest" asp-action="Index" asp-route-id="@Model?.IdWorkplace">@Model?.AttachedTechRequests.Count</a>
+    }
 </div>
 
 <div class="container row mt-4">
@@ -59,9 +61,12 @@
                                     @Html.DisplayFor(modelItem => item.InventNumber)
                                 </td>
                                 <td>
+                                @if (Context.User.IsInRole("admin"))
+                                {
                                     <form asp-action="DetachMonitor" asp-route-id="@Model.IdWorkplace" asp-route-idMonitor="@item.IdMonitor" method="POST">
                                         <button class="fbtn-link" type="submit">Отвязать</button>
                                     </form>
+                                }
                                 </td>
                             </tr>
                         }
