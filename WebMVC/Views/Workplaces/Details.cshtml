@@ -79,6 +79,7 @@
     <div class="col-md-6">
         <h3 style="padding-top: 1em; padding-bottom: 1em;">Комплектующие</h3>
         <a class="btn btn-secondary" asp-action="PublicGenerateHardwareReportById" asp-route-id="@Model?.Guid">Экспортировать в Excel</a>
+        <a class="btn btn-secondary toggleAccordion">Раскрыть/Скрыть все</a>
         <div class="scrollable-div" style="padding-top: 1em; height: 35em">
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
@@ -212,8 +213,9 @@
     </div>
 
     <div class="col-md-6">
-        <h3 style="padding-top: 1em; padding-bottom: 1em;">Программное Обеспечение</h3>
+        <h3 style="padding-top: 1em; padding-bottom: 1em;">Программное обеспечение</h3>
         <a class="btn btn-secondary" asp-action="PublicGenerateSoftwareReportById" asp-route-id="@Model?.Guid">Экспортировать в Excel</a>
+        <a class="btn btn-secondary toggleAccordion">Открыть/Закрыть все</a>
         @{
             var groups = Model.InstalledSoftware.GroupBy(s => s.SoftwareNavigation.IdManufacturer);
             <div class="scrollable-div" style="padding-top: 1em; height: 35em">
@@ -243,6 +245,35 @@
         }
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.toggleAccordion').forEach(button => {
+        button.addEventListener('click', function() {
+            // Находим следующий соседний div, содержащий аккордеоны
+            const siblingDiv = this.nextElementSibling; // Это ваш scrollable-div
+            const accordions = siblingDiv.querySelectorAll('.accordion-collapse');
+            const isAnyOpen = Array.from(accordions).some(accordion => accordion.classList.contains('show'));
+
+            accordions.forEach(accordion => {
+                const collapseInstance = bootstrap.Collapse.getInstance(accordion);
+                if (isAnyOpen) {
+                    if (collapseInstance) {
+                        collapseInstance.hide();
+                    } else {
+                        bootstrap.Collapse.getOrCreateInstance(accordion).hide();
+                    }
+                } else {
+                    if (collapseInstance) {
+                        collapseInstance.show();
+                    } else {
+                        bootstrap.Collapse.getOrCreateInstance(accordion).show();
+                    }
+                }
+            });
+        });
+    });
+</script>
+
 
 
 <partial name="_EditInventNumberComponent.cshtml" />

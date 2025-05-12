@@ -35,6 +35,12 @@
                                     <a class="nav-link" asp-area="" asp-controller="Monitors" asp-action="Index">Мониторы</a>
                                 </li>
                             }
+                            @if (Context.User.IsInRole("admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="CabinetEquipments" asp-action="Index">Оборудование</a>
+                                </li>
+                            }
                         </ul>
                         <div class="nav-item">
                             <form asp-controller="Workplaces" asp-action="Search">

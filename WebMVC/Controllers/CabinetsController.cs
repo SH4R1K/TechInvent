@@ -81,6 +81,27 @@ namespace WebMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> DetachEquipment(int id, int idEquipment)
+        {
+            var equipment = await _context.CabinetEquipments.FindAsync(idEquipment);
+
+            if (equipment == null)
+                return NotFound();
+
+            if (equipment.IdCabinet != id)
+                return BadRequest("Монитор не связан с этим рабочим местом");
+
+
+            equipment.IdCabinet = null;
+
+            _context.CabinetEquipments.Update(equipment);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Workplaces", new { id });
+        }
+
         public async Task<IActionResult> GenerateReport()
         {
             var cabinet = _context.Cabinets.AsNoTracking().Include(c => c.Workplaces).ThenInclude(w => w.IdOsNavigation);

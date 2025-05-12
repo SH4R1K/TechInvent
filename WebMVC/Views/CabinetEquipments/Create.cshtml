@@ -1,0 +1,46 @@
+﻿@model TechInvent.DM.Models.CabinetEquipment
+
+@{
+    ViewData["Title"] = "Создать";
+}
+
+<h1>Создать</h1>
+
+<h4>Оборудование</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Имя</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InventNumber" class="control-label">Инвентарный номер</label>
+                <input asp-for="InventNumber" class="form-control" />
+                <span asp-validation-for="InventNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdCabinet" class="control-label">Кабинет</label>
+                <select asp-for="IdCabinet" class ="form-control" asp-items="ViewBag.IdCabinet"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdCabinetEquipmentType" class="control-label">Тип оборудования</label>
+                <select asp-for="IdCabinetEquipmentType" class ="form-control" asp-items="ViewBag.IdCabinetEquipmentType"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Назад к списку</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
