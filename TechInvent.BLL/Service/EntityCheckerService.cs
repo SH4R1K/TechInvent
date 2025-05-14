@@ -2,7 +2,7 @@
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 
-namespace TechInventAPI.Service
+namespace TechInvent.BLL.Service
 {
     public class EntityCheckerService
     {

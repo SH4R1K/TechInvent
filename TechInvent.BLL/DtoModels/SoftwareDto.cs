@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿
 using System.Text.Json.Serialization;
 
-namespace TechInventAPI.DtoModels
-{    
+namespace TechInvent.BLL.DtoModels
+{
     public class SoftwareDto
     {
         [JsonPropertyName("name")]

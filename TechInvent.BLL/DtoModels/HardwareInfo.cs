@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿
 using System.Text.Json.Serialization;
 
-namespace TechInventAPI.DtoModels
+namespace TechInvent.BLL.DtoModels
 {
     public class HardwareInfo
     {
@@ -19,7 +19,7 @@ namespace TechInventAPI.DtoModels
 
         [JsonPropertyName("gpu")]
         public List<GpuDto> Gpu { get; set; }
-        
+
         [JsonPropertyName("disk")]
         public List<DiskDto> Disks { get; set; }
     }

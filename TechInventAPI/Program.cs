@@ -1,5 +1,5 @@
-using TechInventAPI.Dto;
-using TechInventAPI.Service;
+using TechInvent.BLL.Dto;
+using TechInvent.BLL.Service;
 using TechInventAPI.RabbitMQ;
 using Microsoft.EntityFrameworkCore;
 using TechInvent.DAL.Data;

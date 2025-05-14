@@ -1,8 +1,8 @@
-﻿using TechInvent.DM.Models;
-using TechInventAPI.DtoModels;
-using TechInventAPI.Service;
+﻿using TechInvent.BLL.DtoModels;
+using TechInvent.BLL.Service;
+using TechInvent.DM.Models;
 
-namespace TechInventAPI.Dto
+namespace TechInvent.BLL.Dto
 {
     public class DtoConverter
     {
@@ -26,7 +26,7 @@ namespace TechInventAPI.Dto
             var os = _entityChecker.GetOrCreateOs(workplaceDto.OsName, workplaceDto.Version);
             List<Component> components = ConvertDtoComponents(workplaceDto.HardwareInfo);
             List<Software> software = ConvertDtoSoftware(workplaceDto.Software);
-            
+
             var workplace = _entityChecker.GetOrCreateWorkplace(workplaceDto.CompName, cabinet, os, components, software);
             return workplace;
         }
@@ -45,7 +45,7 @@ namespace TechInventAPI.Dto
         public List<Component> ConvertDtoComponents(HardwareInfo hardwareInfo)
         {
             var components = new List<Component>();
-            
+
             components.AddRange(hardwareInfo.Ram.Select(ConvertDtoRam));
             components.AddRange(hardwareInfo.Gpu.Select(ConvertDtoGpu));
             components.AddRange(hardwareInfo.Processor.Select(ConvertDtoProcessor));

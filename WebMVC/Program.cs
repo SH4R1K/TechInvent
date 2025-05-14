@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
+using TechInvent.BLL.Dto;
+using TechInvent.BLL.Service;
 using TechInvent.DAL.Data;
 using WebMVC.Services;
 
@@ -12,9 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddScoped<JWTokenService>();
 builder.Services.AddScoped<ExcelService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<EntityCheckerService>();
+builder.Services.AddScoped<DtoConverter>();
+
 builder.Services.AddDbContextPool<TechInventContext>(options =>
 {
     options.UseMySQL(Environment.GetEnvironmentVariable("MySQLConnString") ?? builder.Configuration.GetConnectionString("DefaultConnectionMysql") ?? "server=;user=;password=;database=;");

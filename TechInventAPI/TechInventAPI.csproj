@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TechInvent.BLL\TechInvent.BLL.csproj" />
     <ProjectReference Include="..\TechInvent.DAL\TechInvent.DAL.csproj" />
     <ProjectReference Include="..\TechInvent.DM\TechInvent.DM.csproj" />
   </ItemGroup>

@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿
 using System.Text.Json.Serialization;
 
-namespace TechInventAPI.DtoModels
+namespace TechInvent.BLL.DtoModels
 {
-    public class Keyboard
+    public class Mouse
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }
