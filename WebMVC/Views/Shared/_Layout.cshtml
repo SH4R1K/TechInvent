@@ -15,7 +15,7 @@
                 <div class="container-fluid">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TechInvent</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
+                            aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-collapse collapse d-sm-flex justify-content-between">
@@ -24,29 +24,28 @@
                                 @await Component.InvokeAsync("Search")
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="TechRequest" asp-action="Create">Создать заявку</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="TechRequest" asp-action="Index">Заявки</a>
+                                <div class="dropdown">
+                                    <div class="btn-group">
+                                        <a class="nav-link" style="padding-right: 0" asp-area="" asp-controller="TechRequest" asp-action="Index">Заявки</a>
+                                        <a class="nav-link dropdown-toggle dropdown-toggle-split" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" asp-area="" asp-controller="TechRequest" asp-action="Create">Создать заявку</a>
+                                        </ul>
+                                    </div>
+                                </div>
                             </li>
                             @if (Context.User.IsInRole("admin"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-controller="Monitors" asp-action="Index">Мониторы</a>
                                 </li>
-                            }
-                            @if (Context.User.IsInRole("admin"))
-                            {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-controller="CabinetEquipments" asp-action="Index">Оборудование</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Import" asp-action="Index">Импортировать рабочее место</a>
+                                </li>
                             }
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Monitors" asp-action="Index">Мониторы</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Import" asp-action="Index">Импортировать рабочее место</a>
-                            </li>
                         </ul>
                         <div class="nav-item">
                             <form asp-controller="Workplaces" asp-action="Search">

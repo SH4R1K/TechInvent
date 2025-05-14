@@ -60,6 +60,7 @@ namespace WebMVC.Controllers
             var techInventContext = _context.Workplaces.AsNoTracking().OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
             ViewBag.cabinetEquipments = await _context.CabinetEquipments.AsNoTracking().Include(eq => eq.CabinetEquipmentType).Where(eq => eq.IdCabinet == id).ToListAsync();
             ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
+            ViewBag.cabinets = await _context.Cabinets.ToListAsync();
             return View(await techInventContext.ToListAsync());
         }
 
@@ -82,6 +83,28 @@ namespace WebMVC.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Details", new { id });
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> MoveWorkplace(int id, int idCabinet)
+        {
+            var cabinet = await _context.Cabinets.FindAsync(idCabinet);
+
+            if (cabinet == null)
+                return NotFound();
+
+            var workplace = await _context.Workplaces.FindAsync(id);
+
+            if (workplace == null)
+                return NotFound();
+
+            workplace.IdCabinet = idCabinet;
+
+            _context.Workplaces.Update(workplace);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", new { id = idCabinet });
         }
 
         [Authorize(Roles = "admin")]
