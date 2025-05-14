@@ -97,9 +97,12 @@
                 <div class="card-footer row gy-2 justify-content-center justify-content-md-start">
                     <a asp-action="Details" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">Подробнее</a>
                     <a asp-action="QRCode" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">QR-Код</a>
-                    <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#moveWorkplaceModal" data-workplace-id="@workplaces[i].IdWorkplace">
-                        Перенос в другой кабинет
-                    </button>
+                    @if (Context.User.IsInRole("admin"))
+                    {
+                        <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#moveWorkplaceModal" data-workplace-id="@workplaces[i].IdWorkplace">
+                            Перенос в другой кабинет
+                        </a>
+                    }
                 </div>
             </div>
 
