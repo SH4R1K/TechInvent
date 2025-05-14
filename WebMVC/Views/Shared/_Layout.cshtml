@@ -15,17 +15,32 @@
                 <div class="container-fluid">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TechInvent</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
+                    aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="navbar-collapse collapse d-sm-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                               @await Component.InvokeAsync("Search")
+                                @await Component.InvokeAsync("Search")
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="TechRequest" asp-action="Create">Создать заявку</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="TechRequest" asp-action="Index">Заявки</a>
                             </li>
+                            @if (Context.User.IsInRole("admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Monitors" asp-action="Index">Мониторы</a>
+                                </li>
+                            }
+                            @if (Context.User.IsInRole("admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="CabinetEquipments" asp-action="Index">Оборудование</a>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Monitors" asp-action="Index">Мониторы</a>
                             </li>

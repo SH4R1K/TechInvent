@@ -29,12 +29,14 @@ namespace WebMVC.Controllers
 
             return View(await techrequest.ToListAsync());
         }
+
         public async Task<IActionResult> Create()
         {
             ViewBag.Workplaces = await _context.Workplaces.Include(w => w.IdCabinetNavigation).ToListAsync();
             ViewData["IdRequestType"] = new SelectList(_context.RequestTypes, "IdRequestType", "Name");
             return View();
         }
+
         public ActionResult Details(int id)
         {
             var techRequest = _context.TechRequests
@@ -49,6 +51,11 @@ namespace WebMVC.Controllers
             if (techRequest == null)
             {
                 return NotFound();
+            }
+
+            if (techRequest.User.IdUser != _userService.GetUserId() && _userService.GetUserRole() != "admin")
+            {
+                return Forbid();
             }
 
             return View(techRequest);
@@ -70,6 +77,7 @@ namespace WebMVC.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> CompleteWorkplace(int id, int idWorkplace)
@@ -91,6 +99,7 @@ namespace WebMVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", new { id });
         }
+
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> RestoreWorkplace(int id, int idWorkplace)
@@ -119,7 +128,12 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
-            
+
+            if (techRequest.IdUser != _userService.GetUserId() && _userService.GetUserRole() != "admin")
+            {
+                return Forbid();
+            }
+
             techRequest.AttachedWorkplaces.ForEach(aw => aw.IsActive = false);
 
             techRequest.IsActive = false;
@@ -128,12 +142,19 @@ namespace WebMVC.Controllers
 
             return RedirectToAction("Index");
         }
+
         public async Task<IActionResult> ReopenRequest(int id)
         {
             var techRequest = await _context.TechRequests.Include(tr => tr.AttachedWorkplaces).FirstOrDefaultAsync(tr => tr.IdRequest == id);
+            
             if (techRequest == null)
             {
                 return NotFound();
+            }
+
+            if (techRequest.IdUser != _userService.GetUserId() && _userService.GetUserRole() != "admin")
+            {
+                return Forbid();
             }
 
             techRequest.IsActive = true;
@@ -143,6 +164,7 @@ namespace WebMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
@@ -168,8 +190,15 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
+            
+            var userId = _userService.GetUserId();
 
-            var user = await _context.Users.FindAsync(_userService.GetUserId());
+            if (techRequest.User.IdUser != userId && _userService.GetUserRole() != "admin")
+            {
+                return Forbid();
+            }
+
+            var user = await _context.Users.FindAsync(userId);
 
             if (user == null)
                 return Unauthorized();

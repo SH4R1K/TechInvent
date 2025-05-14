@@ -58,10 +58,12 @@ namespace WebMVC.Controllers
         public async Task<IActionResult> Index(int? id)
         {
             var techInventContext = _context.Workplaces.AsNoTracking().OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
+            ViewBag.cabinetEquipments = await _context.CabinetEquipments.AsNoTracking().Include(eq => eq.CabinetEquipmentType).Where(eq => eq.IdCabinet == id).ToListAsync();
             ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
             return View(await techInventContext.ToListAsync());
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> DetachMonitor(int id, int idMonitor)
         {
@@ -81,6 +83,8 @@ namespace WebMVC.Controllers
 
             return RedirectToAction("Details", new { id });
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> UpdateInventNumber(int id, string? inventNumber)
         {
@@ -100,6 +104,7 @@ namespace WebMVC.Controllers
             _context.SaveChanges();
             return RedirectToAction("Details", new { id });
         }
+
         public async Task<IActionResult> Search(string? query, bool searchByComponent = true, bool searchBySoftware = true)
         {
 
@@ -154,6 +159,7 @@ namespace WebMVC.Controllers
 
             return View(workplace);
         }
+
         [AllowAnonymous]
         [HttpGet("{Controller}/Public/{id}")]
         public async Task<IActionResult> Details(Guid? id)
@@ -180,6 +186,7 @@ namespace WebMVC.Controllers
 
             return View(workplace);
         }
+
         public async Task<IActionResult> QRCode(int? id)
         {
             if (id == null)

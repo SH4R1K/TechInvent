@@ -18,12 +18,68 @@
         return;
     }
     var workplaces = Model.ToList();
+    List<CabinetEquipment> cabinetEquipment = ViewBag.cabinetEquipments;
     <div class="row gy-2 justify-content-center justify-content-md-start">
         <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="Index">Назад</a>
         <a class="btn btn-secondary" asp-action="GenerateHardwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel комплектующие</a>
         <a class="btn btn-secondary" asp-action="GenerateSoftwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel ПО</a>
     </div>
+
+    <div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingZero">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCabinetEquipment">
+                    Оборудование
+                </button>
+            </h2>
+            <div id="collapseCabinetEquipment" class="accordion-collapse collapse">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Название
+                            </th>
+                            <th>
+                                Инвентарный номер
+                            </th>
+                            <th>
+                                Тип оборудования
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in cabinetEquipment)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.InventNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CabinetEquipmentType.Name)
+                                </td>
+                                @if (Context.User.IsInRole("admin"))
+                                {
+                                    <td>
+                                        <form asp-action="DetachEquipment" asp-controller="Cabinets" asp-route-id="@item.IdCabinet" asp-route-idEquipment="@item.IdCabinetEquipment" method="POST">
+                                             <a class="text-decoration-none" asp-action="Edit" asp-controller="CabinetEquipments" asp-route-id="@item.IdCabinetEquipment">Редактировать</a> |
+                                            <button class="fbtn-link" type="submit">Отвязать</button>
+                                        </form>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="row justify-content-center justify-content-lg-start">
+
         @for (int i = 0; i < workplaces.Count; i++)
         {
             <div class="card" style="width: 18rem; display: flex; flex-direction: column;">

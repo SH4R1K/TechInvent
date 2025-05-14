@@ -18,6 +18,8 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<AdapterType> AdapterTypes { get; set; }
 
     public virtual DbSet<Cabinet> Cabinets { get; set; }
+    public virtual DbSet<CabinetEquipment> CabinetEquipments { get; set; }
+    public virtual DbSet<CabinetEquipmentType> CabinetEquipmentTypes { get; set; }
 
     public virtual DbSet<Component> Components { get; set; }
 
@@ -70,6 +72,45 @@ public partial class TechInventContext : DbContext
             entity.HasIndex(e => e.Name, "name_cabinet_UNIQUE").IsUnique();
 
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<CabinetEquipment>(entity =>
+        {
+            entity.HasKey(e => e.IdCabinetEquipment).HasName("PRIMARY");
+
+            entity.ToTable("cabinet_equipment");
+
+            entity.Property(e => e.IdCabinetEquipment).HasColumnName("id_cabinet_equipment");
+            entity.Property(e => e.InventNumber)
+                    .HasMaxLength(100)
+                    .HasColumnName("invent_number");
+            entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
+            entity.Property(e => e.IdCabinetEquipmentType).HasColumnName("id_cabinet_equipment_type");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
+
+            entity.HasOne(d => d.Cabinet).WithMany(p => p.CabinetEquipments)
+                .HasForeignKey(d => d.IdCabinet)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("fk_cabinet_equipment_cabinet");
+
+            entity.HasOne(d => d.CabinetEquipmentType).WithMany(p => p.CabinetEquipments)
+                .HasForeignKey(d => d.IdCabinetEquipmentType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_cabinet_equipment_type");
+        });
+
+        modelBuilder.Entity<CabinetEquipmentType>(entity =>
+        {
+            entity.HasKey(e => e.IdCabinetEquipmentType).HasName("PRIMARY");
+
+            entity.ToTable("cabinet_equipment_type");
+
+            entity.Property(e => e.IdCabinetEquipmentType).HasColumnName("id_cabinet_equipment_type");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
