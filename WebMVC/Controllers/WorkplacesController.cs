@@ -320,7 +320,16 @@ namespace WebMVC.Controllers
             var workplaces = await GetWorkplacesQuery()
                 .Where(w => w.IdCabinet == id)
                 .ToListAsync();
-            var software = await _context.Softwares.ToListAsync();
+
+            var installedSoftwareIds = workplaces
+                .SelectMany(w => w.InstalledSoftware.Select(ins => ins.IdSoftware))
+                .Distinct()
+                .ToList();
+
+            var software = await _context.Softwares
+                .Include(s => s.InstalledSoftware)
+                .Where(s => installedSoftwareIds.Contains(s.IdSoftware))
+                .ToListAsync();
 
             if (!workplaces.Any())
             {

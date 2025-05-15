@@ -65,13 +65,13 @@ namespace WebMVC.Controllers
             if (cabinet == null)
                 return NotFound();
 
-            if (cabinet.Name == "Не определённый")
+            if (cabinet.Name == "Неопределённый")
                 return RedirectToAction("Index");
 
-            var undifinedCabinet = await _context.Cabinets.FirstOrDefaultAsync(c => c.Name == "Не определённый");
+            var undifinedCabinet = await _context.Cabinets.FirstOrDefaultAsync(c => c.Name == "Неопределённый");
             if (undifinedCabinet == null)
             {
-                undifinedCabinet = new Cabinet { Name = "Не определённый" };
+                undifinedCabinet = new Cabinet { Name = "Неопределённый" };
                 _context.Cabinets.Add(undifinedCabinet);
             }
 

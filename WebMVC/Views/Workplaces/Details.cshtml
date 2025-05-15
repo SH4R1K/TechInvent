@@ -51,20 +51,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Monitors)
+                        @foreach (Monitor monitor in Model.Monitors)
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
+                                    @Html.DisplayFor(modelItem => monitor.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.InventNumber)
+                                    @Html.DisplayFor(modelItem => monitor.InventNumber)
                                 </td>
                                 <td>
                                 @if (Context.User.IsInRole("admin"))
                                 {
-                                    <form asp-action="DetachMonitor" asp-route-id="@Model.IdWorkplace" asp-route-idMonitor="@item.IdMonitor" method="POST">
-                                        <button class="fbtn-link" type="submit">Отвязать</button>
+                                    <form asp-action="DetachMonitor" asp-route-id="@Model.IdWorkplace" asp-route-idMonitor="@monitor.IdMonitor" method="POST">
+                                        <button class="fbtn-link" type="submit">Открепить</button>
                                     </form>
                                 }
                                 </td>
@@ -79,7 +79,7 @@
     <div class="col-md-6">
         <h3 style="padding-top: 1em; padding-bottom: 1em;">Комплектующие</h3>
         <a class="btn btn-secondary" asp-action="PublicGenerateHardwareReportById" asp-route-id="@Model?.Guid">Экспортировать в Excel</a>
-        <a class="btn btn-secondary toggleAccordion">Раскрыть/Скрыть все</a>
+        <a class="btn btn-secondary toggleAccordion">Показать/Скрыть</a>
         <div class="scrollable-div" style="padding-top: 1em; height: 35em">
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
@@ -88,14 +88,14 @@
                 </button>
             </h2>
             <div id="collapseMainboard" class="accordion-collapse collapse">
-                @foreach (var component in Model.Components.Where(c => c.Mainboard != null))
+                @foreach (Mainboard component in Model.Components.Where(c => c.Mainboard != null))
                 {
                     <div class="card">
                         <div class="card-body">
                                 <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{
-                                    @component.Mainboard?.Name
-} драйвера">@component.Mainboard?.Name</a></h5>
-                            <p class="card-text">Серийный номер: @component.Mainboard?.SerialNumber</p>
+                                    @component.Name
+} драйвера">@component.Name</a></h5>
+                            <p class="card-text">Серийный номер: @component.SerialNumber</p>
                         </div>
                     </div>
                 }
@@ -109,14 +109,14 @@
                 </button>
             </h2>
             <div id="collapseCPU" class="accordion-collapse collapse">
-                @foreach (var component in Model.Components.Where(c => c.Processor != null))
+                @foreach (Processor component in Model.Components.Where(c => c.Processor != null))
                 {
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Processor?.Name} драйвера">@component.Processor?.Name</a></h5>
-                            <p class="card-text">Количество ядер: @component.Processor?.PhysicalCores</p>
-                            <p class="card-text">Количество логических ядер: @component.Processor?.LogicalCores</p>
-                            <p class="card-text">Максимальная частота: @component.Processor?.MaxClockSpeed</p>
+                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Name} драйвера">@component.Name</a></h5>
+                            <p class="card-text">Количество ядер: @component.PhysicalCores</p>
+                            <p class="card-text">Количество логических ядер: @component.LogicalCores</p>
+                            <p class="card-text">Максимальная частота: @component.MaxClockSpeed</p>
                         </div>
                     </div>
                 }
@@ -129,18 +129,18 @@
                 </button>
             </h2>
             <div id="collapseGPU" class="accordion-collapse collapse">
-                @foreach (var component in Model.Components.Where(c => c.Gpu != null))
+                @foreach (Gpu component in Model.Components.Where(c => c.Gpu != null))
                 {
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Gpu?.Name} драйвера">@component.Gpu?.Name</a></h5>
-                                @if (@component.Gpu?.AdapterRam != string.Empty && @component.Gpu?.AdapterRam != null)
+                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Name} драйвера">@component.Name</a></h5>
+                                @if (@component.AdapterRam != string.Empty && @component.AdapterRam != null)
                                 {
-                                    <p class="card-text">Объём памяти: @component.Gpu?.AdapterRam</p>
+                                    <p class="card-text">Объём памяти: @component.AdapterRam</p>
                                 }
-                                @if (@component.Gpu?.Uuid != string.Empty && @component.Gpu?.Uuid != null)
+                                @if (@component.Uuid != string.Empty && @component.Uuid != null)
                                 {
-                                    <p class="card-text">Уникальный ID: @component.Gpu?.Uuid</p>
+                                    <p class="card-text">Уникальный ID: @component.Uuid</p>
                                 }
                         </div>
                     </div>
@@ -154,15 +154,15 @@
                 </button>
             </h2>
             <div id="collapseRam" class="accordion-collapse collapse">
-                @foreach (var component in Model.Components.Where(c => c.Ram != null))
+                @foreach (Ram component in Model.Components.Where(c => c.Ram != null))
                 {
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">@component.Ram?.Name</h5>
-                            <p class="card-text">Скорость: @component.Ram?.Speed</p>
-                            <p class="card-text">Ёмкость: @component.Ram?.Capacity</p>
-                            <p class="card-text">Код партии: @component.Ram?.PartNumber</p>
-                            <p class="card-text">Серийный номер: @component.Ram?.SerialNumber</p>
+                            <h5 class="card-title">@component.Name</h5>
+                            <p class="card-text">Скорость: @component.Speed</p>
+                            <p class="card-text">Ёмкость: @component.Capacity</p>
+                            <p class="card-text">Код партии: @component.PartNumber</p>
+                            <p class="card-text">Серийный номер: @component.SerialNumber</p>
                             <p class="card-text">Производитель: @component.Ram?.IdManufacturerNavigation.Name</p>
                         </div>
                     </div>
@@ -176,12 +176,12 @@
                 </button>
             </h2>
             <div id="collapseNet" class="accordion-collapse collapse">
-                @foreach (var component in Model.Components.Where(c => c.NetAdapter != null))
+                @foreach (NetAdapter component in Model.Components.Where(c => c.NetAdapter != null))
                 {
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.NetAdapter?.Name} драйвера">@component.NetAdapter?.Name</a></h5>
-                            <p class="card-text">MAC: @component.NetAdapter?.MacAddress</p>
+                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Name} драйвера">@component.Name</a></h5>
+                            <p class="card-text">MAC: @component.MacAddress</p>
                             <p class="card-text">Производитель: @component.NetAdapter?.IdManufacturerNavigation?.Name</p>
                             <p class="card-text">Тип адаптера: @component.NetAdapter?.AdapterTypeIdAdapterTypeNavigation?.Name</p>
 
@@ -197,12 +197,12 @@
                 </button>
             </h2>
             <div id="collapseDisk" class="accordion-collapse collapse">
-                @foreach (var component in Model.Components.Where(c => c.Disk != null))
+                @foreach (Disk component in Model.Components.Where(c => c.Disk != null))
                 {
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Disk?.Name}">@component.Disk?.Name</a></h5>
-                            <p class="card-text">Объем: @component.Disk?.Size ГБ</p>
+                            <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Name}">@component.Name</a></h5>
+                            <p class="card-text">Объем: @component.Size ГБ</p>
 
                         </div>
                     </div>
@@ -215,7 +215,7 @@
     <div class="col-md-6">
         <h3 style="padding-top: 1em; padding-bottom: 1em;">Программное обеспечение</h3>
         <a class="btn btn-secondary" asp-action="PublicGenerateSoftwareReportById" asp-route-id="@Model?.Guid">Экспортировать в Excel</a>
-        <a class="btn btn-secondary toggleAccordion">Открыть/Закрыть все</a>
+        <a class="btn btn-secondary toggleAccordion">Показать/Скрыть</a>
         @{
             var groups = Model.InstalledSoftware.GroupBy(s => s.SoftwareNavigation.IdManufacturer);
             <div class="scrollable-div" style="padding-top: 1em; height: 35em">
@@ -249,8 +249,7 @@
 <script>
     document.querySelectorAll('.toggleAccordion').forEach(button => {
         button.addEventListener('click', function() {
-            // Находим следующий соседний div, содержащий аккордеоны
-            const siblingDiv = this.nextElementSibling; // Это ваш scrollable-div
+            const siblingDiv = this.nextElementSibling; 
             const accordions = siblingDiv.querySelectorAll('.accordion-collapse');
             const isAnyOpen = Array.from(accordions).some(accordion => accordion.classList.contains('show'));
 

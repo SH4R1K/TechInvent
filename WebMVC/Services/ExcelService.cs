@@ -93,7 +93,7 @@ namespace WebMVC.Services
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add(workplaces.FirstOrDefault()?.IdCabinetNavigation.Name ?? "Безымянный");
-                GenerateCabinetWorkplacesHardwareWorksheet(worksheet, workplaces);
+                GenerateCabinetWorkplacesHardwareWorksheet(worksheet, workplaces.OrderBy(w => w.Name).ToList());
                 await Task.Run(() => workbook.SaveAs(memoryStream));
             }
 
@@ -107,7 +107,7 @@ namespace WebMVC.Services
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add(workplaces.FirstOrDefault()?.IdCabinetNavigation.Name ?? "Безымянный");
-                GenerateCabinetWorkplacesSoftwareWorksheet(worksheet, workplaces, softwares);
+                GenerateCabinetWorkplacesSoftwareWorksheet(worksheet, workplaces.OrderBy(w => w.Name).ToList(), softwares);
                 await Task.Run(() => workbook.SaveAs(memoryStream));
             }
 
@@ -129,6 +129,7 @@ namespace WebMVC.Services
             worksheet.Cell(4, 5).Value = "Последнее обновление";
             worksheet.Cell(4, 6).Value = "Уникальный идентификатор";
 
+            workplaces = workplaces.OrderBy(w => w.Name).ToList();
             for (int i = 0; i < workplaces.Count; i++)
             {
                 worksheet.Cell(5 + i, 1).Value = i + 1;

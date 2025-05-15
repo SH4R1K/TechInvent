@@ -30,11 +30,14 @@
                             <button class="btn btn-primary" data-bs-toggle="modal" data-cabinet-name="@cabinets[j].Name" data-cabinet-id="@cabinets[j].IdCabinet" data-bs-target="#editCabinetModal">Редактировать кабинет</button>
                         }
                     </div>
-                    @if (cabinets[j].Name != "Не определённый")
+                    @if (Context.User.IsInRole("admin"))
                     {
-                        <a class="position-absolute top-0 end-0 m-2" asp-action="Delete" asp-route-id="@cabinets[j].IdCabinet">
-                            <img src="~/images/trashbin.svg" />
-                        </a>
+                        @if (cabinets[j].Name != "Неопределённый")
+                        {
+                            <a class="position-absolute top-0 end-0 m-2" asp-action="Delete" asp-route-id="@cabinets[j].IdCabinet">
+                                <img src="~/images/trashbin.svg" />
+                            </a>
+                        }
                     }
                 </div>
             </div>
