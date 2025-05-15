@@ -181,8 +181,9 @@ namespace WebMVC.Services
             worksheet.Cell(4, 6).Value = "Видеокарта";
             worksheet.Cell(4, 7).Value = "Оперативная память";
             worksheet.Cell(4, 8).Value = "Сетевые адаптеры";
-            worksheet.Cell(4, 9).Value = "Диски";
-            worksheet.Cell(4, 10).Value = "Мониторы";
+            worksheet.Cell(4, 9).Value = "MAC";
+            worksheet.Cell(4, 10).Value = "Диски";
+            worksheet.Cell(4, 11).Value = "Мониторы";
 
             for (int i = 0; i < workplaces.Count; i++)
             {
@@ -193,9 +194,10 @@ namespace WebMVC.Services
                 worksheet.Cell(5 + i, 5).Value = workplaces[i].Components.FirstOrDefault(c => c.Processor != null)?.Name;
                 worksheet.Cell(5 + i, 6).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Gpu != null).Select(g => $"{g.Name}").ToList());
                 worksheet.Cell(5 + i, 7).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Ram != null).Select(r => $"{r.Name} - {r.Ram.Capacity}").ToList());
-                worksheet.Cell(5 + i, 8).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.NetAdapter != null).Select(n => $"{n.Name}({n.NetAdapter.MacAddress})").ToList());
-                worksheet.Cell(5 + i, 9).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Disk != null).Select(d => $"{d.Name} - {d.Disk.Size}Гб").ToList());
-                worksheet.Cell(5 + i, 10).Value = String.Join(Environment.NewLine, workplaces[i].Monitors.Select(d => $"{d.Name}({d.InventNumber ?? " - "}").ToList());
+                worksheet.Cell(5 + i, 8).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.NetAdapter != null).Select(n => $"{n.Name}").ToList());
+                worksheet.Cell(5 + i, 9).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.NetAdapter != null).Select(n => $"{n.NetAdapter.MacAddress}").ToList());
+                worksheet.Cell(5 + i, 10).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Disk != null).Select(d => $"{d.Name} - {d.Disk.Size}Гб").ToList());
+                worksheet.Cell(5 + i, 11).Value = String.Join(Environment.NewLine, workplaces[i].Monitors.Select(d => $"{d.Name}({d.InventNumber ?? " - "}").ToList());
             }
             worksheet.Rows().AdjustToContents();
             worksheet.Cells().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
@@ -233,7 +235,8 @@ namespace WebMVC.Services
             var netadapters = workplace.Components.Where(c => c.NetAdapter != null).ToList();
             foreach (NetAdapter netadapter in netadapters)
             {
-                worksheet.Cell(7, 2).Value += $"{netadapter.Name}({netadapter.MacAddress}){Environment.NewLine}";
+                worksheet.Cell(7, 2).Value += $"{netadapter.Name}{Environment.NewLine}";
+                worksheet.Cell(7, 3).Value += $"{netadapter.MacAddress}{Environment.NewLine}";
             }
 
             worksheet.Cell(8, 1).Value = "Диски";

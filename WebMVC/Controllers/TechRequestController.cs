@@ -22,7 +22,7 @@ namespace WebMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var techrequest = _context.TechRequests.Include(t => t.RequestType).AsNoTracking();
+            var techrequest = _context.TechRequests.Include(t => t.RequestType).OrderByDescending(t => t.CreationDate).AsNoTracking();
 
             if (_userService.GetUserRole() != "admin")
                 techrequest = techrequest.Where(tr => tr.IdUser == _userService.GetUserId());
@@ -193,7 +193,7 @@ namespace WebMVC.Controllers
             
             var userId = _userService.GetUserId();
 
-            if (techRequest.User.IdUser != userId && _userService.GetUserRole() != "admin")
+            if (techRequest.IdUser != userId && _userService.GetUserRole() != "admin")
             {
                 return Forbid();
             }
