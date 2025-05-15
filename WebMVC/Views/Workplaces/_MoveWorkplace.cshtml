@@ -28,8 +28,11 @@
     var moveWorkplaceModal = document.getElementById('moveWorkplaceModal');
     moveWorkplaceModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget; 
-        var workplaceId = button.getAttribute('data-workplace-id'); 
+        var workplaceId = button.getAttribute('data-workplace-id');
+        var cabinetId = button.getAttribute('data-cabinet-id');
         var workplaceIdInput = document.getElementById('workplaceId');
         workplaceIdInput.value = workplaceId;
+        var select = document.getElementById('cabinetSelect');
+        select.value = cabinetId;
     });
 </script>

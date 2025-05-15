@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using TechInvent.BLL.DtoModels.DtoMVC.Workplace;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 
@@ -42,17 +43,14 @@ namespace WebMVC.Controllers
             return View(cabinetEquipment);
         }
 
-        // GET: CabinetEquipments/Create
         public IActionResult Create()
         {
-            ViewData["IdCabinet"] = new SelectList(_context.Cabinets, "IdCabinet", "Name");
+            ViewData["IdCabinet"] = new SelectList(_context.Cabinets.Select(a => new CabinetNameIdDto { IdCabinet = a.IdCabinet, Name = a.Name }).ToList()
+                .Prepend(new CabinetNameIdDto { Name = "Не выбран" }), "IdCabinet", "Name");
             ViewData["IdCabinetEquipmentType"] = new SelectList(_context.CabinetEquipmentTypes, "IdCabinetEquipmentType", "Name");
             return View();
         }
 
-        // POST: CabinetEquipments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdCabinetEquipment,Name,InventNumber,IdCabinet,IdCabinetEquipmentType")] CabinetEquipment cabinetEquipment)
@@ -62,7 +60,6 @@ namespace WebMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: CabinetEquipments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,14 +72,12 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdCabinet"] = new SelectList(_context.Cabinets, "IdCabinet", "Name", cabinetEquipment.IdCabinet);
+            ViewData["IdCabinet"] = new SelectList(_context.Cabinets.Select(a => new CabinetNameIdDto { IdCabinet = a.IdCabinet, Name = a.Name }).ToList()
+                .Prepend(new CabinetNameIdDto { Name = "Не выбран" }), "IdCabinet", "Name", cabinetEquipment.IdCabinet);
             ViewData["IdCabinetEquipmentType"] = new SelectList(_context.CabinetEquipmentTypes, "IdCabinetEquipmentType", "Name", cabinetEquipment.IdCabinetEquipmentType);
             return View(cabinetEquipment);
         }
 
-        // POST: CabinetEquipments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdCabinetEquipment,Name,InventNumber,IdCabinet,IdCabinetEquipmentType")] CabinetEquipment cabinetEquipment)
@@ -111,7 +106,6 @@ namespace WebMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: CabinetEquipments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,7 +125,6 @@ namespace WebMVC.Controllers
             return View(cabinetEquipment);
         }
 
-        // POST: CabinetEquipments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

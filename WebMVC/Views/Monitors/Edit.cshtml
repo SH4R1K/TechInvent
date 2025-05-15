@@ -13,22 +13,22 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdMonitor" />
-            <div class="form-group">
+            <div class="mb-3 form-group">
                 <label asp-for="Name" class="control-label">Имя</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3 form-group">
                 <label asp-for="InventNumber" class="control-label">Инвентарные номер</label>
                 <input asp-for="InventNumber" class="form-control" />
                 <span asp-validation-for="InventNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3 form-group">
                 <label asp-for="IdWorkplace" class="control-label">Рабочее место</label>
                 <select asp-for="IdWorkplace" class="form-control" asp-items="ViewBag.IdWorkplace"></select>
                 <span asp-validation-for="IdWorkplace" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3 form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>

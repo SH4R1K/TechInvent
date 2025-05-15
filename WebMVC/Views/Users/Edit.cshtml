@@ -13,22 +13,22 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdUser" />
-            <div class="form-group">
+            <div class="mb-3 form-group">
                 <label asp-for="Login" class="control-label">Логин</label>
                 <input asp-for="Login" class="form-control" />
                 <span asp-validation-for="Login" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3 form-group">
                 <label asp-for="Password" class="control-label">Пароль</label>
                 <input asp-for="Password" type="password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3 form-group">
                 <label asp-for="IdRole" class="control-label">Роль</label>
                 <select asp-for="IdRole" class="form-control" asp-items="ViewBag.IdRole"></select>
                 <span asp-validation-for="IdRole" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3 form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>

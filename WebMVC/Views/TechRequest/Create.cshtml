@@ -10,26 +10,26 @@
 <form asp-action="Create">
     @Html.AntiForgeryToken()
     <input asp-for="IdUser" type="hidden" value="@Context.User.FindFirst("id")!.Value" />
-    <div class="form-group">
+    <div class="mb-3 form-group">
         <label asp-for="Title">Заголовок</label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3 form-group">
         <label asp-for="Description">Описание</label>
         <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
 
-    <div class="form-group">
+    <div class="mb-3 form-group">
         <label asp-for="IdRequestType" class="control-label">Тип заявки</label>
         <select asp-for="IdRequestType" class="form-control" asp-items="ViewBag.IdRequestType" data-val-required="Тип не может быть пустым"></select>
         <span asp-validation-for="IdRequestType" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3 form-group">
         <label asp-for="AttachedWorkplaces" class="control-label">Рабочие места</label>
         <div>
             @foreach (Workplace workplace in ViewBag.Workplaces)
@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3 form-group">
         <button type="submit" class="btn btn-primary">Создать</button>
     </div>
 </form>

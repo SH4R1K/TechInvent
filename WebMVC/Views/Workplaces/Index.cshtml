@@ -7,22 +7,15 @@
 
 <h1>@ViewBag.cabinetName</h1>
 @{
-    if (Model.Count() == 0)
-    {
-        <div>
-            <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="Index">Назад</a>
-        </div>
-        <div style="margin: 1rem">
-            В данном кабинете ещё нет рабочих мест
-        </div>
-        return;
-    }
     var workplaces = Model.ToList();
     List<CabinetEquipment> cabinetEquipment = ViewBag.cabinetEquipments;
-    <div class="row gy-2 justify-content-center justify-content-md-start">
+        <div class="row gy-2 justify-content-center justify-content-md-start">
         <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="Index">Назад</a>
+        @if (workplaces.Count() != 0)
+        {
         <a class="btn btn-secondary" asp-action="GenerateHardwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel комплектующие</a>
         <a class="btn btn-secondary" asp-action="GenerateSoftwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel ПО</a>
+        }
     </div>
 
     <div>
@@ -78,6 +71,13 @@
         </div>
     </div>
 
+    if (workplaces.Count() == 0)
+    {
+        <div style="margin: 1rem">
+            В данном кабинете ещё нет рабочих мест
+        </div>
+        return;
+    }
     <div class="row justify-content-center justify-content-lg-start">
 
         @for (int i = 0; i < workplaces.Count; i++)
@@ -99,7 +99,7 @@
                     <a asp-action="QRCode" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">QR-Код</a>
                     @if (Context.User.IsInRole("admin"))
                     {
-                        <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#moveWorkplaceModal" data-workplace-id="@workplaces[i].IdWorkplace">
+                        <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#moveWorkplaceModal" data-workplace-id="@workplaces[i].IdWorkplace" data-cabinet-id="@workplaces[i].IdCabinet">
                             Перенос в другой кабинет
                         </a>
                     }

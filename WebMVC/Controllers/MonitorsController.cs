@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using TechInvent.BLL.DtoModels.DtoMVC.Workplace;
 using TechInvent.DAL.Data;
-using TechInvent.DM.Models;
 using Monitor = TechInvent.DM.Models.Monitor;
 
 namespace WebMVC.Controllers
@@ -32,7 +28,8 @@ namespace WebMVC.Controllers
 
         public IActionResult Create()
         {
-            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces, "IdWorkplace", "Name");
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdWorkplace, Name = a.Name }).ToList()
+                .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name");
             return View();
         }
 
@@ -47,7 +44,8 @@ namespace WebMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces, "IdWorkplace", "Name", monitor.IdWorkplace);
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdWorkplace, Name = a.Name }).ToList()
+                .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name", monitor.IdWorkplace);
             return View(monitor);
         }
 
@@ -64,7 +62,8 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces, "IdWorkplace", "Name", monitor.IdWorkplace);
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdWorkplace, Name = a.Name }).ToList()
+                .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name", monitor.IdWorkplace);
             return View(monitor);
         }
 
@@ -97,7 +96,8 @@ namespace WebMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces, "IdWorkplace", "Name", monitor.IdWorkplace);
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdWorkplace, Name = a.Name }).ToList()
+                .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name", monitor.IdWorkplace);
             return View(monitor);
         }
 
