@@ -40,7 +40,7 @@ namespace WebMVC.Controllers
                     .ThenInclude(c => c.Mainboard)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.NetAdapter)
-                        .ThenInclude(n => n.AdapterTypeIdAdapterTypeNavigation)
+                        .ThenInclude(n => n.AdapterTypeNavigation)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.NetAdapter)
                         .ThenInclude(n => n.IdManufacturerNavigation)
@@ -169,7 +169,7 @@ namespace WebMVC.Controllers
             {
                 workplace = await GetWorkplacesQuery()
                     .Include(w => w.AttachedTechRequests.Where(tr => tr.IsActive))
-                    .FirstOrDefaultAsync(m => m.IdWorkplace == id);
+                    .FirstOrDefaultAsync(m => m.IdInventStuff == id);
 
                 if (workplace == null)
                 {
@@ -217,7 +217,7 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            var workplace = await _context.Workplaces.AsNoTracking().FirstOrDefaultAsync(w => w.IdWorkplace == id);
+            var workplace = await _context.Workplaces.AsNoTracking().FirstOrDefaultAsync(w => w.IdInventStuff == id);
 
             if (workplace == null)
             {
@@ -345,7 +345,7 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            var workplace = await _context.Workplaces.FirstOrDefaultAsync(w => w.IdWorkplace == id);
+            var workplace = await _context.Workplaces.FirstOrDefaultAsync(w => w.IdInventStuff == id);
 
             if (workplace == null)
             {

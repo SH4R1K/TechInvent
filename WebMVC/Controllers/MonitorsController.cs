@@ -28,7 +28,7 @@ namespace WebMVC.Controllers
 
         public IActionResult Create()
         {
-            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdWorkplace, Name = a.Name }).ToList()
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name");
             return View();
         }
@@ -36,7 +36,7 @@ namespace WebMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdMonitor,Name,InventNumber,IdWorkplace")] Monitor monitor)
+        public async Task<IActionResult> Create([Bind("IdInventStuff,Name,InventNumber,IdWorkplace")] Monitor monitor)
         {
             if (ModelState.IsValid)
             {
@@ -44,7 +44,7 @@ namespace WebMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdWorkplace, Name = a.Name }).ToList()
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name", monitor.IdWorkplace);
             return View(monitor);
         }
@@ -62,16 +62,16 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdWorkplace, Name = a.Name }).ToList()
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name", monitor.IdWorkplace);
             return View(monitor);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdMonitor,Name,InventNumber,IdWorkplace")] Monitor monitor)
+        public async Task<IActionResult> Edit(int id, [Bind("IdInventStuff,Name,InventNumber,IdWorkplace")] Monitor monitor)
         {
-            if (id != monitor.IdMonitor)
+            if (id != monitor.IdInventStuff)
             {
                 return NotFound();
             }
@@ -85,7 +85,7 @@ namespace WebMVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MonitorExists(monitor.IdMonitor))
+                    if (!MonitorExists(monitor.IdInventStuff))
                     {
                         return NotFound();
                     }
@@ -96,7 +96,7 @@ namespace WebMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdWorkplace, Name = a.Name }).ToList()
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name", monitor.IdWorkplace);
             return View(monitor);
         }
@@ -110,7 +110,7 @@ namespace WebMVC.Controllers
 
             var monitor = await _context.Monitors
                 .Include(m => m.Workplace)
-                .FirstOrDefaultAsync(m => m.IdMonitor == id);
+                .FirstOrDefaultAsync(m => m.IdInventStuff == id);
             if (monitor == null)
             {
                 return NotFound();
@@ -135,7 +135,7 @@ namespace WebMVC.Controllers
 
         private bool MonitorExists(int id)
         {
-            return _context.Monitors.Any(e => e.IdMonitor == id);
+            return _context.Monitors.Any(e => e.IdInventStuff == id);
         }
     }
 }

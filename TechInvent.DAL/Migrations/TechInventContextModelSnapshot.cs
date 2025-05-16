@@ -7,7 +7,7 @@ using TechInvent.DAL.Data;
 
 #nullable disable
 
-namespace TechInventAPI.Migrations
+namespace TechInvent.DAL.Migrations
 {
     [DbContext(typeof(TechInventContext))]
     partial class TechInventContextModelSnapshot : ModelSnapshot
@@ -16,7 +16,7 @@ namespace TechInventAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.13")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("TechInvent.DM.Models.AdapterType", b =>
@@ -60,42 +60,6 @@ namespace TechInventAPI.Migrations
                         .IsUnique();
 
                     b.ToTable("cabinet", (string)null);
-                });
-
-            modelBuilder.Entity("TechInvent.DM.Models.CabinetEquipment", b =>
-                {
-                    b.Property<int>("IdCabinetEquipment")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id_cabinet_equipment");
-
-                    b.Property<int?>("IdCabinet")
-                        .HasColumnType("int")
-                        .HasColumnName("id_cabinet");
-
-                    b.Property<int>("IdCabinetEquipmentType")
-                        .HasColumnType("int")
-                        .HasColumnName("id_cabinet_equipment_type");
-
-                    b.Property<string>("InventNumber")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("invent_number");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("name");
-
-                    b.HasKey("IdCabinetEquipment")
-                        .HasName("PRIMARY");
-
-                    b.HasIndex("IdCabinet");
-
-                    b.HasIndex("IdCabinetEquipmentType");
-
-                    b.ToTable("cabinet_equipment", (string)null);
                 });
 
             modelBuilder.Entity("TechInvent.DM.Models.CabinetEquipmentType", b =>
@@ -162,6 +126,39 @@ namespace TechInventAPI.Migrations
                     b.ToTable("installed_software", (string)null);
                 });
 
+            modelBuilder.Entity("TechInvent.DM.Models.InventStuff", b =>
+                {
+                    b.Property<int>("IdInventStuff")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_invent_stuff");
+
+                    b.Property<string>("InventNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("invent_number");
+
+                    b.Property<bool>("IsDecommissioned")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_decommissioned");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("IdInventStuff")
+                        .HasName("PRIMARY");
+
+                    b.HasIndex(new[] { "InventNumber" }, "uq_inventstuff_inventnumber")
+                        .IsUnique();
+
+                    b.ToTable("invent_stuff", (string)null);
+
+                    b.UseTptMappingStrategy();
+                });
+
             modelBuilder.Entity("TechInvent.DM.Models.Manufacturer", b =>
                 {
                     b.Property<int>("IdManufacturer")
@@ -183,36 +180,6 @@ namespace TechInventAPI.Migrations
                         .HasDatabaseName("name_UNIQUE1");
 
                     b.ToTable("manufacturer", (string)null);
-                });
-
-            modelBuilder.Entity("TechInvent.DM.Models.Monitor", b =>
-                {
-                    b.Property<int>("IdMonitor")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id_monitor");
-
-                    b.Property<int?>("IdWorkplace")
-                        .HasColumnType("int")
-                        .HasColumnName("id_workplace");
-
-                    b.Property<string>("InventNumber")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("invent_number");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("name");
-
-                    b.HasKey("IdMonitor")
-                        .HasName("PRIMARY");
-
-                    b.HasIndex("IdWorkplace");
-
-                    b.ToTable("monitor", (string)null);
                 });
 
             modelBuilder.Entity("TechInvent.DM.Models.Os", b =>
@@ -367,7 +334,8 @@ namespace TechInventAPI.Migrations
                         .HasColumnName("description");
 
                     b.Property<int>("IdRequestType")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_request_type");
 
                     b.Property<int>("IdUser")
                         .HasColumnType("int")
@@ -490,53 +458,6 @@ namespace TechInventAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TechInvent.DM.Models.Workplace", b =>
-                {
-                    b.Property<int>("IdWorkplace")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id_workplace");
-
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("guid");
-
-                    b.Property<int>("IdCabinet")
-                        .HasColumnType("int")
-                        .HasColumnName("id_cabinet");
-
-                    b.Property<int>("IdOs")
-                        .HasColumnType("int")
-                        .HasColumnName("id_os");
-
-                    b.Property<string>("InventNumber")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("invent_number");
-
-                    b.Property<DateTime>("LastUpdate")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("last_update");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("name");
-
-                    b.HasKey("IdWorkplace")
-                        .HasName("PRIMARY");
-
-                    b.HasIndex(new[] { "IdCabinet" }, "fk_workplace_cabinet_idx");
-
-                    b.HasIndex(new[] { "IdOs" }, "fk_workplace_os1_idx");
-
-                    b.HasIndex(new[] { "Guid" }, "uq_workplace_guid")
-                        .IsUnique();
-
-                    b.ToTable("workplace", (string)null);
-                });
-
             modelBuilder.Entity("TechInvent.DM.Models.Disk", b =>
                 {
                     b.HasBaseType("TechInvent.DM.Models.Component");
@@ -581,9 +502,9 @@ namespace TechInventAPI.Migrations
                 {
                     b.HasBaseType("TechInvent.DM.Models.Component");
 
-                    b.Property<int>("AdapterTypeIdAdapterType")
+                    b.Property<int>("IdAdapterType")
                         .HasColumnType("int")
-                        .HasColumnName("adapter_type_id_adapter_type");
+                        .HasColumnName("id_adapter_type");
 
                     b.Property<int>("IdManufacturer")
                         .HasColumnType("int")
@@ -594,7 +515,7 @@ namespace TechInventAPI.Migrations
                         .HasColumnType("varchar(100)")
                         .HasColumnName("mac_address");
 
-                    b.HasIndex(new[] { "AdapterTypeIdAdapterType" }, "fk_net_adapter_adapter_type1_idx");
+                    b.HasIndex(new[] { "IdAdapterType" }, "fk_net_adapter_adapter_type1_idx");
 
                     b.HasIndex(new[] { "IdManufacturer" }, "fk_net_adapter_manufacturer2_idx");
 
@@ -665,21 +586,69 @@ namespace TechInventAPI.Migrations
 
             modelBuilder.Entity("TechInvent.DM.Models.CabinetEquipment", b =>
                 {
-                    b.HasOne("TechInvent.DM.Models.Cabinet", "Cabinet")
-                        .WithMany("CabinetEquipments")
-                        .HasForeignKey("IdCabinet")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("fk_cabinet_equipment_cabinet");
+                    b.HasBaseType("TechInvent.DM.Models.InventStuff");
 
-                    b.HasOne("TechInvent.DM.Models.CabinetEquipmentType", "CabinetEquipmentType")
-                        .WithMany("CabinetEquipments")
-                        .HasForeignKey("IdCabinetEquipmentType")
-                        .IsRequired()
-                        .HasConstraintName("fk_cabinet_equipment_type");
+                    b.Property<int?>("IdCabinet")
+                        .HasColumnType("int")
+                        .HasColumnName("id_cabinet");
 
-                    b.Navigation("Cabinet");
+                    b.Property<int>("IdCabinetEquipmentType")
+                        .HasColumnType("int")
+                        .HasColumnName("id_cabinet_equipment_type");
 
-                    b.Navigation("CabinetEquipmentType");
+                    b.HasIndex("IdCabinet");
+
+                    b.HasIndex("IdCabinetEquipmentType");
+
+                    b.ToTable("cabinet_equipment", (string)null);
+                });
+
+            modelBuilder.Entity("TechInvent.DM.Models.Monitor", b =>
+                {
+                    b.HasBaseType("TechInvent.DM.Models.InventStuff");
+
+                    b.Property<int?>("IdWorkplace")
+                        .HasColumnType("int")
+                        .HasColumnName("id_workplace");
+
+                    b.Property<string>("SerialNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("serial_number");
+
+                    b.HasIndex("IdWorkplace");
+
+                    b.ToTable("monitor", (string)null);
+                });
+
+            modelBuilder.Entity("TechInvent.DM.Models.Workplace", b =>
+                {
+                    b.HasBaseType("TechInvent.DM.Models.InventStuff");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("guid");
+
+                    b.Property<int>("IdCabinet")
+                        .HasColumnType("int")
+                        .HasColumnName("id_cabinet");
+
+                    b.Property<int>("IdOs")
+                        .HasColumnType("int")
+                        .HasColumnName("id_os");
+
+                    b.Property<DateTime>("LastUpdate")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("last_update");
+
+                    b.HasIndex(new[] { "IdCabinet" }, "fk_workplace_cabinet_idx");
+
+                    b.HasIndex(new[] { "IdOs" }, "fk_workplace_os1_idx");
+
+                    b.HasIndex(new[] { "Guid" }, "uq_workplace_guid")
+                        .IsUnique();
+
+                    b.ToTable("workplace", (string)null);
                 });
 
             modelBuilder.Entity("TechInvent.DM.Models.Component", b =>
@@ -712,17 +681,6 @@ namespace TechInventAPI.Migrations
                     b.Navigation("SoftwareNavigation");
 
                     b.Navigation("WorkplaceNavigation");
-                });
-
-            modelBuilder.Entity("TechInvent.DM.Models.Monitor", b =>
-                {
-                    b.HasOne("TechInvent.DM.Models.Workplace", "Workplace")
-                        .WithMany("Monitors")
-                        .HasForeignKey("IdWorkplace")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("fk_monitor_workplace");
-
-                    b.Navigation("Workplace");
                 });
 
             modelBuilder.Entity("TechInvent.DM.Models.Software", b =>
@@ -808,25 +766,6 @@ namespace TechInventAPI.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("TechInvent.DM.Models.Workplace", b =>
-                {
-                    b.HasOne("TechInvent.DM.Models.Cabinet", "IdCabinetNavigation")
-                        .WithMany("Workplaces")
-                        .HasForeignKey("IdCabinet")
-                        .IsRequired()
-                        .HasConstraintName("fk_workplace_cabinet");
-
-                    b.HasOne("TechInvent.DM.Models.Os", "IdOsNavigation")
-                        .WithMany("Workplaces")
-                        .HasForeignKey("IdOs")
-                        .IsRequired()
-                        .HasConstraintName("fk_workplace_os1");
-
-                    b.Navigation("IdCabinetNavigation");
-
-                    b.Navigation("IdOsNavigation");
-                });
-
             modelBuilder.Entity("TechInvent.DM.Models.Disk", b =>
                 {
                     b.HasOne("TechInvent.DM.Models.Component", "IdComponentNavigation")
@@ -865,9 +804,9 @@ namespace TechInventAPI.Migrations
 
             modelBuilder.Entity("TechInvent.DM.Models.NetAdapter", b =>
                 {
-                    b.HasOne("TechInvent.DM.Models.AdapterType", "AdapterTypeIdAdapterTypeNavigation")
+                    b.HasOne("TechInvent.DM.Models.AdapterType", "AdapterTypeNavigation")
                         .WithMany("NetAdapters")
-                        .HasForeignKey("AdapterTypeIdAdapterType")
+                        .HasForeignKey("IdAdapterType")
                         .IsRequired()
                         .HasConstraintName("fk_net_adapter_adapter_type1");
 
@@ -884,7 +823,7 @@ namespace TechInventAPI.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_net_adapter_manufacturer2");
 
-                    b.Navigation("AdapterTypeIdAdapterTypeNavigation");
+                    b.Navigation("AdapterTypeNavigation");
 
                     b.Navigation("IdComponentNavigation");
 
@@ -921,6 +860,73 @@ namespace TechInventAPI.Migrations
                     b.Navigation("IdComponentNavigation");
 
                     b.Navigation("IdManufacturerNavigation");
+                });
+
+            modelBuilder.Entity("TechInvent.DM.Models.CabinetEquipment", b =>
+                {
+                    b.HasOne("TechInvent.DM.Models.Cabinet", "Cabinet")
+                        .WithMany("CabinetEquipments")
+                        .HasForeignKey("IdCabinet")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_cabinet_equipment_cabinet");
+
+                    b.HasOne("TechInvent.DM.Models.CabinetEquipmentType", "CabinetEquipmentType")
+                        .WithMany("CabinetEquipments")
+                        .HasForeignKey("IdCabinetEquipmentType")
+                        .IsRequired()
+                        .HasConstraintName("fk_cabinet_equipment_type");
+
+                    b.HasOne("TechInvent.DM.Models.InventStuff", null)
+                        .WithOne()
+                        .HasForeignKey("TechInvent.DM.Models.CabinetEquipment", "IdInventStuff")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cabinet");
+
+                    b.Navigation("CabinetEquipmentType");
+                });
+
+            modelBuilder.Entity("TechInvent.DM.Models.Monitor", b =>
+                {
+                    b.HasOne("TechInvent.DM.Models.InventStuff", null)
+                        .WithOne()
+                        .HasForeignKey("TechInvent.DM.Models.Monitor", "IdInventStuff")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TechInvent.DM.Models.Workplace", "Workplace")
+                        .WithMany("Monitors")
+                        .HasForeignKey("IdWorkplace")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_monitor_workplace");
+
+                    b.Navigation("Workplace");
+                });
+
+            modelBuilder.Entity("TechInvent.DM.Models.Workplace", b =>
+                {
+                    b.HasOne("TechInvent.DM.Models.Cabinet", "IdCabinetNavigation")
+                        .WithMany("Workplaces")
+                        .HasForeignKey("IdCabinet")
+                        .IsRequired()
+                        .HasConstraintName("fk_workplace_cabinet");
+
+                    b.HasOne("TechInvent.DM.Models.InventStuff", null)
+                        .WithOne()
+                        .HasForeignKey("TechInvent.DM.Models.Workplace", "IdInventStuff")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TechInvent.DM.Models.Os", "IdOsNavigation")
+                        .WithMany("Workplaces")
+                        .HasForeignKey("IdOs")
+                        .IsRequired()
+                        .HasConstraintName("fk_workplace_os1");
+
+                    b.Navigation("IdCabinetNavigation");
+
+                    b.Navigation("IdOsNavigation");
                 });
 
             modelBuilder.Entity("TechInvent.DM.Models.AdapterType", b =>

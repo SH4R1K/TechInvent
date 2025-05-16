@@ -11,9 +11,9 @@ public partial class NetAdapter : Component
 
     public int IdManufacturer { get; set; }
 
-    public int AdapterTypeIdAdapterType { get; set; }
+    public int IdAdapterType { get; set; }
 
-    public virtual AdapterType AdapterTypeIdAdapterTypeNavigation { get; set; } = null!;
+    public virtual AdapterType AdapterTypeNavigation { get; set; } = null!;
 
     public virtual Component IdComponentNavigation { get; set; } = null!;
 
@@ -25,7 +25,7 @@ public partial class NetAdapter : Component
             return Name == other.Name &&
                    MacAddress == other.MacAddress &&
                    IdManufacturer == other.IdManufacturer &&
-                   AdapterTypeIdAdapterType == other.AdapterTypeIdAdapterType;
+                   IdAdapterType == other.IdAdapterType;
         }
         return false;
     }

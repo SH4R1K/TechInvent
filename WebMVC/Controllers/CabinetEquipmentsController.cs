@@ -34,7 +34,8 @@ namespace WebMVC.Controllers
             var cabinetEquipment = await _context.CabinetEquipments
                 .Include(c => c.Cabinet)
                 .Include(c => c.CabinetEquipmentType)
-                .FirstOrDefaultAsync(m => m.IdCabinetEquipment == id);
+                .FirstOrDefaultAsync(m => m.IdInventStuff == id);
+
             if (cabinetEquipment == null)
             {
                 return NotFound();
@@ -53,7 +54,7 @@ namespace WebMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdCabinetEquipment,Name,InventNumber,IdCabinet,IdCabinetEquipmentType")] CabinetEquipment cabinetEquipment)
+        public async Task<IActionResult> Create([Bind("IdInventStuff,Name,InventNumber,IdCabinet,IdCabinetEquipmentType")] CabinetEquipment cabinetEquipment)
         {
             _context.Add(cabinetEquipment);
             await _context.SaveChangesAsync();
@@ -80,9 +81,9 @@ namespace WebMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdCabinetEquipment,Name,InventNumber,IdCabinet,IdCabinetEquipmentType")] CabinetEquipment cabinetEquipment)
+        public async Task<IActionResult> Edit(int id, [Bind("IdInventStuff,Name,InventNumber,IdCabinet,IdCabinetEquipmentType")] CabinetEquipment cabinetEquipment)
         {
-            if (id != cabinetEquipment.IdCabinetEquipment)
+            if (id != cabinetEquipment.IdInventStuff)
             {
                 return NotFound();
             }
@@ -94,7 +95,7 @@ namespace WebMVC.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CabinetEquipmentExists(cabinetEquipment.IdCabinetEquipment))
+                if (!CabinetEquipmentExists(cabinetEquipment.IdInventStuff))
                 {
                     return NotFound();
                 }
@@ -116,7 +117,7 @@ namespace WebMVC.Controllers
             var cabinetEquipment = await _context.CabinetEquipments
                 .Include(c => c.Cabinet)
                 .Include(c => c.CabinetEquipmentType)
-                .FirstOrDefaultAsync(m => m.IdCabinetEquipment == id);
+                .FirstOrDefaultAsync(m => m.IdInventStuff == id);
             if (cabinetEquipment == null)
             {
                 return NotFound();
@@ -141,7 +142,7 @@ namespace WebMVC.Controllers
 
         private bool CabinetEquipmentExists(int id)
         {
-            return _context.CabinetEquipments.Any(e => e.IdCabinetEquipment == id);
+            return _context.CabinetEquipments.Any(e => e.IdInventStuff == id);
         }
     }
 }

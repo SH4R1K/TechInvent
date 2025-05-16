@@ -9,7 +9,7 @@
     <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
     @if (Context.User.IsInRole("admin"))
     {
-    <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdWorkplace" data-bs-target="#editWorkplaceModal">Изменить инвентарный номер</a>
+    <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdInventStuff" data-bs-target="#editWorkplaceModal">Изменить инвентарный номер</a>
     }
 </div>
 
@@ -63,7 +63,7 @@
                                 <td>
                                 @if (Context.User.IsInRole("admin"))
                                 {
-                                    <form asp-action="DetachMonitor" asp-route-id="@Model.IdWorkplace" asp-route-idMonitor="@monitor.IdMonitor" method="POST">
+                                    <form asp-action="DetachMonitor" asp-route-id="@Model.IdInventStuff" asp-route-idMonitor="@monitor.IdInventStuff" method="POST">
                                         <button class="fbtn-link" type="submit">Открепить</button>
                                     </form>
                                 }
@@ -183,7 +183,7 @@
                             <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Name} драйвера">@component.Name</a></h5>
                             <p class="card-text">MAC: @component.MacAddress</p>
                             <p class="card-text">Производитель: @component.NetAdapter?.IdManufacturerNavigation?.Name</p>
-                            <p class="card-text">Тип адаптера: @component.NetAdapter?.AdapterTypeIdAdapterTypeNavigation?.Name</p>
+                            <p class="card-text">Тип адаптера: @component.NetAdapter?.AdapterTypeNavigation?.Name</p>
 
                         </div>
                     </div>

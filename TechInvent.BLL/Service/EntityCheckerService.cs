@@ -51,7 +51,7 @@ namespace TechInvent.BLL.Service
 
         public Workplace GetOrCreateWorkplace(string name, Cabinet cabinet, Os os, List<Component> components, List<Software> software)
         {
-            var workplace = _context.Workplaces.Include(w => w.Components).Include(w => w.InstalledSoftware).FirstOrDefault(m => m.Name == name);
+            var workplace = _context.Workplaces.Include(w => w.Components).Include(w => w.InstalledSoftware).FirstOrDefault(m => m.Name == name && !m.IsDecommissioned);
             if (workplace == null)
             {
                 workplace = new Workplace { Name = name, IdCabinetNavigation = cabinet, IdOsNavigation = os };
@@ -71,7 +71,7 @@ namespace TechInvent.BLL.Service
                 component.IdWorkplaceNavigation = workplace;
                 workplace.Components.Add(component);
             }
-            workplace.InstalledSoftware.AddRange(software.DistinctBy(s => s.IdSoftware).Select(s => new InstalledSoftware { IdSoftware = s.IdSoftware, IdWorkplace = workplace.IdWorkplace }).ToList());
+            workplace.InstalledSoftware.AddRange(software.DistinctBy(s => s.IdSoftware).Select(s => new InstalledSoftware { IdSoftware = s.IdSoftware, IdWorkplace = workplace.IdInventStuff }).ToList());
             //_context.Update(workplace);
             return workplace;
         }

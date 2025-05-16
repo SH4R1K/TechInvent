@@ -18,4 +18,8 @@
     <ProjectReference Include="..\TechInvent.DM\TechInvent.DM.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

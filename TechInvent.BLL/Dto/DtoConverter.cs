@@ -110,8 +110,8 @@ namespace TechInvent.BLL.Dto
                 MacAddress = netDto.MacAddress,
                 IdManufacturer = manufacturer.IdManufacturer,
                 IdManufacturerNavigation = manufacturer,
-                AdapterTypeIdAdapterType = adapterType.IdAdapterType,
-                AdapterTypeIdAdapterTypeNavigation = adapterType
+                IdAdapterType = adapterType.IdAdapterType,
+                AdapterTypeNavigation = adapterType
             };
         }
 
