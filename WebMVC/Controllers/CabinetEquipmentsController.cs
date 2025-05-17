@@ -19,7 +19,7 @@ namespace WebMVC.Controllers
         // GET: CabinetEquipments
         public async Task<IActionResult> Index()
         {
-            var techInventContext = _context.CabinetEquipments.Include(c => c.Cabinet).Include(c => c.CabinetEquipmentType);
+            var techInventContext = _context.CabinetEquipments.Include(c => c.Cabinet).Include(c => c.Workplace).Include(c => c.CabinetEquipmentType);
             return View(await techInventContext.ToListAsync());
         }
 
@@ -48,6 +48,8 @@ namespace WebMVC.Controllers
         {
             ViewData["IdCabinet"] = new SelectList(_context.Cabinets.Select(a => new CabinetNameIdDto { IdCabinet = a.IdCabinet, Name = a.Name }).ToList()
                 .Prepend(new CabinetNameIdDto { Name = "Не выбран" }), "IdCabinet", "Name");
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdCabinet, Name = a.Name }).ToList()
+                .Prepend(new WorkplaceNameIdDto { Name = "Не выбран" }), "IdWorkplace", "Name");
             ViewData["IdCabinetEquipmentType"] = new SelectList(_context.CabinetEquipmentTypes, "IdCabinetEquipmentType", "Name");
             return View();
         }
@@ -73,15 +75,20 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
+
             ViewData["IdCabinet"] = new SelectList(_context.Cabinets.Select(a => new CabinetNameIdDto { IdCabinet = a.IdCabinet, Name = a.Name }).ToList()
                 .Prepend(new CabinetNameIdDto { Name = "Не выбран" }), "IdCabinet", "Name", cabinetEquipment.IdCabinet);
+
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
+                .Prepend(new WorkplaceNameIdDto { Name = "Не выбран" }), "IdWorkplace", "Name", cabinetEquipment.IdWorkplace);
+
             ViewData["IdCabinetEquipmentType"] = new SelectList(_context.CabinetEquipmentTypes, "IdCabinetEquipmentType", "Name", cabinetEquipment.IdCabinetEquipmentType);
             return View(cabinetEquipment);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdInventStuff,Name,InventNumber,IdCabinet,IdCabinetEquipmentType")] CabinetEquipment cabinetEquipment)
+        public async Task<IActionResult> Edit(int id, [Bind("IdInventStuff,Name,InventNumber,IdCabinet,IdWorkplace,IdCabinetEquipmentType")] CabinetEquipment cabinetEquipment)
         {
             if (id != cabinetEquipment.IdInventStuff)
             {

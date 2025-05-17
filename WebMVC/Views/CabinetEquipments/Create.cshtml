@@ -27,11 +27,15 @@
                 <select asp-for="IdCabinet" class ="form-control" asp-items="ViewBag.IdCabinet"></select>
             </div>
             <div class="mb-3 form-group">
+                <label asp-for="IdWorkplace" class="control-label">Рабочее место</label>
+                <select asp-for="IdWorkplace" class="form-control" asp-items="ViewBag.IdWorkplace"></select>
+            </div>
+            <div class="mb-3 form-group">
                 <label asp-for="IdCabinetEquipmentType" class="control-label">Тип оборудования</label>
                 <select asp-for="IdCabinetEquipmentType" class ="form-control" asp-items="ViewBag.IdCabinetEquipmentType"></select>
             </div>
             <div class="mb-3 form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </form>
     </div>

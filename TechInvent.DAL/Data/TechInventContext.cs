@@ -83,12 +83,18 @@ public partial class TechInventContext : DbContext
             entity.ToTable("cabinet_equipment");
 
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
+            entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
             entity.Property(e => e.IdCabinetEquipmentType).HasColumnName("id_cabinet_equipment_type");
 
             entity.HasOne(d => d.Cabinet).WithMany(p => p.CabinetEquipments)
                 .HasForeignKey(d => d.IdCabinet)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_cabinet_equipment_cabinet");
+
+            entity.HasOne(d => d.Workplace).WithMany(p => p.CabinetEquipments)
+                .HasForeignKey(d => d.IdWorkplace)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("fk_cabinet_equipment_workplace");
 
             entity.HasOne(d => d.CabinetEquipmentType).WithMany(p => p.CabinetEquipments)
                 .HasForeignKey(d => d.IdCabinetEquipmentType)

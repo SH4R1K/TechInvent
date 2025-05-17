@@ -1,11 +1,9 @@
 ﻿using LinqKit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using System.Linq.Expressions;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
-using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
@@ -47,7 +45,7 @@ namespace WebMVC.Controllers
 
             var monitor = _context.Monitors
                 .AsNoTracking()
-                .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase) 
+                .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
                 || w.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase)
                 || w.SerialNumber.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .Include(w => w.Workplace).ToList();
@@ -58,12 +56,54 @@ namespace WebMVC.Controllers
                 .AsNoTracking()
                 .Include(w => w.Cabinet)
                 .Include(w => w.CabinetEquipmentType)
+                .Include(w => w.Workplace)
                 .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || w.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             inventStuff.AddRange(cabinetEquipment);
 
             return View(inventStuff);
+        }
+
+        [HttpGet]
+        public JsonResult AutoComplete(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return Json(new List<object>()); 
+            }
+
+            var componentResults = _context.Components
+                .AsNoTracking()
+                .Where(c => c.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Select(c => c.Name);
+
+            var softwareResults = _context.Softwares
+                .AsNoTracking()
+                .Where(c => c.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Select(c => c.Name);
+
+            var inventNumberResults = _context.InventStuffs
+                .AsNoTracking()
+                .Where(ins => ins.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Select(ins => ins.InventNumber);
+
+            var inventNameResults = _context.InventStuffs
+                .AsNoTracking()
+                .Where(ins => ins.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Select(ins => ins.Name);
+
+            var result = componentResults
+                .Union(inventNumberResults)
+                .Union(inventNameResults)
+                .Union(softwareResults)
+                .Distinct()
+                .ToList()
+                .Take(10);
+
+
+
+            return Json(result);
         }
     }
 }

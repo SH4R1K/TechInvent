@@ -26,6 +26,9 @@
             <th>
                 Кабинет
             </th>
+            <th>
+                Рабочее место
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -42,7 +45,10 @@
                 @Html.DisplayFor(modelItem => item.CabinetEquipmentType.Name)
             </td>
             <td>
-                    @(item.Cabinet?.Name ?? "Не определён")
+                    @(item.Cabinet?.Name ?? "нет")
+            </td>
+            <td>
+                    @(item.Workplace?.Name ?? "нет")
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdInventStuff">Редактировать</a> |

@@ -32,6 +32,8 @@ namespace WebMVC.Controllers
                 .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.IdOsNavigation)
                 .Include(w => w.Monitors)
+                .Include(w => w.CabinetEquipments)
+                    .ThenInclude(c => c.CabinetEquipmentType)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.Gpu)
                 .Include(w => w.Components)
@@ -80,6 +82,27 @@ namespace WebMVC.Controllers
             monitor.IdWorkplace = null;
 
             _context.Monitors.Update(monitor);
+            _context.SaveChanges();
+
+            return RedirectToAction("Details", new { id });
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> DetachEquipment(int id, int idEquipment)
+        {
+            var cabinetEquipment = await _context.CabinetEquipments.FindAsync(idEquipment);
+
+            if (cabinetEquipment == null)
+                return NotFound();
+
+            if (cabinetEquipment.IdWorkplace != id)
+                return BadRequest("Оборудование не связано с этим рабочим местом");
+
+
+            cabinetEquipment.IdWorkplace = null;
+
+            _context.CabinetEquipments.Update(cabinetEquipment);
             _context.SaveChanges();
 
             return RedirectToAction("Details", new { id });
