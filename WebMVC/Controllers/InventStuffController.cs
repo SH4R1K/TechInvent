@@ -47,6 +47,9 @@ namespace WebMVC.Controllers
 
             var monitor = _context.Monitors
                 .AsNoTracking()
+                .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase) 
+                || w.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase)
+                || w.SerialNumber.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .Include(w => w.Workplace).ToList();
 
             inventStuff.AddRange(monitor);
@@ -54,6 +57,8 @@ namespace WebMVC.Controllers
             var cabinetEquipment = _context.CabinetEquipments
                 .AsNoTracking()
                 .Include(w => w.Cabinet)
+                .Include(w => w.CabinetEquipmentType)
+                .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || w.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             inventStuff.AddRange(cabinetEquipment);
