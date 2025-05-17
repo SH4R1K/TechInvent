@@ -18,10 +18,10 @@
             {
                 case Monitor monitor:
                     <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-header card-title">@monitor.Name</h5>
+                        <h5 class="card-header card-title">@monitor.Name</h5>
                             <div class="card-body d-flex flex-column flex-grow-1">
-                                <p class="card-text"> Инвентарный номер: @monitor?.InventNumber</p>
+                                <p class="card-text">Инвентарный номер: @(monitor?.InventNumber ?? "нет")</p>
+                                <p class="card-text">Серийный номер: @(monitor?.SerialNumber ?? "нет")</p>
                                 <p class="card-text">Рабочее место: @(monitor?.Workplace?.Name ?? "нет")</p>
                             </div>
                             @if (monitor.IdWorkplace != null)
@@ -30,7 +30,6 @@
                                     <a asp-controller="Workplaces" asp-action="Details" asp-route-id="@monitor?.IdWorkplace" class="btn btn-primary">Перейти к рабочему месту</a>
                                 </div>
                             }
-                        </div>
                     </div>
                     break;
 
@@ -50,10 +49,9 @@
 
                 case CabinetEquipment cabinetEquipment:
                     <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-header card-title">@cabinetEquipment.Name</h5>
+                        <h5 class="card-header card-title">@cabinetEquipment.Name</h5>
                             <div class="card-body d-flex flex-column flex-grow-1">
-                                <p class="card-text"> Инвентарный номер: @cabinetEquipment?.InventNumber</p>
+                                <p class="card-text">Инвентарный номер: @(cabinetEquipment?.InventNumber ?? "нет")</p>
                                 <p class="card-text">Тип: @cabinetEquipment?.CabinetEquipmentType.Name</p>
                                 <p class="card-text">Кабинет: @(cabinetEquipment?.Cabinet?.Name ?? "нет")</p>
                             </div>
@@ -64,7 +62,6 @@
                                 </div>
                             }
                         </div>
-                    </div>
                     break;
 
                 default:

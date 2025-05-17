@@ -47,6 +47,9 @@
                             <th>
                                 Инвентарный номер
                             </th>
+                            <th>
+                                Серийный номер
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -58,7 +61,10 @@
                                     @Html.DisplayFor(modelItem => monitor.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => monitor.InventNumber)
+                                    @(monitor.InventNumber ?? "нет")
+                                </td>
+                                <td>
+                                    @(monitor.SerialNumber ?? "нет")
                                 </td>
                                 <td>
                                 @if (Context.User.IsInRole("admin"))

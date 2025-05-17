@@ -36,7 +36,7 @@ namespace WebMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdInventStuff,Name,InventNumber,IdWorkplace")] Monitor monitor)
+        public async Task<IActionResult> Create([Bind("IdInventStuff,Name,InventNumber,SerialNumber,IdWorkplace")] Monitor monitor)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace WebMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdInventStuff,Name,InventNumber,IdWorkplace")] Monitor monitor)
+        public async Task<IActionResult> Edit(int id, [Bind("IdInventStuff,Name,InventNumber,SerialNumber,IdWorkplace")] Monitor monitor)
         {
             if (id != monitor.IdInventStuff)
             {
