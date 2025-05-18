@@ -33,18 +33,30 @@
                                         <a class="nav-link" style="padding-right: 0" asp-area="" asp-controller="TechRequest" asp-action="Index">Заявки</a>
                                         <a class="nav-link dropdown-toggle dropdown-toggle-split" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" asp-area="" asp-controller="TechRequest" asp-action="Create">Создать заявку</a>
+                                            <li>
+                                                <a class="dropdown-item" asp-area="" asp-controller="TechRequest" asp-action="Create">Создать заявку</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
                             </li>
                             @if (Context.User.IsInRole("admin"))
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Monitors" asp-action="Index">Мониторы</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="CabinetEquipments" asp-action="Index">Оборудование</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Оборудование
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                        <li>
+                                            <a class="nav-link" asp-area="" asp-controller="CabinetEquipments" asp-action="Index">Другое</a>
+                                        </li>
+                                        <li>
+                                            <a class="nav-link" asp-area="" asp-controller="Monitors" asp-action="Index">Мониторы</a>
+                                        </li>
+                                        <li>
+                                            <a class="nav-link" asp-area="" asp-controller="Vendors" asp-action="Index">Производители</a>
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-controller="Import" asp-action="Index">Импортировать рабочее место</a>

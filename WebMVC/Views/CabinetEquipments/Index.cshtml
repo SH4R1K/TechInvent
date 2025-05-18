@@ -21,7 +21,13 @@
                 Инвентарный номер
             </th>
             <th>
+                Серийный номер
+            </th>
+            <th>
                 Тип оборудования
+            </th>
+            <th>
+                Производитель
             </th>
             <th>
                 Кабинет
@@ -42,7 +48,13 @@
                 @Html.DisplayFor(modelItem => item.InventNumber)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.SerialNumber)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.CabinetEquipmentType.Name)
+            </td>
+            <td>
+                @(item.Vendor?.Name ?? "нет")
             </td>
             <td>
                     @(item.Cabinet?.Name ?? "нет")

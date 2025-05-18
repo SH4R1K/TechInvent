@@ -47,6 +47,7 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<RequestType> RequestTypes { get; set; }
     public virtual DbSet<TechRequestComment> Comments { get; set; }
     public virtual DbSet<Monitor> Monitors { get; set; }
+    public virtual DbSet<Vendor> Vendors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -84,7 +85,9 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
             entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
+            entity.Property(e => e.IdVendor).HasColumnName("id_vendor");
             entity.Property(e => e.IdCabinetEquipmentType).HasColumnName("id_cabinet_equipment_type");
+            entity.Property(e => e.SerialNumber).HasColumnName("serial_number");
 
             entity.HasOne(d => d.Cabinet).WithMany(p => p.CabinetEquipments)
                 .HasForeignKey(d => d.IdCabinet)
@@ -100,6 +103,11 @@ public partial class TechInventContext : DbContext
                 .HasForeignKey(d => d.IdCabinetEquipmentType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_cabinet_equipment_type");
+
+            entity.HasOne(d => d.Vendor).WithMany(p => p.CabinetEquipments)
+                .HasForeignKey(d => d.IdVendor)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_cabinet_equipment_vendor");
         });
 
         modelBuilder.Entity<CabinetEquipmentType>(entity =>
@@ -315,8 +323,12 @@ public partial class TechInventContext : DbContext
              entity.Property(e => e.InventNumber)
                 .HasMaxLength(100)
                 .HasColumnName("invent_number");
+             entity.Property(e => e.SerialNumber).HasColumnName("serial_number")
+                .HasMaxLength(100)
+                .HasColumnName("serial_number");
 
              entity.HasIndex(e => e.InventNumber, "uq_inventstuff_inventnumber").IsUnique();
+             entity.HasIndex(e => e.SerialNumber, "uq_inventstuff_serialnumber").IsUnique();
 
 
          });
@@ -499,15 +511,29 @@ public partial class TechInventContext : DbContext
             entity.ToTable("monitor");
 
             entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
-
-            entity.Property(e => e.SerialNumber)
-                .HasMaxLength(100)
-                .HasColumnName("serial_number");
+            entity.Property(e => e.IdVendor).HasColumnName("id_vendor");
 
             entity.HasOne(d => d.Workplace).WithMany(p => p.Monitors)
                 .HasForeignKey(d => d.IdWorkplace)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_monitor_workplace");
+
+            entity.HasOne(d => d.Vendor).WithMany(p => p.Monitors)
+                .HasForeignKey(d => d.IdVendor)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_monitor_vendor");
+        });
+
+        modelBuilder.Entity<Vendor>(entity =>
+        {
+            entity.ToTable("vendor");
+
+            entity.HasKey(e => e.IdVendor);
+            entity.HasIndex(e => e.Name, "name_unique").IsUnique();
+
+            entity.Property(e => e.IdVendor).HasColumnName("id_vendor");
+            entity.Property(e => e.Name).HasColumnName("name");
+
         });
 
         modelBuilder.Entity<User>().HasData(InitialData.UsersList);

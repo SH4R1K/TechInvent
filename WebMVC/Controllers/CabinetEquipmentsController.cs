@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using TechInvent.BLL.DtoModels.DtoMVC.Cabinet;
+using TechInvent.BLL.DtoModels.DtoMVC.Vendor;
 using TechInvent.BLL.DtoModels.DtoMVC.Workplace;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
@@ -50,13 +52,15 @@ namespace WebMVC.Controllers
                 .Prepend(new CabinetNameIdDto { Name = "Не выбран" }), "IdCabinet", "Name");
             ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdCabinet, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбран" }), "IdWorkplace", "Name");
+            ViewData["IdVendor"] = new SelectList(_context.Vendors.Select(a => new VendorNameIdDto { IdVendor = a.IdVendor, Name = a.Name }).ToList()
+                .Prepend(new VendorNameIdDto { Name = "Не выбран" }), "IdVendor", "Name");
             ViewData["IdCabinetEquipmentType"] = new SelectList(_context.CabinetEquipmentTypes, "IdCabinetEquipmentType", "Name");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdInventStuff,Name,InventNumber,IdCabinet,IdCabinetEquipmentType")] CabinetEquipment cabinetEquipment)
+        public async Task<IActionResult> Create([Bind("IdInventStuff,Name,InventNumber,SerialNumber,IdWorkplace,IdCabinet,IdCabinetEquipmentType,IdVendor")] CabinetEquipment cabinetEquipment)
         {
             _context.Add(cabinetEquipment);
             await _context.SaveChangesAsync();
@@ -81,6 +85,8 @@ namespace WebMVC.Controllers
 
             ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбран" }), "IdWorkplace", "Name", cabinetEquipment.IdWorkplace);
+            ViewData["IdVendor"] = new SelectList(_context.Vendors.Select(a => new VendorNameIdDto { IdVendor = a.IdVendor, Name = a.Name }).ToList()
+                .Prepend(new VendorNameIdDto { Name = "Не выбран" }), "IdVendor", "Name");
 
             ViewData["IdCabinetEquipmentType"] = new SelectList(_context.CabinetEquipmentTypes, "IdCabinetEquipmentType", "Name", cabinetEquipment.IdCabinetEquipmentType);
             return View(cabinetEquipment);
@@ -88,7 +94,7 @@ namespace WebMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdInventStuff,Name,InventNumber,IdCabinet,IdWorkplace,IdCabinetEquipmentType")] CabinetEquipment cabinetEquipment)
+        public async Task<IActionResult> Edit(int id, [Bind("IdInventStuff,Name,InventNumber,SerialNumber,IdCabinet,IdWorkplace,IdCabinetEquipmentType,IdVendor")] CabinetEquipment cabinetEquipment)
         {
             if (id != cabinetEquipment.IdInventStuff)
             {

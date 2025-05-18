@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using TechInvent.BLL.DtoModels.DtoMVC.Vendor;
 using TechInvent.BLL.DtoModels.DtoMVC.Workplace;
 using TechInvent.DAL.Data;
 using Monitor = TechInvent.DM.Models.Monitor;
@@ -21,7 +22,7 @@ namespace WebMVC.Controllers
         // GET: Monitors
         public async Task<IActionResult> Index()
         {
-            var techInventContext = _context.Monitors.Include(m => m.Workplace);
+            var techInventContext = _context.Monitors.Include(m => m.Workplace).Include(m => m.Vendor);
             return View(await techInventContext.ToListAsync());
         }
 
@@ -30,13 +31,15 @@ namespace WebMVC.Controllers
         {
             ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name");
+            ViewData["IdVendor"] = new SelectList(_context.Vendors.Select(a => new VendorNameIdDto { IdVendor = a.IdVendor, Name = a.Name }).ToList()
+                .Prepend(new VendorNameIdDto { Name = "Не выбран" }), "IdVendor", "Name");
             return View();
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdInventStuff,Name,InventNumber,SerialNumber,IdWorkplace")] Monitor monitor)
+        public async Task<IActionResult> Create([Bind("IdInventStuff,Name,InventNumber,SerialNumber,IdWorkplace,IdVendor")] Monitor monitor)
         {
             if (ModelState.IsValid)
             {
@@ -46,6 +49,8 @@ namespace WebMVC.Controllers
             }
             ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name", monitor.IdWorkplace);
+            ViewData["IdVendor"] = new SelectList(_context.Vendors.Select(a => new VendorNameIdDto { IdVendor = a.IdVendor, Name = a.Name }).ToList()
+                .Prepend(new VendorNameIdDto { Name = "Не выбран" }), "IdVendor", "Name");
             return View(monitor);
         }
 
@@ -64,12 +69,14 @@ namespace WebMVC.Controllers
             }
             ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name", monitor.IdWorkplace);
+            ViewData["IdVendor"] = new SelectList(_context.Vendors.Select(a => new VendorNameIdDto { IdVendor = a.IdVendor, Name = a.Name }).ToList()
+                .Prepend(new VendorNameIdDto { Name = "Не выбран" }), "IdVendor", "Name");
             return View(monitor);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdInventStuff,Name,InventNumber,SerialNumber,IdWorkplace")] Monitor monitor)
+        public async Task<IActionResult> Edit(int id, [Bind("IdInventStuff,Name,InventNumber,SerialNumber,IdWorkplace,IdVendor")] Monitor monitor)
         {
             if (id != monitor.IdInventStuff)
             {
@@ -98,6 +105,8 @@ namespace WebMVC.Controllers
             }
             ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбрано" }), "IdWorkplace", "Name", monitor.IdWorkplace);
+            ViewData["IdVendor"] = new SelectList(_context.Vendors.Select(a => new VendorNameIdDto { IdVendor = a.IdVendor, Name = a.Name }).ToList()
+                .Prepend(new VendorNameIdDto { Name = "Не выбран" }), "IdVendor", "Name");
             return View(monitor);
         }
 

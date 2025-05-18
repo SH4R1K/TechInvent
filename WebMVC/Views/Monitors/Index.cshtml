@@ -22,6 +22,9 @@
                 Серийный номер
             </th>
             <th>
+                Производитель
+            </th>
+            <th>
                 Рабочее место
             </th>
             <th></th>
@@ -33,11 +36,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-                <td>
-                    @(item.InventNumber ?? "нет")
+            <td>
+                @(item.InventNumber ?? "нет")
             </td>
             <td>
                 @(item.SerialNumber ?? "нет")
+            </td>
+            <td>
+                @(item.Vendor?.Name ?? "нет")
             </td>
             <td>
                 @if (item.Workplace != null){

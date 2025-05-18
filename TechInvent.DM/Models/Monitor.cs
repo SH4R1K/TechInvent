@@ -8,8 +8,9 @@ namespace TechInvent.DM.Models
 {
     public class Monitor : InventStuff
     {
-        public string? SerialNumber { get; set; }
         public int? IdWorkplace { get; set; }
+        public int? IdVendor { get; set; }
         public virtual Workplace? Workplace { get; set; }
+        public virtual Vendor? Vendor { get; set; }
     }
 }

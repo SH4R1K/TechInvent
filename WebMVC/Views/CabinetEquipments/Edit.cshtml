@@ -24,6 +24,16 @@
                 <span asp-validation-for="InventNumber" class="text-danger"></span>
             </div>
             <div class="mb-3 form-group">
+                <label asp-for="SerialNumber" class="control-label">Серийный номер</label>
+                <input asp-for="SerialNumber" class="form-control" />
+                <span asp-validation-for="SerialNumber" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <label asp-for="IdVendor" class="control-label">Производитель</label>
+                <select asp-for="IdVendor" class="form-control" asp-items="ViewBag.IdVendor"></select>
+                <span asp-validation-for="IdVendor" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
                 <label asp-for="IdCabinet" class="control-label">Кабинет</label>
                 <select asp-for="IdCabinet" class="form-control" asp-items="ViewBag.IdCabinet"></select>
                 <span asp-validation-for="IdCabinet" class="text-danger"></span>

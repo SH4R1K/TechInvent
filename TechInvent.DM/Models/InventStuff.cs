@@ -10,6 +10,7 @@ namespace TechInvent.DM.Models
     {
         public int IdInventStuff { get; set; }
         public required string Name { get; set; }
+        public string? SerialNumber { get; set; }
         public string? InventNumber { get; set; }
         public bool IsDecommissioned { get; set; } = false;
     }

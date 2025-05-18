@@ -28,6 +28,11 @@
                 <span asp-validation-for="SerialNumber" class="text-danger"></span>
             </div>
             <div class="mb-3 form-group">
+                <label asp-for="IdVendor" class="control-label">Производитель</label>
+                <select asp-for="IdVendor" class="form-control" asp-items="ViewBag.IdVendor"></select>
+                <span asp-validation-for="IdVendor" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
                 <label asp-for="IdWorkplace" class="control-label">Рабочее место</label>
                 <select asp-for="IdWorkplace" class="form-control" asp-items="ViewBag.IdWorkplace"></select>
                 <span asp-validation-for="IdWorkplace" class="text-danger"></span>
