@@ -20,11 +20,11 @@ namespace TechInventAPI.Controllers
             _dtoConverter = dtoConverter;
         }
         [HttpPost(Name = "PostInvent")]
-        public IActionResult Post([FromBody] CabinetDto cabinetDto)
+        public async Task<IActionResult> Post([FromBody] CabinetDto cabinetDto)
         {
             try
             {
-                _dtoConverter.ConvertDtoCabinet(cabinetDto);
+                await _dtoConverter.ConvertDtoCabinetAsync(cabinetDto);
                 Console.WriteLine("Cabinet updated");
                 return StatusCode(200);
             }

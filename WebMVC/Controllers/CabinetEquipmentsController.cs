@@ -21,7 +21,7 @@ namespace WebMVC.Controllers
         // GET: CabinetEquipments
         public async Task<IActionResult> Index()
         {
-            var techInventContext = _context.CabinetEquipments.Include(c => c.Cabinet).Include(c => c.Workplace).Include(c => c.CabinetEquipmentType);
+            var techInventContext = _context.CabinetEquipments.Include(c => c.Cabinet).Include(c => c.Workplace).Include(c => c.Vendor).Include(c => c.CabinetEquipmentType);
             return View(await techInventContext.ToListAsync());
         }
 

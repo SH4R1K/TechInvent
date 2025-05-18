@@ -3,7 +3,7 @@ using TechInvent.DM.Models;
 using Monitor = TechInvent.DM.Models.Monitor;
 namespace WebMVC.Services
 {
-    public class ExcelService
+    public partial class ExcelService
     {
         public async Task<MemoryStream> GenerateCabinetsReportAsync(List<Cabinet> cabinets)
         {

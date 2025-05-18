@@ -13,49 +13,58 @@ namespace TechInvent.BLL.Service
             _context = context;
         }
 
-        public Os GetOrCreateOs(string osName, string osVersion)
+        public async Task<Os> GetOrCreateOsAsync(string osName, string osVersion)
         {
-            var os = _context.Os.FirstOrDefault(o => o.OsName == osName && o.OsVersion == osVersion);
+            var os = await _context.Os.FirstOrDefaultAsync(o => o.OsName == osName && o.OsVersion == osVersion);
             if (os == null)
             {
                 os = new Os { OsName = osName, OsVersion = osVersion };
-                _context.Os.Add(os);
-                SaveChanges();
+                await _context.Os.AddAsync(os);
+                await SaveChangesAsync();
             }
             return os;
         }
 
-        public Manufacturer GetOrCreateManufacturer(string name)
+        public async Task<Manufacturer> GetOrCreateManufacturerAsync(string name)
         {
-            var manufacturer = _context.Manufacturers.FirstOrDefault(m => m.Name == name);
+            var manufacturer = await _context.Manufacturers.FirstOrDefaultAsync(m => m.Name == name);
             if (manufacturer == null)
             {
                 manufacturer = new Manufacturer { Name = name };
-                _context.Manufacturers.Add(manufacturer);
-                SaveChanges();
+                await _context.Manufacturers.AddAsync(manufacturer);
+                await SaveChangesAsync();
             }
             return manufacturer;
         }
 
-        public AdapterType GetOrCreateAdapterType(string name)
+        public async Task<AdapterType> GetOrCreateAdapterTypeAsync(string name)
         {
-            var adapterType = _context.AdapterTypes.FirstOrDefault(m => m.Name == name);
+            var adapterType = await _context.AdapterTypes.FirstOrDefaultAsync(m => m.Name == name);
             if (adapterType == null)
             {
                 adapterType = new AdapterType { Name = name };
-                _context.AdapterTypes.Add(adapterType);
-                SaveChanges();
+                await _context.AdapterTypes.AddAsync(adapterType);
+                await SaveChangesAsync();
             }
             return adapterType;
         }
 
-        public Workplace GetOrCreateWorkplace(string name, Cabinet cabinet, Os os, List<Component> components, List<Software> software)
+        public async Task<Workplace> GetOrCreateWorkplaceAsync(string name, Cabinet cabinet, Os os, List<Component> components, List<Software> software)
         {
-            var workplace = _context.Workplaces.Include(w => w.Components).Include(w => w.InstalledSoftware).FirstOrDefault(m => m.Name == name && !m.IsDecommissioned);
+            var workplace = await _context.Workplaces
+                .Include(w => w.Components)
+                .Include(w => w.InstalledSoftware)
+                .FirstOrDefaultAsync(m => m.Name == name && !m.IsDecommissioned);
+
             if (workplace == null)
             {
-                workplace = new Workplace { Name = name, IdCabinetNavigation = cabinet, IdOsNavigation = os };
-                _context.Workplaces.Add(workplace);
+                workplace = new Workplace
+                {
+                    Name = name,
+                    IdCabinetNavigation = cabinet,
+                    IdOsNavigation = os
+                };
+                await _context.Workplaces.AddAsync(workplace);
             }
             else
             {
@@ -65,46 +74,84 @@ namespace TechInvent.BLL.Service
                 workplace.Components.RemoveAll(c => !components.Contains(c));
                 workplace.InstalledSoftware.Clear();
             }
+
             var filteredComponents = components.Where(c => !workplace.Components.Contains(c));
             foreach (var component in filteredComponents)
             {
                 component.IdWorkplaceNavigation = workplace;
                 workplace.Components.Add(component);
             }
-            workplace.InstalledSoftware.AddRange(software.DistinctBy(s => s.IdSoftware).Select(s => new InstalledSoftware { IdSoftware = s.IdSoftware, IdWorkplace = workplace.IdInventStuff }).ToList());
-            //_context.Update(workplace);
+
+            workplace.InstalledSoftware.AddRange(
+                software.DistinctBy(s => s.IdSoftware)
+                    .Select(s => new InstalledSoftware
+                    {
+                        IdSoftware = s.IdSoftware,
+                        IdWorkplace = workplace.IdInventStuff
+                    }).ToList()
+            );
+
             return workplace;
         }
 
-        public Cabinet GetOrCreateCabinet(string name)
+        public async Task<Cabinet> GetOrCreateCabinetAsync(string name)
         {
-            var cabinet = _context.Cabinets.FirstOrDefault(m => m.Name == name);
+            var cabinet = await _context.Cabinets.FirstOrDefaultAsync(m => m.Name == name);
             if (cabinet == null)
             {
                 cabinet = new Cabinet { Name = name };
-                _context.Cabinets.Add(cabinet);
-                SaveChanges();
+                await _context.Cabinets.AddAsync(cabinet);
+                await SaveChangesAsync();
             }
             return cabinet;
         }
 
-        public Software GetOrCreateSoftware(string name, string version, int idManufacturer)
+        public async Task<Software> GetOrCreateSoftwareAsync(string name, string version, int idManufacturer)
         {
-            var software = _context.Softwares.FirstOrDefault(s => s.Name == name && s.Version == version && s.IdManufacturer == s.IdManufacturer);
+            var software = await _context.Softwares.FirstOrDefaultAsync(s =>
+                s.Name == name && s.Version == version && s.IdManufacturer == idManufacturer);
+
             if (software == null)
             {
-                software = new Software { Name = name, Version = version, IdManufacturer = idManufacturer };
-                _context.Softwares.Add(software);
-                SaveChanges();
+                software = new Software
+                {
+                    Name = name,
+                    Version = version,
+                    IdManufacturer = idManufacturer
+                };
+                await _context.Softwares.AddAsync(software);
+                await SaveChangesAsync();
             }
             return software;
         }
 
-        public void SaveChanges()
+        public async Task<CabinetEquipmentType> GetOrCreateCabinetEquipmentTypeAsync(string typeName)
         {
-            _context.SaveChanges();
+            var type = await _context.CabinetEquipmentTypes.FirstOrDefaultAsync(t => t.Name == typeName);
+            if (type == null)
+            {
+                type = new CabinetEquipmentType { Name = typeName };
+                await _context.CabinetEquipmentTypes.AddAsync(type);
+                await SaveChangesAsync();
+            }
+            return type;
+        }
+
+        public async Task<Vendor> GetOrCreateVendorAsync(string typeName)
+        {
+            var vendor = await _context.Vendors.FirstOrDefaultAsync(t => t.Name == typeName);
+            if (vendor == null)
+            {
+                vendor = new Vendor { Name = typeName };
+                await _context.Vendors.AddAsync(vendor);
+                await SaveChangesAsync();
+            }
+            return vendor;
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
-
-
 }

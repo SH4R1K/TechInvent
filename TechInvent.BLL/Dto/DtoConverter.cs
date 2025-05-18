@@ -13,52 +13,58 @@ namespace TechInvent.BLL.Dto
             _entityChecker = entityChecker;
         }
 
-        public Cabinet ConvertDtoCabinet(CabinetDto cabinetDto)
+        public async Task<Cabinet> ConvertDtoCabinetAsync(CabinetDto cabinetDto)
         {
-            Cabinet cabinet = _entityChecker.GetOrCreateCabinet(cabinetDto.Name);
-            ConvertDtoWorkPlace(cabinetDto.Workplace, cabinet);
-            _entityChecker.SaveChanges();
+            Cabinet cabinet = await _entityChecker.GetOrCreateCabinetAsync(cabinetDto.Name);
+            await ConvertDtoWorkPlaceAsync(cabinetDto.Workplace, cabinet);
+            await _entityChecker.SaveChangesAsync();
             return cabinet;
         }
 
-        public Workplace ConvertDtoWorkPlace(WorkplaceDto workplaceDto, Cabinet cabinet)
+        public async Task<Workplace> ConvertDtoWorkPlaceAsync(WorkplaceDto workplaceDto, Cabinet cabinet)
         {
-            var os = _entityChecker.GetOrCreateOs(workplaceDto.OsName, workplaceDto.Version);
-            List<Component> components = ConvertDtoComponents(workplaceDto.HardwareInfo);
-            List<Software> software = ConvertDtoSoftware(workplaceDto.Software);
+            var os = await _entityChecker.GetOrCreateOsAsync(workplaceDto.OsName, workplaceDto.Version);
+            List<Component> components = await ConvertDtoComponentsAsync(workplaceDto.HardwareInfo);
+            List<Software> software = await ConvertDtoSoftwareAsync(workplaceDto.Software);
 
-            var workplace = _entityChecker.GetOrCreateWorkplace(workplaceDto.CompName, cabinet, os, components, software);
+            var workplace = await _entityChecker.GetOrCreateWorkplaceAsync(workplaceDto.CompName, cabinet, os, components, software);
             return workplace;
         }
 
-        public List<Software> ConvertDtoSoftware(List<SoftwareDto> softwareDtoList)
+        public async Task<List<Software>> ConvertDtoSoftwareAsync(List<SoftwareDto> softwareDtoList)
         {
             var softwareList = new List<Software>();
             foreach (SoftwareDto softwareDto in softwareDtoList)
             {
-                var software = _entityChecker.GetOrCreateSoftware(softwareDto.Name, softwareDto.Version, _entityChecker.GetOrCreateManufacturer(softwareDto.Vendor).IdManufacturer);
+                var manufacturer = await _entityChecker.GetOrCreateManufacturerAsync(softwareDto.Vendor);
+                var software = await _entityChecker.GetOrCreateSoftwareAsync(softwareDto.Name, softwareDto.Version, manufacturer.IdManufacturer);
                 softwareList.Add(software);
             }
             return softwareList;
         }
 
-        public List<Component> ConvertDtoComponents(HardwareInfo hardwareInfo)
+        public async Task<List<Component>> ConvertDtoComponentsAsync(HardwareInfo hardwareInfo)
         {
             var components = new List<Component>();
 
-            components.AddRange(hardwareInfo.Ram.Select(ConvertDtoRam));
-            components.AddRange(hardwareInfo.Gpu.Select(ConvertDtoGpu));
-            components.AddRange(hardwareInfo.Processor.Select(ConvertDtoProcessor));
-            components.AddRange(hardwareInfo.Net.Select(ConvertDtoNetAdapter));
-            components.AddRange(hardwareInfo.Disks.Select(ConvertDtoDisk));
+            foreach (var ramDto in hardwareInfo.Ram)
+                components.Add(await ConvertDtoRamAsync(ramDto));
+            foreach (var gpuDto in hardwareInfo.Gpu)
+                components.Add(ConvertDtoGpu(gpuDto));
+            foreach (var processorDto in hardwareInfo.Processor)
+                components.Add(ConvertDtoProcessor(processorDto));
+            foreach (var netDto in hardwareInfo.Net)
+                components.Add(await ConvertDtoNetAdapterAsync(netDto));
+            foreach (var diskDto in hardwareInfo.Disks)
+                components.Add(ConvertDtoDisk(diskDto));
 
             components.Add(ConvertDtoMainboard(hardwareInfo.Mainboard));
             return components;
         }
 
-        public Ram ConvertDtoRam(RamDto ramDto)
+        public async Task<Ram> ConvertDtoRamAsync(RamDto ramDto)
         {
-            var manufacturer = _entityChecker.GetOrCreateManufacturer(ramDto.Manufacturer);
+            var manufacturer = await _entityChecker.GetOrCreateManufacturerAsync(ramDto.Manufacturer);
             return new Ram
             {
                 Name = ramDto.Name,
@@ -80,6 +86,7 @@ namespace TechInvent.BLL.Dto
                 SerialNumber = mainboardDto.SerialNumber
             };
         }
+
         public Disk ConvertDtoDisk(DiskDto diskDto)
         {
             return new Disk
@@ -100,10 +107,10 @@ namespace TechInvent.BLL.Dto
             };
         }
 
-        public NetAdapter ConvertDtoNetAdapter(NetDto netDto)
+        public async Task<NetAdapter> ConvertDtoNetAdapterAsync(NetDto netDto)
         {
-            var manufacturer = _entityChecker.GetOrCreateManufacturer(netDto.Manufacturer);
-            var adapterType = _entityChecker.GetOrCreateAdapterType(netDto.AdapterType);
+            var manufacturer = await _entityChecker.GetOrCreateManufacturerAsync(netDto.Manufacturer);
+            var adapterType = await _entityChecker.GetOrCreateAdapterTypeAsync(netDto.AdapterType);
             return new NetAdapter
             {
                 Name = netDto.Name,
@@ -125,5 +132,4 @@ namespace TechInvent.BLL.Dto
             };
         }
     }
-
 }
