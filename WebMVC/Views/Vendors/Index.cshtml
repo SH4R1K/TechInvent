@@ -1,35 +1,35 @@
 ﻿@model IEnumerable<TechInvent.DM.Models.Vendor>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Производители";
 }
 
-<h1>Index</h1>
+<h1>Производители</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create">Создать</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Название
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdVendor">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdVendor">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdVendor">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdVendor">Редактировать</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdVendor">Удалить</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

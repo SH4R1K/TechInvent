@@ -45,10 +45,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.InventNumber)
+                 @(item.InventNumber ?? "нет")
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SerialNumber)
+                 @(item.SerialNumber ?? "нет")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CabinetEquipmentType.Name)

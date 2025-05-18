@@ -32,8 +32,11 @@ namespace WebMVC.Controllers
                 .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.IdOsNavigation)
                 .Include(w => w.Monitors)
+                    .ThenInclude(w => w.Vendor)
                 .Include(w => w.CabinetEquipments)
                     .ThenInclude(c => c.CabinetEquipmentType)
+                .Include(w => w.CabinetEquipments)
+                    .ThenInclude(c => c.Vendor)
                 .Include(w => w.Components)
                     .ThenInclude(c => c.Gpu)
                 .Include(w => w.Components)
@@ -60,7 +63,7 @@ namespace WebMVC.Controllers
         public async Task<IActionResult> Index(int? id)
         {
             var techInventContext = _context.Workplaces.AsNoTracking().OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
-            ViewBag.cabinetEquipments = await _context.CabinetEquipments.AsNoTracking().Include(eq => eq.CabinetEquipmentType).Where(eq => eq.IdCabinet == id).ToListAsync();
+            ViewBag.cabinetEquipments = await _context.CabinetEquipments.AsNoTracking().Include(eq => eq.CabinetEquipmentType).Include(eq => eq.Vendor).Where(eq => eq.IdCabinet == id).ToListAsync();
             ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
             ViewBag.cabinets = await _context.Cabinets.ToListAsync();
             return View(await techInventContext.ToListAsync());
@@ -145,6 +148,27 @@ namespace WebMVC.Controllers
             }
 
             workplace.InventNumber = inventNumber;
+
+            _context.Workplaces.Update(workplace);
+            _context.SaveChanges();
+            return RedirectToAction("Details", new { id });
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateSerialNumber(int id, string? serialNumber)
+        {
+            var workplace = await _context.Workplaces.FindAsync(id);
+
+            if (workplace == null)
+                return NotFound();
+
+            if (serialNumber != null)
+            {
+                serialNumber = serialNumber?.Trim();
+            }
+
+            workplace.SerialNumber = serialNumber;
 
             _context.Workplaces.Update(workplace);
             _context.SaveChanges();

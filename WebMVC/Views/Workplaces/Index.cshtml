@@ -36,6 +36,12 @@
                                 Инвентарный номер
                             </th>
                             <th>
+                                Серийный номер
+                            </th>
+                            <th>
+                                Производитель
+                            </th>
+                            <th>
                                 Тип оборудования
                             </th>
                             <th></th>
@@ -49,7 +55,13 @@
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.InventNumber)
+                                    @(item.InventNumber ?? "нет")
+                                </td>
+                                <td>
+                                    @(item.SerialNumber ?? "нет")
+                                </td>
+                                <td>
+                                    @(item.Vendor?.Name ?? "нет")
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CabinetEquipmentType.Name)
@@ -96,6 +108,7 @@
                         </div>
                     }
                     <p class="card-text">Инвентарный номер: @(workplaces[i].InventNumber ?? "нет")</p>
+                    <p class="card-text">Серийный номер: @(workplaces[i].SerialNumber ?? "нет")</p>
                 </div>
                 <div class="card-footer row gy-2 justify-content-center justify-content-md-start">
                     <a asp-action="Details" asp-route-id="@workplaces[i].IdInventStuff" class="btn btn-primary">Подробнее</a>

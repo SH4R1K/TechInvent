@@ -22,7 +22,8 @@ namespace WebMVC.Controllers
 
             Expression<Func<Workplace, bool>> predicate = PredicateBuilder.New<Workplace>(
                 workplaces => workplaces.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                workplaces.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase));
+                workplaces.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                workplaces.SerialNumber.Contains(query, StringComparison.OrdinalIgnoreCase));
 
             if (searchByComponent)
                 predicate = predicate.Or(w => w.Components.Any(c => c.Name.Contains(query, StringComparison.OrdinalIgnoreCase)));
@@ -47,8 +48,10 @@ namespace WebMVC.Controllers
                 .AsNoTracking()
                 .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
                 || w.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase)
-                || w.SerialNumber.Contains(query, StringComparison.OrdinalIgnoreCase))
-                .Include(w => w.Workplace).ToList();
+                || w.SerialNumber.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                 w.Vendor.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Include(w => w.Workplace)
+                .Include(w => w.Vendor).ToList();
 
             inventStuff.AddRange(monitor);
 
@@ -57,7 +60,9 @@ namespace WebMVC.Controllers
                 .Include(w => w.Cabinet)
                 .Include(w => w.CabinetEquipmentType)
                 .Include(w => w.Workplace)
-                .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || w.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Include(w => w.Vendor)
+                .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || w.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                 w.Vendor.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             inventStuff.AddRange(cabinetEquipment);
@@ -70,7 +75,7 @@ namespace WebMVC.Controllers
         {
             if (string.IsNullOrWhiteSpace(query))
             {
-                return Json(new List<object>()); 
+                return Json(new List<object>());
             }
 
             var componentResults = _context.Components
@@ -93,10 +98,16 @@ namespace WebMVC.Controllers
                 .Where(ins => ins.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .Select(ins => ins.Name);
 
+            var vendorNameResults = _context.Vendors
+                .AsNoTracking()
+                .Where(ins => ins.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Select(ins => ins.Name);
+
             var result = componentResults
                 .Union(inventNumberResults)
                 .Union(inventNameResults)
                 .Union(softwareResults)
+                .Union(vendorNameResults)
                 .Distinct()
                 .ToList()
                 .Take(10);

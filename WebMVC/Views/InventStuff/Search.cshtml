@@ -20,6 +20,7 @@
                     <div class="card">
                         <h5 class="card-header card-title">@monitor.Name</h5>
                         <div class="card-body d-flex flex-column flex-grow-1">
+                            <p class="card-text">Производитель: @(monitor?.Vendor?.Name ?? "нет")</p>
                             <p class="card-text">Инвентарный номер: @(monitor?.InventNumber ?? "нет")</p>
                             <p class="card-text">Серийный номер: @(monitor?.SerialNumber ?? "нет")</p>
                             <p class="card-text">Рабочее место: @(monitor?.Workplace?.Name ?? "нет")</p>
@@ -38,7 +39,8 @@
                         <h5 class="card-header card-title">@workplace.Name</h5>
                         <div class="card-body d-flex flex-column flex-grow-1">
                             <p class="card-text">ОС: @workplace.IdOsNavigation.OsName</p>
-                            <p class="card-text">Инвентарный номер: @(workplace.InventNumber ?? "нет")</p>
+                            <p class="card-text">Инвентарный номер: @(workplace?.InventNumber ?? "нет")</p>
+                            <p class="card-text">Серийный номер: @(workplace?.SerialNumber ?? "нет")</p>
                         </div>
                         <div class="card-footer row gy-2 justify-content-center justify-content-md-start">
                             <a asp-controller="Workplaces" asp-action="Details" asp-route-id="@workplace.IdInventStuff" class="btn btn-primary">Подробнее</a>
@@ -51,7 +53,9 @@
                     <div class="card">
                         <h5 class="card-header card-title">@cabinetEquipment.Name</h5>
                         <div class="card-body d-flex flex-column flex-grow-1">
+                            <p class="card-text">Производитель: @(cabinetEquipment?.Vendor?.Name ?? "нет")</p>
                             <p class="card-text">Инвентарный номер: @(cabinetEquipment?.InventNumber ?? "нет")</p>
+                            <p class="card-text">Серийный номер: @(cabinetEquipment?.SerialNumber ?? "нет")</p>
                             <p class="card-text">Тип: @cabinetEquipment?.CabinetEquipmentType.Name</p>
                             <p class="card-text">Кабинет: @(cabinetEquipment?.Cabinet?.Name ?? "нет")</p>
                             <p class="card-text">Рабочее место: @(cabinetEquipment?.Workplace?.Name ?? "нет")</p>
