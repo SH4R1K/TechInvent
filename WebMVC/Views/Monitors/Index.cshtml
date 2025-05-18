@@ -19,6 +19,12 @@
                 Инвентарный номер
             </th>
             <th>
+                Серийный номер
+            </th>
+            <th>
+                Производитель
+            </th>
+            <th>
                 Рабочее место
             </th>
             <th></th>
@@ -31,19 +37,25 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.InventNumber)
+                @(item.InventNumber ?? "нет")
+            </td>
+            <td>
+                @(item.SerialNumber ?? "нет")
+            </td>
+            <td>
+                @(item.Vendor?.Name ?? "нет")
             </td>
             <td>
                 @if (item.Workplace != null){
                 <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@item.IdWorkplace">@item.Workplace.Name</a>
                 }
                 else{
-                  @("Не привязан")
+                    @("Не прикреплен")
                 }
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdMonitor">Редактировать</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdMonitor">Удалить</a>
+                <a asp-action="Edit" asp-route-id="@item.IdInventStuff">Редактировать</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdInventStuff">Удалить</a>
             </td>
         </tr>
 }

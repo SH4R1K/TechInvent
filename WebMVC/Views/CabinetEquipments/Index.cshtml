@@ -21,10 +21,19 @@
                 Инвентарный номер
             </th>
             <th>
+                Серийный номер
+            </th>
+            <th>
                 Тип оборудования
             </th>
             <th>
+                Производитель
+            </th>
+            <th>
                 Кабинет
+            </th>
+            <th>
+                Рабочее место
             </th>
             <th></th>
         </tr>
@@ -36,17 +45,26 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.InventNumber)
+                 @(item.InventNumber ?? "нет")
+            </td>
+            <td>
+                 @(item.SerialNumber ?? "нет")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CabinetEquipmentType.Name)
             </td>
             <td>
-                    @(item.Cabinet?.Name ?? "Не определён")
+                @(item.Vendor?.Name ?? "нет")
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdCabinetEquipment">Редактировать</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdCabinetEquipment">Удалить</a>
+                    @(item.Cabinet?.Name ?? "нет")
+            </td>
+            <td>
+                    @(item.Workplace?.Name ?? "нет")
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdInventStuff">Редактировать</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdInventStuff">Удалить</a>
             </td>
         </tr>
 }

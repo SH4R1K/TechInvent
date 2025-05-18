@@ -9,7 +9,8 @@
     <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
     @if (Context.User.IsInRole("admin"))
     {
-    <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdWorkplace" data-bs-target="#editWorkplaceModal">Изменить инвентарный номер</a>
+    <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdInventStuff" data-bs-target="#editWorkplaceModal">Изменить инвентарный номер</a>
+    <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.SerialNumber" data-workplace-id="@Model?.IdInventStuff" data-bs-target="#editWorkplaceSerialModal">Изменить серийный номер</a>
     }
 </div>
 
@@ -47,6 +48,12 @@
                             <th>
                                 Инвентарный номер
                             </th>
+                            <th>
+                                Серийный номер
+                            </th>
+                            <th>
+                                Производитель
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -58,16 +65,84 @@
                                     @Html.DisplayFor(modelItem => monitor.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => monitor.InventNumber)
+                                    @(monitor.InventNumber ?? "нет")
+                                </td>
+                                <td>
+                                    @(monitor.SerialNumber ?? "нет")
+                                </td>
+                                <td>
+                                    @(monitor.Vendor?.Name ?? "нет")
                                 </td>
                                 <td>
                                 @if (Context.User.IsInRole("admin"))
                                 {
-                                    <form asp-action="DetachMonitor" asp-route-id="@Model.IdWorkplace" asp-route-idMonitor="@monitor.IdMonitor" method="POST">
+                                    <form asp-action="DetachMonitor" asp-route-id="@Model.IdInventStuff" asp-route-idMonitor="@monitor.IdInventStuff" method="POST">
                                         <button class="fbtn-link" type="submit">Открепить</button>
                                     </form>
                                 }
                                 </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingZero">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCabinetEquipment">
+                    Оборудование
+                </button>
+            </h2>
+            <div id="collapseCabinetEquipment" class="accordion-collapse collapse">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Название
+                            </th>
+                            <th>
+                                Инвентарный номер
+                            </th>
+                            <th>
+                                Серийный номер
+                            </th>
+                            <th>
+                                Производитель
+                            </th>
+                            <th>
+                                Тип оборудования
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CabinetEquipments)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @(item.InventNumber ?? "нет")
+                                </td>
+                                <td>
+                                    @(item.SerialNumber ?? "нет")
+                                </td>
+                                <td>
+                                    @(item.Vendor?.Name ?? "нет")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CabinetEquipmentType.Name)
+                                </td>
+                                @if (Context.User.IsInRole("admin"))
+                                {
+                                    <td>
+                                        <form asp-action="DetachEquipment" asp-controller="Workplaces" asp-route-id="@item.IdWorkplace" asp-route-idEquipment="@item.IdInventStuff" method="POST">
+                                            <a class="text-decoration-none" asp-action="Edit" asp-controller="CabinetEquipments" asp-route-id="@item.IdInventStuff">Редактировать</a> |
+                                            <button class="fbtn-link" type="submit">Открепить</button>
+                                        </form>
+                                    </td>
+                                }
                             </tr>
                         }
                     </tbody>
@@ -183,7 +258,7 @@
                             <h5 class="card-title"><a class="text-decoration-none" href="https://yandex.ru/search/?text=@{@component.Name} драйвера">@component.Name</a></h5>
                             <p class="card-text">MAC: @component.MacAddress</p>
                             <p class="card-text">Производитель: @component.NetAdapter?.IdManufacturerNavigation?.Name</p>
-                            <p class="card-text">Тип адаптера: @component.NetAdapter?.AdapterTypeIdAdapterTypeNavigation?.Name</p>
+                            <p class="card-text">Тип адаптера: @component.NetAdapter?.AdapterTypeNavigation?.Name</p>
 
                         </div>
                     </div>
@@ -275,4 +350,8 @@
 
 
 
-<partial name="_EditInventNumberComponent.cshtml" />
+@if (Context.User.IsInRole("admin"))
+{
+    <partial name="_EditInventNumberComponent.cshtml" />
+    <partial name="_EditSerialNumberComponent.cshtml" />
+}

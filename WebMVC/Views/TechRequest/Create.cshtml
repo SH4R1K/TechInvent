@@ -35,7 +35,7 @@
             @foreach (Workplace workplace in ViewBag.Workplaces)
             {
                 <label>
-                    <input type="checkbox" name="selectedWorkplaces" value="@workplace.IdWorkplace" />
+                    <input type="checkbox" name="selectedWorkplaces" value="@workplace.IdInventStuff" />
                     (@workplace.IdCabinetNavigation.Name) @workplace.Name
                 </label>
 

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TechInvent.BLL.DtoModels.DtoMVC.Workplace
+namespace TechInvent.BLL.DtoModels.DtoMVC.Cabinet
 {
     public class CabinetNameIdDto
     {
         public int? IdCabinet { get; set; }
-        public required string Name{ get; set; }
+        public required string Name { get; set; }
     }
 }

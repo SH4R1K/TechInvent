@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdCabinetEquipment" />
+            <input type="hidden" asp-for="IdInventStuff" />
             <div class="mb-3 form-group">
                 <label asp-for="Name" class="control-label">Название</label>
                 <input asp-for="Name" class="form-control" />
@@ -24,9 +24,23 @@
                 <span asp-validation-for="InventNumber" class="text-danger"></span>
             </div>
             <div class="mb-3 form-group">
+                <label asp-for="SerialNumber" class="control-label">Серийный номер</label>
+                <input asp-for="SerialNumber" class="form-control" />
+                <span asp-validation-for="SerialNumber" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <label asp-for="IdVendor" class="control-label">Производитель</label>
+                <select asp-for="IdVendor" class="form-control" asp-items="ViewBag.IdVendor"></select>
+                <span asp-validation-for="IdVendor" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
                 <label asp-for="IdCabinet" class="control-label">Кабинет</label>
                 <select asp-for="IdCabinet" class="form-control" asp-items="ViewBag.IdCabinet"></select>
                 <span asp-validation-for="IdCabinet" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <label asp-for="IdWorkplace" class="control-label">Рабочее место</label>
+                <select asp-for="IdWorkplace" class="form-control" asp-items="ViewBag.IdWorkplace"></select>
             </div>
             <div class="mb-3 form-group">
                 <label asp-for="IdCabinetEquipmentType" class="control-label">Тип оборудования</label>

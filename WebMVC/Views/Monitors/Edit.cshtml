@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdMonitor" />
+            <input type="hidden" asp-for="IdInventStuff" />
             <div class="mb-3 form-group">
                 <label asp-for="Name" class="control-label">Имя</label>
                 <input asp-for="Name" class="form-control" />
@@ -22,6 +22,16 @@
                 <label asp-for="InventNumber" class="control-label">Инвентарные номер</label>
                 <input asp-for="InventNumber" class="form-control" />
                 <span asp-validation-for="InventNumber" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <label asp-for="SerialNumber" class="control-label">Серийный номер</label>
+                <input asp-for="SerialNumber" class="form-control" />
+                <span asp-validation-for="SerialNumber" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group">
+                <label asp-for="IdVendor" class="control-label">Производитель</label>
+                <select asp-for="IdVendor" class="form-control" asp-items="ViewBag.IdVendor"></select>
+                <span asp-validation-for="IdVendor" class="text-danger"></span>
             </div>
             <div class="mb-3 form-group">
                 <label asp-for="IdWorkplace" class="control-label">Рабочее место</label>

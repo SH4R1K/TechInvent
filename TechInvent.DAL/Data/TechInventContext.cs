@@ -20,6 +20,7 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<Cabinet> Cabinets { get; set; }
     public virtual DbSet<CabinetEquipment> CabinetEquipments { get; set; }
     public virtual DbSet<CabinetEquipmentType> CabinetEquipmentTypes { get; set; }
+    public virtual DbSet<InventStuff> InventStuffs{ get; set; }
 
     public virtual DbSet<Component> Components { get; set; }
 
@@ -46,6 +47,7 @@ public partial class TechInventContext : DbContext
     public virtual DbSet<RequestType> RequestTypes { get; set; }
     public virtual DbSet<TechRequestComment> Comments { get; set; }
     public virtual DbSet<Monitor> Monitors { get; set; }
+    public virtual DbSet<Vendor> Vendors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -79,29 +81,33 @@ public partial class TechInventContext : DbContext
 
         modelBuilder.Entity<CabinetEquipment>(entity =>
         {
-            entity.HasKey(e => e.IdCabinetEquipment).HasName("PRIMARY");
-
             entity.ToTable("cabinet_equipment");
 
-            entity.Property(e => e.IdCabinetEquipment).HasColumnName("id_cabinet_equipment");
-            entity.Property(e => e.InventNumber)
-                    .HasMaxLength(100)
-                    .HasColumnName("invent_number");
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
+            entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
+            entity.Property(e => e.IdVendor).HasColumnName("id_vendor");
             entity.Property(e => e.IdCabinetEquipmentType).HasColumnName("id_cabinet_equipment_type");
-            entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .HasColumnName("name");
+            entity.Property(e => e.SerialNumber).HasColumnName("serial_number");
 
             entity.HasOne(d => d.Cabinet).WithMany(p => p.CabinetEquipments)
                 .HasForeignKey(d => d.IdCabinet)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_cabinet_equipment_cabinet");
 
+            entity.HasOne(d => d.Workplace).WithMany(p => p.CabinetEquipments)
+                .HasForeignKey(d => d.IdWorkplace)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("fk_cabinet_equipment_workplace");
+
             entity.HasOne(d => d.CabinetEquipmentType).WithMany(p => p.CabinetEquipments)
                 .HasForeignKey(d => d.IdCabinetEquipmentType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_cabinet_equipment_type");
+
+            entity.HasOne(d => d.Vendor).WithMany(p => p.CabinetEquipments)
+                .HasForeignKey(d => d.IdVendor)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_cabinet_equipment_vendor");
         });
 
         modelBuilder.Entity<CabinetEquipmentType>(entity =>
@@ -201,21 +207,21 @@ public partial class TechInventContext : DbContext
         {
             entity.ToTable("net_adapter");
 
-            entity.HasIndex(e => e.AdapterTypeIdAdapterType, "fk_net_adapter_adapter_type1_idx");
+            entity.HasIndex(e => e.IdAdapterType, "fk_net_adapter_adapter_type1_idx");
 
             entity.HasIndex(e => e.IdManufacturer, "fk_net_adapter_manufacturer2_idx");
 
             entity.HasIndex(e => e.IdComponent, "fk_ram_component1_idx");
 
             entity.Property(e => e.IdComponent).HasColumnName("id_component");
-            entity.Property(e => e.AdapterTypeIdAdapterType).HasColumnName("adapter_type_id_adapter_type");
+            entity.Property(e => e.IdAdapterType).HasColumnName("id_adapter_type");
             entity.Property(e => e.IdManufacturer).HasColumnName("id_manufacturer");
             entity.Property(e => e.MacAddress)
                 .HasMaxLength(100)
                 .HasColumnName("mac_address");
 
-            entity.HasOne(d => d.AdapterTypeIdAdapterTypeNavigation).WithMany(p => p.NetAdapters)
-                .HasForeignKey(d => d.AdapterTypeIdAdapterType)
+            entity.HasOne(d => d.AdapterTypeNavigation).WithMany(p => p.NetAdapters)
+                .HasForeignKey(d => d.IdAdapterType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_net_adapter_adapter_type1");
 
@@ -303,9 +309,32 @@ public partial class TechInventContext : DbContext
                 .HasConstraintName("fk_net_adapter_manufacturer1");
         });
 
+        modelBuilder.Entity<InventStuff>().UseTptMappingStrategy();
+
+        modelBuilder.Entity<InventStuff>(entity =>
+         {
+             entity.HasKey(e => e.IdInventStuff).HasName("PRIMARY");
+             entity.ToTable("invent_stuff");
+             entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
+             entity.Property(e => e.IdInventStuff).HasColumnName("id_invent_stuff");
+             entity.Property(e => e.IsDecommissioned).HasColumnName("is_decommissioned");
+             entity.Property(e => e.InventNumber)
+                .HasMaxLength(100)
+                .HasColumnName("invent_number");
+             entity.Property(e => e.SerialNumber).HasColumnName("serial_number")
+                .HasMaxLength(100)
+                .HasColumnName("serial_number");
+
+             entity.HasIndex(e => e.InventNumber, "uq_inventstuff_inventnumber").IsUnique();
+             entity.HasIndex(e => e.SerialNumber, "uq_inventstuff_serialnumber").IsUnique();
+
+
+         });
+
         modelBuilder.Entity<Workplace>(entity =>
         {
-            entity.HasKey(e => e.IdWorkplace).HasName("PRIMARY");
             entity.ToTable("workplace");
 
             entity.HasIndex(e => e.IdCabinet, "fk_workplace_cabinet_idx");
@@ -314,16 +343,8 @@ public partial class TechInventContext : DbContext
 
             entity.HasIndex(e => e.Guid, "uq_workplace_guid").IsUnique();
 
-            entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
             entity.Property(e => e.IdCabinet).HasColumnName("id_cabinet");
             entity.Property(e => e.IdOs).HasColumnName("id_os");
-            entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .HasColumnName("name");
-
-            entity.Property(e => e.InventNumber)
-                .HasMaxLength(100)
-                .HasColumnName("invent_number");
 
             entity.Property(e => e.Guid)
                 .HasDefaultValue(null)
@@ -416,6 +437,7 @@ public partial class TechInventContext : DbContext
 
             entity.Property(e => e.IdUser).HasColumnName("id_user");
             entity.Property(e => e.IdRequest).HasColumnName("id_request");
+            entity.Property(e => e.IdRequestType).HasColumnName("id_request_type");
             entity.Property(e => e.Title).HasMaxLength(100).HasColumnName("title");
             entity.Property(e => e.Description).HasMaxLength(1000).HasColumnName("description");
             entity.Property(e => e.IsActive).HasColumnName("is_active");
@@ -486,22 +508,32 @@ public partial class TechInventContext : DbContext
 
         modelBuilder.Entity<Monitor>(entity =>
         {
-            entity.HasKey(e => e.IdMonitor).HasName("PRIMARY");
-
             entity.ToTable("monitor");
-            entity.Property(e => e.IdMonitor).HasColumnName("id_monitor");
+
             entity.Property(e => e.IdWorkplace).HasColumnName("id_workplace");
-            entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .HasColumnName("name");
-            entity.Property(e => e.InventNumber)
-                .HasMaxLength(100)
-                .HasColumnName("invent_number");
+            entity.Property(e => e.IdVendor).HasColumnName("id_vendor");
 
             entity.HasOne(d => d.Workplace).WithMany(p => p.Monitors)
                 .HasForeignKey(d => d.IdWorkplace)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_monitor_workplace");
+
+            entity.HasOne(d => d.Vendor).WithMany(p => p.Monitors)
+                .HasForeignKey(d => d.IdVendor)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_monitor_vendor");
+        });
+
+        modelBuilder.Entity<Vendor>(entity =>
+        {
+            entity.ToTable("vendor");
+
+            entity.HasKey(e => e.IdVendor);
+            entity.HasIndex(e => e.Name, "name_unique").IsUnique();
+
+            entity.Property(e => e.IdVendor).HasColumnName("id_vendor");
+            entity.Property(e => e.Name).HasColumnName("name");
+
         });
 
         modelBuilder.Entity<User>().HasData(InitialData.UsersList);

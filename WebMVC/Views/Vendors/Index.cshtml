@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TechInvent.DM.Models.Vendor>
+
+@{
+    ViewData["Title"] = "Производители";
+}
+
+<h1>Производители</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Создать</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdVendor">Редактировать</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdVendor">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

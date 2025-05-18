@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace TechInvent.DM.Models
 {
-    public class CabinetEquipment
+    public class CabinetEquipment : InventStuff
     {
-        public int IdCabinetEquipment { get; set; }
-        public required string Name { get; set; }
-        public string? InventNumber { get; set; }
         public int? IdCabinet { get; set; }
+        public int? IdWorkplace { get; set; }
+        public int? IdVendor { get; set; }
         public int IdCabinetEquipmentType { get; set; }
+        public virtual Vendor? Vendor { get; set; }
         public required virtual CabinetEquipmentType CabinetEquipmentType { get; set; }
+        public virtual Workplace? Workplace { get; set; }
         public virtual Cabinet? Cabinet { get; set; }
     }
 }

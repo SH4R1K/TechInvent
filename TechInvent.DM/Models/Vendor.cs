@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TechInvent.DM.Models
+{
+    public class Vendor
+    {
+        public int IdVendor { get; set; }
+        public required string Name { get; set; }
+        public virtual List<Monitor> Monitors { get; set; } = new List<Monitor>();
+        public virtual List<CabinetEquipment> CabinetEquipments { get; set; } = new List<CabinetEquipment>();
+    }
+}
