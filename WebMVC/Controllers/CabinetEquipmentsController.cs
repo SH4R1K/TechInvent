@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TechInvent.BLL.DtoModels.DtoMVC.Cabinet;
@@ -9,6 +10,7 @@ using TechInvent.DM.Models;
 
 namespace WebMVC.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class CabinetEquipmentsController : Controller
     {
         private readonly TechInventContext _context;

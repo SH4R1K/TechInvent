@@ -10,7 +10,6 @@ namespace TechInvent.DM.Models
     {
         public int IdVendor { get; set; }
         public required string Name { get; set; }
-        public virtual List<Monitor> Monitors { get; set; } = new List<Monitor>();
         public virtual List<CabinetEquipment> CabinetEquipments { get; set; } = new List<CabinetEquipment>();
     }
 }

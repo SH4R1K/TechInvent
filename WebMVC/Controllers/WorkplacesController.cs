@@ -31,8 +31,6 @@ namespace WebMVC.Controllers
                 .AsNoTracking()
                 .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.IdOsNavigation)
-                .Include(w => w.Monitors)
-                    .ThenInclude(w => w.Vendor)
                 .Include(w => w.CabinetEquipments)
                     .ThenInclude(c => c.CabinetEquipmentType)
                 .Include(w => w.CabinetEquipments)
@@ -67,27 +65,6 @@ namespace WebMVC.Controllers
             ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
             ViewBag.cabinets = await _context.Cabinets.ToListAsync();
             return View(await techInventContext.ToListAsync());
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost]
-        public async Task<IActionResult> DetachMonitor(int id, int idMonitor)
-        {
-            var monitor = await _context.Monitors.FindAsync(idMonitor);
-
-            if (monitor == null)
-                return NotFound();
-
-            if (monitor.IdWorkplace != id)
-                return BadRequest("Монитор не связан с этим рабочим местом");
-
-
-            monitor.IdWorkplace = null;
-
-            _context.Monitors.Update(monitor);
-            _context.SaveChanges();
-
-            return RedirectToAction("Details", new { id });
         }
 
         [Authorize(Roles = "admin")]

@@ -35,7 +35,6 @@ namespace WebMVC.Controllers
                 .AsNoTracking()
                 .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.IdOsNavigation)
-                .Include(w => w.Monitors)
                 .Include(w => w.Components)
                 .Include(w => w.InstalledSoftware)
                     .ThenInclude(s => s.SoftwareNavigation)
@@ -43,17 +42,6 @@ namespace WebMVC.Controllers
                 .Where(predicate).ToList();
 
             inventStuff.AddRange(workplace);
-
-            var monitor = _context.Monitors
-                .AsNoTracking()
-                .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
-                || w.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase)
-                || w.SerialNumber.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                 w.Vendor.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
-                .Include(w => w.Workplace)
-                .Include(w => w.Vendor).ToList();
-
-            inventStuff.AddRange(monitor);
 
             var cabinetEquipment = _context.CabinetEquipments
                 .AsNoTracking()
