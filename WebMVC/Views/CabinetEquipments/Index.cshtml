@@ -56,12 +56,26 @@
             <td>
                 @(item.Vendor?.Name ?? "нет")
             </td>
-            <td>
-                    @(item.Cabinet?.Name ?? "нет")
+                <td>
+                    @if (item.Cabinet != null)
+                    {
+                        <a class="text-decoration-none" asp-action="Index" asp-controller="Workplaces" asp-route-id="@item.IdCabinet">@item.Cabinet.Name</a>
+                    }
+                    else
+                    {
+                        @("нет")
+                    }
             </td>
-            <td>
-                    @(item.Workplace?.Name ?? "нет")
-            </td>
+                <td>
+                    @if (item.Workplace != null)
+                    {
+                        <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@item.IdWorkplace">@item.Workplace.Name</a>
+                    }
+                    else
+                    {
+                        @("нет")
+                    }
+                </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdInventStuff">Редактировать</a> |
                 <a asp-action="Delete" asp-route-id="@item.IdInventStuff">Удалить</a>

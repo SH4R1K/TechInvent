@@ -61,7 +61,8 @@ namespace WebMVC.Controllers
                 .Include(w => w.CabinetEquipmentType)
                 .Include(w => w.Workplace)
                 .Include(w => w.Vendor)
-                .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || w.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                .Where(w => w.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || w.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase)
+                || w.SerialNumber.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                  w.Vendor.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
@@ -98,6 +99,11 @@ namespace WebMVC.Controllers
                 .Where(ins => ins.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .Select(ins => ins.Name);
 
+            var serialNumberResults = _context.InventStuffs
+                .AsNoTracking()
+                .Where(ins => ins.SerialNumber.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Select(ins => ins.SerialNumber);
+
             var vendorNameResults = _context.Vendors
                 .AsNoTracking()
                 .Where(ins => ins.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
@@ -106,6 +112,7 @@ namespace WebMVC.Controllers
             var result = componentResults
                 .Union(inventNumberResults)
                 .Union(inventNameResults)
+                .Union(serialNumberResults)
                 .Union(softwareResults)
                 .Union(vendorNameResults)
                 .Distinct()
