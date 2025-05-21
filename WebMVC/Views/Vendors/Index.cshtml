@@ -26,8 +26,12 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.IdVendor">Редактировать</a> |
-                    <a asp-action="Delete" asp-route-id="@item.IdVendor">Удалить</a>
+                    <a asp-action="Edit" asp-route-id="@item.IdVendor">
+                        <img src="~/images/pencil-edit.svg" />
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.IdVendor">
+                        <img src="~/images/trashbin.svg" />
+                    </a>
                 </td>
             </tr>
         }

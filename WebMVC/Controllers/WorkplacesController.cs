@@ -1,12 +1,9 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using LinqKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using QRCoder;
-using System.Linq;
-using System.Linq.Expressions;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 using WebMVC.Services;

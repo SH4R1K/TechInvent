@@ -77,8 +77,12 @@
                     }
                 </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdInventStuff">Редактировать</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdInventStuff">Удалить</a>
+                    <a asp-action="Edit" asp-route-id="@item.IdInventStuff">
+                        <img src="~/images/pencil-edit.svg"/>
+                    </a> 
+                    <a asp-action="Delete" asp-route-id="@item.IdInventStuff">
+                        <img src="~/images/trashbin.svg" />
+                    </a>
             </td>
         </tr>
 }

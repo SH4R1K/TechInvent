@@ -83,7 +83,9 @@
                                 {
                                     <td>
                                         <form asp-action="DetachEquipment" asp-controller="Workplaces" asp-route-id="@item.IdWorkplace" asp-route-idEquipment="@item.IdInventStuff" method="POST">
-                                            <a class="text-decoration-none" asp-action="Edit" asp-controller="CabinetEquipments" asp-route-id="@item.IdInventStuff">Редактировать</a> |
+                                            <a class="text-decoration-none" asp-action="Edit" asp-controller="CabinetEquipments" asp-route-id="@item.IdInventStuff">
+                                                <img src="~/images/pencil-edit.svg" />
+                                            </a> |
                                             <button class="fbtn-link" type="submit">Открепить</button>
                                         </form>
                                     </td>
