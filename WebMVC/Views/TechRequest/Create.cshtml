@@ -31,20 +31,33 @@
 
     <div class="mb-3 form-group">
         <label asp-for="AttachedWorkplaces" class="control-label">Рабочие места</label>
-        <div>
+        <select id="workplace-select" name="selectedWorkplaces" class="form-control" multiple="multiple">
             @foreach (Workplace workplace in ViewBag.Workplaces)
             {
-                <label>
-                    <input type="checkbox" name="selectedWorkplaces" value="@workplace.IdInventStuff" />
+                <option value="@workplace.IdInventStuff">
                     (@workplace.IdCabinetNavigation.Name) @workplace.Name
-                </label>
-
-                <br />
+                </option>
             }
-        </div>
+        </select>
     </div>
 
     <div class="mb-3 form-group">
         <button type="submit" class="btn btn-primary">Создать</button>
     </div>
 </form>
+
+<script>
+    $(document).ready(function () {
+        $('#workplace-select').select2({
+            placeholder: "Выберите рабочие места",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

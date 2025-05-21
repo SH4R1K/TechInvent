@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddToastify(config => { config.DurationInSeconds = 10; config.Position = Position.Right; config.Gravity = Gravity.Bottom; });
 
 builder.Services.AddScoped<JWTokenService>();
 builder.Services.AddScoped<ExcelService>();
@@ -65,7 +67,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

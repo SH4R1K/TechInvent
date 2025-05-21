@@ -1,4 +1,5 @@
-﻿using LinqKit;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using LinqKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,13 +18,15 @@ namespace WebMVC.Controllers
     {
         private readonly TechInventContext _context;
         private readonly ExcelService _excelService;
+        private readonly IToastifyService _notifyService;
         private readonly IMemoryCache _cache;
 
-        public WorkplacesController(TechInventContext context, ExcelService excelService, IMemoryCache cache)
+        public WorkplacesController(TechInventContext context, ExcelService excelService, IMemoryCache cache, IToastifyService notifyService)
         {
             _context = context;
             _excelService = excelService;
             _cache = cache;
+            _notifyService = notifyService;
         }
         private IQueryable<Workplace> GetWorkplacesQuery()
         {
@@ -86,6 +89,7 @@ namespace WebMVC.Controllers
             _context.CabinetEquipments.Update(cabinetEquipment);
             _context.SaveChanges();
 
+            _notifyService.Success("Оборудование откреплено");
             return RedirectToAction("Details", new { id });
         }
 
@@ -108,6 +112,7 @@ namespace WebMVC.Controllers
             _context.Workplaces.Update(workplace);
             _context.SaveChanges();
 
+            _notifyService.Success("Рабочее место перенесено");
             return RedirectToAction("Index", new { id = idCabinet });
         }
 
@@ -115,42 +120,60 @@ namespace WebMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInventNumber(int id, string? inventNumber)
         {
-            var workplace = await _context.Workplaces.FindAsync(id);
-
-            if (workplace == null)
-                return NotFound();
-
-            if (inventNumber != null)
+            try
             {
-                inventNumber = inventNumber?.Trim();
+                var workplace = await _context.Workplaces.FindAsync(id);
+
+                if (workplace == null)
+                    return NotFound();
+
+                if (inventNumber != null)
+                {
+                    inventNumber = inventNumber?.Trim();
+                }
+
+                workplace.InventNumber = inventNumber;
+
+                _context.Workplaces.Update(workplace);
+                _context.SaveChanges();
+                _notifyService.Success("Инвентарный номер обновлен");
+                return RedirectToAction("Details", new { id });
             }
-
-            workplace.InventNumber = inventNumber;
-
-            _context.Workplaces.Update(workplace);
-            _context.SaveChanges();
-            return RedirectToAction("Details", new { id });
+            catch
+            {
+                _notifyService.Error("Инвентарный номер уже занят");
+                return RedirectToAction("Details", new { id });
+            }
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> UpdateSerialNumber(int id, string? serialNumber)
         {
-            var workplace = await _context.Workplaces.FindAsync(id);
-
-            if (workplace == null)
-                return NotFound();
-
-            if (serialNumber != null)
+            try
             {
-                serialNumber = serialNumber?.Trim();
+                var workplace = await _context.Workplaces.FindAsync(id);
+
+                if (workplace == null)
+                    return NotFound();
+
+                if (serialNumber != null)
+                {
+                    serialNumber = serialNumber?.Trim();
+                }
+
+                workplace.SerialNumber = serialNumber;
+
+                _context.Workplaces.Update(workplace);
+                _context.SaveChanges();
+                _notifyService.Success("Серийный номер обновлен");
+                return RedirectToAction("Details", new { id });
             }
-
-            workplace.SerialNumber = serialNumber;
-
-            _context.Workplaces.Update(workplace);
-            _context.SaveChanges();
-            return RedirectToAction("Details", new { id });
+            catch
+            {
+                _notifyService.Error("Серийный номер уже занят");
+                return RedirectToAction("Details", new { id });
+            }
         }
 
         [HttpGet("{Controller}/Details/{id}")]
