@@ -52,7 +52,8 @@ namespace WebMVC.Controllers
         {
             ViewData["IdCabinet"] = new SelectList(_context.Cabinets.Select(a => new CabinetNameIdDto { IdCabinet = a.IdCabinet, Name = a.Name }).ToList()
                 .Prepend(new CabinetNameIdDto { Name = "Не выбран" }), "IdCabinet", "Name");
-            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdCabinet, Name = a.Name }).ToList()
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces
+                .Where(ins => !ins.IsDecommissioned).Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdCabinet, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбран" }), "IdWorkplace", "Name");
             ViewData["IdVendor"] = new SelectList(_context.Vendors.Select(a => new VendorNameIdDto { IdVendor = a.IdVendor, Name = a.Name }).ToList()
                 .Prepend(new VendorNameIdDto { Name = "Не выбран" }), "IdVendor", "Name");
@@ -85,7 +86,8 @@ namespace WebMVC.Controllers
             ViewData["IdCabinet"] = new SelectList(_context.Cabinets.Select(a => new CabinetNameIdDto { IdCabinet = a.IdCabinet, Name = a.Name }).ToList()
                 .Prepend(new CabinetNameIdDto { Name = "Не выбран" }), "IdCabinet", "Name", cabinetEquipment.IdCabinet);
 
-            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces.Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
+            ViewData["IdWorkplace"] = new SelectList(_context.Workplaces
+                .Where(ins => !ins.IsDecommissioned).Select(a => new WorkplaceNameIdDto { IdWorkplace = a.IdInventStuff, Name = a.Name }).ToList()
                 .Prepend(new WorkplaceNameIdDto { Name = "Не выбран" }), "IdWorkplace", "Name", cabinetEquipment.IdWorkplace);
             ViewData["IdVendor"] = new SelectList(_context.Vendors.Select(a => new VendorNameIdDto { IdVendor = a.IdVendor, Name = a.Name }).ToList()
                 .Prepend(new VendorNameIdDto { Name = "Не выбран" }), "IdVendor", "Name");

@@ -22,7 +22,7 @@ namespace WebMVC.Controllers
         // GET: Cabinets
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Cabinets.AsNoTracking().Include(c => c.Workplaces).ToListAsync());
+            return View(await _context.Cabinets.AsNoTracking().Include(c => c.Workplaces.Where(w => !w.IsDecommissioned)).ToListAsync());
         }
 
         [Authorize(Roles = "admin")]
@@ -104,7 +104,7 @@ namespace WebMVC.Controllers
 
         public async Task<IActionResult> GenerateReport()
         {
-            var cabinet = _context.Cabinets.AsNoTracking().Include(c => c.Workplaces).ThenInclude(w => w.IdOsNavigation);
+            var cabinet = _context.Cabinets.AsNoTracking().Include(c => c.Workplaces.Where(w => !w.IsDecommissioned)).ThenInclude(w => w.IdOsNavigation);
 
             if (cabinet.Count() == 0)
             {
@@ -119,7 +119,7 @@ namespace WebMVC.Controllers
             {
                 return NotFound();
             }
-            var cabinet = _context.Cabinets.AsNoTracking().Include(c => c.Workplaces).ThenInclude(w => w.IdOsNavigation).FirstOrDefault(c => c.IdCabinet == id);
+            var cabinet = _context.Cabinets.AsNoTracking().Include(c => c.Workplaces.Where(w => !w.IsDecommissioned)).ThenInclude(w => w.IdOsNavigation).FirstOrDefault(c => c.IdCabinet == id);
 
             if (cabinet == null)
             {

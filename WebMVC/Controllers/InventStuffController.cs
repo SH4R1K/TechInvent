@@ -15,6 +15,42 @@ namespace WebMVC.Controllers
         {
             _context = context;
         }
+
+        private IQueryable<InventStuff> GetIActualnventStuffQuery()
+        {
+            return _context.InventStuffs
+                            .AsNoTracking()
+                            .Where(ins => !ins.IsDecommissioned);
+        }
+
+        public async Task<IActionResult> DecommissionedStuff()
+        {
+            var inventStuff = new List<InventStuff>();
+
+            var workplace = await _context.Workplaces
+                .AsNoTracking()
+                .Include(w => w.IdCabinetNavigation)
+                .Include(w => w.IdOsNavigation)
+                .Include(w => w.Components)
+                .Include(w => w.InstalledSoftware)
+                    .ThenInclude(s => s.SoftwareNavigation)
+                        .ThenInclude(s => s.ManufacturerNavigation)
+                .Where(ins => ins.IsDecommissioned).ToListAsync();
+
+            inventStuff.AddRange(workplace);
+
+            var cabinetEquipment = await _context.CabinetEquipments
+                .AsNoTracking()
+                .Include(w => w.Cabinet)
+                .Include(w => w.CabinetEquipmentType)
+                .Include(w => w.Workplace)
+                .Include(w => w.Vendor)
+                .Where(ins => ins.IsDecommissioned)
+                .ToListAsync();
+
+            inventStuff.AddRange(cabinetEquipment);
+            return View(inventStuff);
+        }
         public async Task<IActionResult> Search(string? query, bool searchByComponent = true, bool searchBySoftware = true)
         {
             ViewBag.query = query;
@@ -33,6 +69,7 @@ namespace WebMVC.Controllers
 
             var workplace = _context.Workplaces
                 .AsNoTracking()
+                .Where(w => !w.IsDecommissioned)
                 .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.IdOsNavigation)
                 .Include(w => w.Components)
@@ -45,6 +82,7 @@ namespace WebMVC.Controllers
 
             var cabinetEquipment = _context.CabinetEquipments
                 .AsNoTracking()
+                .Where(w => !w.IsDecommissioned)
                 .Include(w => w.Cabinet)
                 .Include(w => w.CabinetEquipmentType)
                 .Include(w => w.Workplace)
@@ -77,18 +115,15 @@ namespace WebMVC.Controllers
                 .Where(c => c.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .Select(c => c.Name);
 
-            var inventNumberResults = _context.InventStuffs
-                .AsNoTracking()
+            var inventNumberResults = GetIActualnventStuffQuery()
                 .Where(ins => ins.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .Select(ins => ins.InventNumber);
 
-            var inventNameResults = _context.InventStuffs
-                .AsNoTracking()
+            var inventNameResults = GetIActualnventStuffQuery()
                 .Where(ins => ins.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .Select(ins => ins.Name);
 
-            var serialNumberResults = _context.InventStuffs
-                .AsNoTracking()
+            var serialNumberResults = GetIActualnventStuffQuery()
                 .Where(ins => ins.SerialNumber.Contains(query, StringComparison.OrdinalIgnoreCase))
                 .Select(ins => ins.SerialNumber);
 

@@ -19,23 +19,18 @@ namespace WebMVC.Controllers
             _context = context;
         }
 
-        // GET: Users
         public async Task<IActionResult> Index()
         {
             var techInventContext = _context.Users.Include(u => u.Role);
             return View(await techInventContext.ToListAsync());
         }
 
-        // GET: Users/Create
         public IActionResult Create()
         {
             ViewData["IdRole"] = new SelectList(_context.Set<Role>(), "IdRole", "Name");
             return View();
         }
 
-        // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdUser,Login,Password,IdRole")] User user)
@@ -45,7 +40,6 @@ namespace WebMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -62,9 +56,6 @@ namespace WebMVC.Controllers
             return View(user);
         }
 
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdUser,Login,Password,IdRole")] User user)
@@ -93,7 +84,6 @@ namespace WebMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -112,7 +102,6 @@ namespace WebMVC.Controllers
             return View(user);
         }
 
-        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

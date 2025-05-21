@@ -60,7 +60,8 @@ namespace WebMVC.Controllers
         // GET: Workplaces
         public async Task<IActionResult> Index(int? id)
         {
-            var techInventContext = _context.Workplaces.AsNoTracking().OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
+            var techInventContext = _context.Workplaces.AsNoTracking()
+                .Where(w => !w.IsDecommissioned).OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
             ViewBag.cabinetEquipments = await _context.CabinetEquipments.AsNoTracking().Include(eq => eq.CabinetEquipmentType).Include(eq => eq.Vendor).Where(eq => eq.IdCabinet == id).ToListAsync();
             ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
             ViewBag.cabinets = await _context.Cabinets.ToListAsync();
@@ -152,34 +153,6 @@ namespace WebMVC.Controllers
             return RedirectToAction("Details", new { id });
         }
 
-        public async Task<IActionResult> Search(string? query, bool searchByComponent = true, bool searchBySoftware = true)
-        {
-
-            ViewBag.query = query;
-            Expression<Func<Workplace, bool>> predicate = PredicateBuilder.New<Workplace>(
-                workplaces => workplaces.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || 
-                workplaces.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase));
-            
-            if (searchByComponent)
-               predicate = predicate.Or(w => w.Components.Any(c => c.Name.Contains(query, StringComparison.OrdinalIgnoreCase)));
-
-            if (searchBySoftware)
-                predicate = predicate.Or(w => w.InstalledSoftware.Any(s => s.SoftwareNavigation.Name.Contains(query, StringComparison.OrdinalIgnoreCase)));
-
-            var cabinets = _context.Cabinets
-                .Include(w => w.Workplaces.AsQueryable().Where(predicate))
-                    .ThenInclude(w => w.Components)
-                .Include(w => w.Workplaces.AsQueryable().Where(predicate))
-                    .ThenInclude(w => w.InstalledSoftware)
-                        .ThenInclude(s => s.SoftwareNavigation)
-                .AsQueryable();
-
-            cabinets = cabinets.Where(c => c.Workplaces.AsQueryable().Any(predicate));
-            
-
-            return View(await cabinets.ToListAsync());
-        }
-
         [HttpGet("{Controller}/Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
@@ -241,12 +214,13 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            var workplace = await _context.Workplaces.AsNoTracking().FirstOrDefaultAsync(w => w.IdInventStuff == id);
+            var workplace = await _context.Workplaces.AsNoTracking().Where(w => !w.IsDecommissioned).FirstOrDefaultAsync(w => w.IdInventStuff == id);
 
             if (workplace == null)
             {
                 return NotFound();
             }
+
             byte[] qrCodeImage = null;
             byte[] data = null;
             string scheme = Request.Scheme;
