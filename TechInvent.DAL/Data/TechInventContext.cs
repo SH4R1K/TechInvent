@@ -324,6 +324,11 @@ public partial class TechInventContext : DbContext
              entity.Property(e => e.SerialNumber).HasColumnName("serial_number")
                 .HasMaxLength(100)
                 .HasColumnName("serial_number");
+             entity.Property(e => e.DecommissionComment)
+                .HasMaxLength(1000)
+                .HasColumnName("decommission_comment");
+             entity.Property(e => e.DecommissionDate)
+                .HasColumnName("decommission_date");
 
              entity.HasIndex(e => e.InventNumber, "uq_inventstuff_inventnumber").IsUnique();
              entity.HasIndex(e => e.SerialNumber, "uq_inventstuff_serialnumber").IsUnique();
@@ -412,6 +417,7 @@ public partial class TechInventContext : DbContext
             entity.Property(e => e.IdRole).HasColumnName("id_role");
             entity.Property(e => e.Login).HasColumnName("login").HasMaxLength(100);
             entity.Property(e => e.Password).HasColumnName("password").HasMaxLength(255);
+            entity.Property(e => e.LastLoginDate).HasColumnName("last_login_date");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdRole)

@@ -36,8 +36,9 @@ namespace WebMVC.Controllers
                 {
                     var token = _tokenService.CreateToken(existUser);
                     Response.Cookies.Append("A", token);
+                    existUser.LastLoginDate = DateTime.Now;
+                    await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "Home");
-
                 }
                 _notifyService.Error("Неверный логин или пароль");
                 return Unauthorized();

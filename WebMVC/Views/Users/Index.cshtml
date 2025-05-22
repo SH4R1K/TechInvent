@@ -21,6 +21,9 @@
             <th>
                 Роль
             </th>
+            <th>
+                Последння дата входа
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -35,6 +38,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Role.Name)
+            </td>
+            <td>
+                @(item.LastLoginDate?.ToString() ?? "не заходил")
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdUser">Редактировать</a> |

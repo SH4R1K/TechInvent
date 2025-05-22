@@ -101,6 +101,7 @@ namespace WebMVC.Controllers
                     }
                 }
             }
+
             return RedirectToAction("Index", "Cabinets");
         }
     }
