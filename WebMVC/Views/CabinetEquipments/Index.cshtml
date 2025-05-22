@@ -42,7 +42,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.Name) @if (item.IsDecommissioned) { <strong> (списано) </strong> }
             </td>
             <td>
                  @(item.InventNumber ?? "нет")
@@ -79,6 +79,9 @@
             <td>
                     <a asp-action="Edit" class="text-decoration-none" asp-route-id="@item.IdInventStuff">
                         <img src="~/images/pencil-edit.svg"/>
+                    </a>
+                    <a asp-action="DecommissionStuff" asp-controller="InventStuff" class="text-decoration-none" asp-route-id="@item.IdInventStuff">
+                        <img src="~/images/gui-cancel.svg" />
                     </a>
                     <a asp-action="Delete" asp-route-id="@item.IdInventStuff">
                         <img src="~/images/trashbin.svg" />

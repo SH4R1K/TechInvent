@@ -72,8 +72,10 @@
                                         <form asp-action="DetachEquipment" asp-controller="Cabinets" asp-route-id="@item.IdCabinet" asp-route-idEquipment="@item.IdInventStuff" method="POST">
                                             <a class="text-decoration-none" asp-action="Edit" asp-controller="CabinetEquipments" asp-route-id="@item.IdInventStuff">
                                                 <img src="~/images/pencil-edit.svg" />
-                                            </a> |
-                                            <button class="fbtn-link" type="submit">Открепить</button>
+                                            </a> 
+                                            <button class="fbtn-link" type="submit">
+                                                <img src="~/images/broken-chain.svg" />
+                                            </button>
                                         </form>
                                     </td>
                                 }
@@ -104,6 +106,9 @@
                     @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
                     {
                         <div class="position-absolute top-0 end-0 m-2">
+                            <a asp-action="DecommissionStuff" asp-controller="InventStuff" class="text-decoration-none" asp-route-id="@workplaces[i].IdInventStuff">
+                                <img src="~/images/gui-cancel.svg" />
+                            </a>
                             <a asp-action="Delete" asp-route-id="@workplaces[i].IdInventStuff">
                                 <img src="~/images/trashbin.svg" />
                             </a>

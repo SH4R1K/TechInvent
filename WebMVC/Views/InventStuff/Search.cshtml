@@ -23,6 +23,11 @@
                             <p class="card-text">ОС: @workplace.IdOsNavigation.OsName</p>
                             <p class="card-text">Инвентарный номер: @(workplace?.InventNumber ?? "нет")</p>
                             <p class="card-text">Серийный номер: @(workplace?.SerialNumber ?? "нет")</p>
+                            @if (workplace.IsDecommissioned)
+                            {
+                                <p class="card-text">Списано: @(workplace.DecommissionDate.ToString() ?? "Неизвестно")</p>
+                                <p class="card-text">Комментарий: @(workplace.DecommissionComment ?? "нет")</p>
+                            }
                         </div>
                         <div class="card-footer row gy-2 justify-content-center justify-content-md-start">
                             <a asp-controller="Workplaces" asp-action="Details" asp-route-id="@workplace.IdInventStuff" class="btn btn-primary">Подробнее</a>
@@ -41,6 +46,11 @@
                             <p class="card-text">Тип: @cabinetEquipment?.CabinetEquipmentType.Name</p>
                             <p class="card-text">Кабинет: @(cabinetEquipment?.Cabinet?.Name ?? "нет")</p>
                             <p class="card-text">Рабочее место: @(cabinetEquipment?.Workplace?.Name ?? "нет")</p>
+                            @if (cabinetEquipment.IsDecommissioned)
+                            {
+                                <p class="card-text">Списано: @(cabinetEquipment.DecommissionDate.ToString() ?? "Неизвестно")</p>
+                                <p class="card-text">Комментарий: @(cabinetEquipment.DecommissionComment ?? "нет")</p>
+                            }
                         </div>
                         <div class="card-footer row gy-2 justify-content-center justify-content-md-start">
                             @if (cabinetEquipment.IdCabinet != null)

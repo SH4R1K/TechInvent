@@ -24,6 +24,35 @@ namespace WebMVC.Controllers
                             .AsNoTracking()
                             .Where(ins => !ins.IsDecommissioned);
         }
+        
+        public async Task<IActionResult> DecommissionStuff(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var stuff = await _context.InventStuffs.FindAsync(id);
+            
+            if (stuff == null)
+                return NotFound();
+
+            return View(stuff);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DecommissionStuff(int id, string comment)
+        {
+            var stuff = await _context.InventStuffs.FindAsync(id);
+
+            if (stuff == null)
+                return NotFound();
+
+            stuff.DecommissionDate = DateTime.Now;
+            stuff.IsDecommissioned = true;
+            stuff.DecommissionComment = comment;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("DecommissionedStuff");
+        }
 
         public async Task<IActionResult> DecommissionedStuff()
         {
@@ -72,7 +101,6 @@ namespace WebMVC.Controllers
 
             var workplace = _context.Workplaces
                 .AsNoTracking()
-                .Where(w => !w.IsDecommissioned)
                 .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.IdOsNavigation)
                 .Include(w => w.Components)
@@ -85,7 +113,6 @@ namespace WebMVC.Controllers
 
             var cabinetEquipment = _context.CabinetEquipments
                 .AsNoTracking()
-                .Where(w => !w.IsDecommissioned)
                 .Include(w => w.Cabinet)
                 .Include(w => w.CabinetEquipmentType)
                 .Include(w => w.Workplace)
@@ -144,8 +171,6 @@ namespace WebMVC.Controllers
                 .Distinct()
                 .ToList()
                 .Take(10);
-
-
 
             return Json(result);
         }

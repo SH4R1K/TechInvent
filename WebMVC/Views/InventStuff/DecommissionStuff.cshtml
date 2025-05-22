@@ -1,0 +1,44 @@
+﻿@model InventStuff
+
+
+@{
+    ViewData["Title"] = "Списать";
+}
+
+<h1>Списать</h1>
+
+<h3>Вы уверены что хотите списать?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Название
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Инвентарный номер
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InventNumber)
+        </dd>
+        <dt class="col-sm-2">
+            Серийный номер
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SerialNumber)
+        </dd>
+    </dl>
+
+    <form asp-action="DecommissionStuff">
+        <input type="hidden" asp-for="IdInventStuff" />
+        <div class="mb-3 form-group">
+            <label asp-for="DecommissionComment" class="control-label">Комментарий</label>
+            <input type="text" class="form-control" asp-for="DecommissionComment" name="comment" placeholder="Комментарий.." required/>
+            <span asp-validation-for="DecommissionComment" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Сохранить" class="btn btn-danger" /> 
+        <a class="btn btn-primary" href="javascript:history.back()">Назад к списку</a>
+    </form>
+</div>

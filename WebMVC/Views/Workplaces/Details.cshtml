@@ -17,7 +17,7 @@
 <div class="container row mt-4">
     <div class="card">
             <h4 class="card-header card-title">
-                Рабочее место (@Model.IdCabinetNavigation.Name)
+                Рабочее место (@Model.IdCabinetNavigation.Name) @if (@Model.IsDecommissioned) { <strong> (списано) </strong> }
             </h4>
         <div class="card-body">
             <p class="card-text">Имя компьютера: <small class="text-body-secondary">@ViewData["PCName"]</small></p>
@@ -85,8 +85,10 @@
                                         <form asp-action="DetachEquipment" asp-controller="Workplaces" asp-route-id="@item.IdWorkplace" asp-route-idEquipment="@item.IdInventStuff" method="POST">
                                             <a class="text-decoration-none" asp-action="Edit" asp-controller="CabinetEquipments" asp-route-id="@item.IdInventStuff">
                                                 <img src="~/images/pencil-edit.svg" />
-                                            </a> |
-                                            <button class="fbtn-link" type="submit">Открепить</button>
+                                            </a> 
+                                            <button class="fbtn-link" type="submit">
+                                                <img src="~/images/broken-chain.svg" />
+                                            </button>
                                         </form>
                                     </td>
                                 }
