@@ -2,6 +2,7 @@
 using System.IO;
 using TechInvent.BLL.Dto;
 using TechInvent.BLL.DtoModels;
+using TechInvent.BLL.Extensions;
 using TechInvent.BLL.Service;
 using TechInvent.DM.Models;
 namespace WebMVC.Services
@@ -25,14 +26,15 @@ namespace WebMVC.Services
 
                 for (int row = 2; row <= rowCount; row++) 
                 {
+                    var cabinet = worksheet.Cell(row, 9).GetString().IsEmpty();
                     var equipment = new CabinetEquipment
                     {
-                        Name = worksheet.Cell(row, 1).GetString(), 
-                        InventNumber = $"{worksheet.Cell(row, 3).GetString()} {worksheet.Cell(row, 4).GetString()}",
-                        SerialNumber = worksheet.Cell(row, 5).GetString().Trim().Length > 0 ? worksheet.Cell(row, 5).GetString().Trim() : null, 
-                        Vendor = worksheet.Cell(row, 7).GetString().Trim().Length > 0 ? await _entityChecker.GetOrCreateVendorAsync(worksheet.Cell(row, 7).GetString()) : null, // G2 - Vendor
-                        Cabinet = worksheet.Cell(row, 9).GetString().Trim().Length > 0 ? await _entityChecker.GetOrCreateCabinetAsync(worksheet.Cell(row, 9).GetString()) : null, // I2 - Cabinet
-                        CabinetEquipmentType = await _entityChecker.GetOrCreateCabinetEquipmentTypeAsync(worksheet.Cell(row, 10).GetString()) // J2 - Type
+                        Name = worksheet.Cell(row, 1).GetString(),
+                        InventNumber = $"{worksheet.Cell(row, 3).GetString()} {worksheet.Cell(row, 4).GetString()}".ReturnNullIfEmpty(),
+                        SerialNumber = worksheet.Cell(row, 5).GetString().ReturnNullIfEmpty(),
+                        Vendor = !worksheet.Cell(row, 7).GetString().IsEmpty() ? await _entityChecker.GetOrCreateVendorAsync(worksheet.Cell(row, 7).GetString()) : null,
+                        Cabinet = !worksheet.Cell(row, 9).GetString().IsEmpty() ? await _entityChecker.GetOrCreateCabinetAsync(worksheet.Cell(row, 9).GetString()) : null,
+                        CabinetEquipmentType = await _entityChecker.GetOrCreateCabinetEquipmentTypeAsync(worksheet.Cell(row, 10).GetString())
                     };
                     equipments.Add(equipment);
                 }

@@ -69,20 +69,28 @@ namespace WebMVC.Controllers
                             var equipments = await _excelService.ImportEquipmentAsync(stream);
 
                             var existingEquipments = await _context.CabinetEquipments
-                                .Select(e => new { e.SerialNumber, e.InventNumber })
                                 .ToListAsync();
 
-
-                            var newEquipments = equipments
-                                .Where(e => !existingEquipments
-                                    .Any(existing =>
-                                        existing.SerialNumber == e.SerialNumber ||
-                                        existing.InventNumber == e.InventNumber))
-                                .ToList();
-
-                            if (newEquipments.Any())
+                            foreach (var equipment in equipments)
                             {
-                                await _context.CabinetEquipments.AddRangeAsync(newEquipments);
+                                var existingEquipment = existingEquipments
+                                    .FirstOrDefault(existing =>
+                                        existing.SerialNumber == equipment.SerialNumber ||
+                                        existing.InventNumber == equipment.InventNumber);
+
+                                if (existingEquipment != null)
+                                {
+                                    existingEquipment.Cabinet = equipment.Cabinet; 
+                                    existingEquipment.CabinetEquipmentType = equipment.CabinetEquipmentType;
+                                    existingEquipment.Vendor = equipment.Vendor;
+                                    existingEquipment.SerialNumber = equipment.SerialNumber;
+                                    existingEquipment.Name = equipment.Name;
+                                }
+                                else
+                                {
+                                    await _context.CabinetEquipments.AddAsync(equipment);
+                                }
+
                                 await _context.SaveChangesAsync();
                             }
                         }
