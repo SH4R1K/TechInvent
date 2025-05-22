@@ -9,7 +9,7 @@ using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "operator, admin")]
     public class ImportController : Controller
     {
         private readonly DtoConverter _dtoConverter;

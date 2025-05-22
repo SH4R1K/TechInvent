@@ -11,7 +11,7 @@ using TechInvent.DM.Models;
 
 namespace WebMVC.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "operator, admin")]
     public class CabinetEquipmentsController : Controller
     {
         private readonly TechInventContext _context;
@@ -176,6 +176,7 @@ namespace WebMVC.Controllers
                 .Include(c => c.Cabinet)
                 .Include(c => c.CabinetEquipmentType)
                 .FirstOrDefaultAsync(m => m.IdInventStuff == id);
+
             if (cabinetEquipment == null)
             {
                 return NotFound();

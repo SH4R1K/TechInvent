@@ -9,7 +9,7 @@ using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
-    [Authorize(Roles = "user, admin")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

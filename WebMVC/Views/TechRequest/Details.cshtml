@@ -32,7 +32,7 @@
                                             <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
                                                 (@workplace.Workplace.IdCabinetNavigation.Name) @workplace.Workplace.Name
                                             </a>
-                                            @if (Context.User.IsInRole("admin"))
+                                            @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
                                             {
                                                 <button class="btn-none float-end" type="submit">
                                                     <img src="~/images/check.svg" />
@@ -54,7 +54,7 @@
                                             <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
                                                 (@workplace.Workplace.IdCabinetNavigation.Name) @workplace.Workplace.Name
                                             </a>
-                                            @if (Context.User.IsInRole("admin"))
+                                            @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
                                             {
                                             <button class="btn-none float-end" type="submit">
                                                 <img src="~/images/restore.svg" />

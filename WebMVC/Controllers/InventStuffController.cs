@@ -1,4 +1,5 @@
 ﻿using LinqKit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -7,6 +8,7 @@ using TechInvent.DM.Models;
 
 namespace WebMVC.Controllers
 {
+    [Authorize]
     public class InventStuffController : Controller
     {
         private readonly TechInventContext _context;
@@ -51,6 +53,7 @@ namespace WebMVC.Controllers
             inventStuff.AddRange(cabinetEquipment);
             return View(inventStuff);
         }
+
         public async Task<IActionResult> Search(string? query, bool searchByComponent = true, bool searchBySoftware = true)
         {
             ViewBag.query = query;

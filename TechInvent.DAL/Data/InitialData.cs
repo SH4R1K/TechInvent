@@ -12,6 +12,7 @@ namespace TechInvent.DAL.Data
         {
            new Role {IdRole=1, Name="admin"},
            new Role {IdRole=2, Name="user"},
+           new Role {IdRole=3, Name="operator"},
         };
         public static List<RequestType> RequestTypes { get; set; } = new List<RequestType>()
         {

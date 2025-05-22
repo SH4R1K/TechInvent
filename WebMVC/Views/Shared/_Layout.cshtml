@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
                             </li>
-                            @if (Context.User.IsInRole("admin"))
+                            @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">

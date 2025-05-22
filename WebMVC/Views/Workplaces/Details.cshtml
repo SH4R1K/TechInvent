@@ -7,7 +7,7 @@
 
 <div style="padding-top: 1em;">
     <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
-    @if (Context.User.IsInRole("admin"))
+    @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
     {
     <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdInventStuff" data-bs-target="#editWorkplaceModal">Изменить инвентарный номер</a>
     <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.SerialNumber" data-workplace-id="@Model?.IdInventStuff" data-bs-target="#editWorkplaceSerialModal">Изменить серийный номер</a>
@@ -79,7 +79,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CabinetEquipmentType.Name)
                                 </td>
-                                @if (Context.User.IsInRole("admin"))
+                                @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
                                 {
                                     <td>
                                         <form asp-action="DetachEquipment" asp-controller="Workplaces" asp-route-id="@item.IdWorkplace" asp-route-idEquipment="@item.IdInventStuff" method="POST">
@@ -297,7 +297,7 @@
 
 
 
-@if (Context.User.IsInRole("admin"))
+@if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
 {
     <partial name="_EditInventNumberComponent.cshtml" />
     <partial name="_EditSerialNumberComponent.cshtml" />

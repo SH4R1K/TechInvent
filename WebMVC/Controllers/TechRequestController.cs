@@ -8,7 +8,7 @@ using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
-    [Authorize(Roles = "user, admin")]
+    [Authorize]
     public class TechRequestController : Controller
     {
         private readonly TechInventContext _context;
@@ -78,7 +78,7 @@ namespace WebMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         [HttpPost]
         public async Task<IActionResult> CompleteWorkplace(int id, int idWorkplace)
         {
@@ -100,7 +100,7 @@ namespace WebMVC.Controllers
             return RedirectToAction("Details", new { id });
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         [HttpPost]
         public async Task<IActionResult> RestoreWorkplace(int id, int idWorkplace)
         {
@@ -164,7 +164,7 @@ namespace WebMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)

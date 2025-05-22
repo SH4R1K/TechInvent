@@ -10,7 +10,7 @@ using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
-    [Authorize(Roles = "user, admin")]
+    [Authorize]
     public class WorkplacesController : Controller
     {
         private readonly TechInventContext _context;
@@ -68,7 +68,7 @@ namespace WebMVC.Controllers
             return View(await techInventContext.ToListAsync());
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         [HttpPost]
         public async Task<IActionResult> DetachEquipment(int id, int idEquipment)
         {
@@ -90,7 +90,7 @@ namespace WebMVC.Controllers
             return RedirectToAction("Details", new { id });
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         [HttpPost]
         public async Task<IActionResult> MoveWorkplace(int id, int idCabinet)
         {
@@ -113,7 +113,7 @@ namespace WebMVC.Controllers
             return RedirectToAction("Index", new { id = idCabinet });
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         [HttpPost]
         public async Task<IActionResult> UpdateInventNumber(int id, string? inventNumber)
         {
@@ -143,7 +143,7 @@ namespace WebMVC.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         [HttpPost]
         public async Task<IActionResult> UpdateSerialNumber(int id, string? serialNumber)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TechInvent.DAL.Data;
@@ -11,10 +12,12 @@ namespace WebMVC.Controllers
     {
         private readonly TechInventContext _context;
         private readonly JWTokenService _tokenService;
-        public AuthController(TechInventContext context, JWTokenService tokenService) 
-        { 
+        private readonly IToastifyService _notifyService;
+        public AuthController(TechInventContext context, JWTokenService tokenService, IToastifyService notifyService)
+        {
             _context = context;
             _tokenService = tokenService;
+            _notifyService = notifyService;
         }
 
         public IActionResult Index()
@@ -26,15 +29,24 @@ namespace WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Login,Password")] User user)
         {
-            var existUser = _context.Users.Include(u => u.Role).FirstOrDefault(u => u.Login == user.Login && u.Password == user.Password);
-            if (existUser != null)
+            try
             {
-                var token = _tokenService.CreateToken(existUser);
-                Response.Cookies.Append("A", token);
-                return RedirectToAction("Index", "Home");
+                var existUser = _context.Users.Include(u => u.Role).FirstOrDefault(u => u.Login == user.Login && u.Password == user.Password);
+                if (existUser != null)
+                {
+                    var token = _tokenService.CreateToken(existUser);
+                    Response.Cookies.Append("A", token);
+                    return RedirectToAction("Index", "Home");
 
+                }
+                _notifyService.Error("Неверный логин или пароль");
+                return Unauthorized();
             }
-            return Unauthorized();
+            catch
+            {
+                _notifyService.Error("Нет подключения к БД");
+                return Unauthorized();  
+            }
         }
 
         public async Task<IActionResult> Logout()

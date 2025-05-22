@@ -8,7 +8,7 @@ using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
-    [Authorize(Roles = "user, admin")]
+    [Authorize]
     public class CabinetsController : Controller
     {
         private readonly TechInventContext _context;
@@ -26,7 +26,7 @@ namespace WebMVC.Controllers
             return View(await _context.Cabinets.AsNoTracking().Include(c => c.Workplaces.Where(w => !w.IsDecommissioned)).ToListAsync());
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         [HttpPost]
         public async Task<IActionResult> Create(Cabinet cabinet)
         {
@@ -42,7 +42,7 @@ namespace WebMVC.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(Cabinet cabinet)
         {
@@ -58,7 +58,7 @@ namespace WebMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var cabinet = await _context.Cabinets.Include(c => c.Workplaces).FirstOrDefaultAsync(c => c.IdCabinet == id);
@@ -82,7 +82,7 @@ namespace WebMVC.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "operator, admin")]
         [HttpPost]
         public async Task<IActionResult> DetachEquipment(int id, int idEquipment)
         {

@@ -6,7 +6,7 @@ using TechInvent.DM.Models;
 
 namespace WebMVC.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "operator, admin")]
     public class VendorsController : Controller
     {
         private readonly TechInventContext _context;
