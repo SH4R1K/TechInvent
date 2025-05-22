@@ -29,7 +29,7 @@ namespace WebMVC.Services
                     {
                         Name = worksheet.Cell(row, 1).GetString(), 
                         InventNumber = $"{worksheet.Cell(row, 3).GetString()} {worksheet.Cell(row, 4).GetString()}",
-                        SerialNumber = worksheet.Cell(row, 5).GetString(), 
+                        SerialNumber = worksheet.Cell(row, 5).GetString().Trim().Length > 0 ? worksheet.Cell(row, 5).GetString().Trim() : null, 
                         Vendor = worksheet.Cell(row, 7).GetString().Trim().Length > 0 ? await _entityChecker.GetOrCreateVendorAsync(worksheet.Cell(row, 7).GetString()) : null, // G2 - Vendor
                         Cabinet = worksheet.Cell(row, 9).GetString().Trim().Length > 0 ? await _entityChecker.GetOrCreateCabinetAsync(worksheet.Cell(row, 9).GetString()) : null, // I2 - Cabinet
                         CabinetEquipmentType = await _entityChecker.GetOrCreateCabinetEquipmentTypeAsync(worksheet.Cell(row, 10).GetString()) // J2 - Type

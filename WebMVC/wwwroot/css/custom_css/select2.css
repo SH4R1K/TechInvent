@@ -1,0 +1,74 @@
+﻿/* Убираем фон и применяем стили к выбранным элементам */
+.select2-container--default .select2-selection--multiple {
+    background-color: var(--background-dark) !important;
+    border: 1px solid var(--border-neon-purple) !important;
+    color: var(--text-light) !important;
+    border-radius: 0.5rem !important;
+    min-height: 40px;
+}
+
+    /* Стили для выбранных "плашек" */
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: var(--main-color) !important;
+        border: 1px solid var(--border-neon-purple) !important;
+        color: var(--text-light) !important;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    /* Иконка удаления (крестик) */
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+        color: var(--text-neon-pink) !important;
+        margin-right: 6px;
+    }
+
+/* Список значений в dropdown */
+.select2-container--default .select2-results > .select2-results__options {
+    background-color: var(--background-dropdown);
+    color: var(--text-light);
+}
+
+/* Наведение на элементы в списке */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--main-color) !important;
+    color: #fff !important;
+}
+
+/* Поле ввода поиска в dropdown */
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    background-color: rgba(25, 25, 25, 0.95) !important;
+    border: 1px solid var(--border-neon-purple) !important;
+    color: var(--text-light) !important;
+}
+
+/* Контейнер выбора в фокусе */
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: var(--border-neon-purple) !important;
+    box-shadow: 0 0 5px var(--border-neon-purple);
+}
+
+/* Стиль выбранных элементов в dropdown */
+.select2-container--default .select2-results__option--selected {
+    background-color: rgba(74, 44, 133, 0.4) !important;
+    color: var(--text-light) !important;
+}
+
+/* Поддержка выбора с aria-selected */
+.select2-container--default .select2-results__option[aria-selected="true"] {
+    background-color: rgba(74, 44, 133, 0.4) !important;
+    color: var(--text-light) !important;
+}
+
+/* Hover на выбранных (чтобы не "отбеливались") */
+.select2-container--default .select2-results__option--highlighted[aria-selected="true"] {
+    background-color: rgba(74, 44, 133, 0.4) !important;
+    color: var(--text-light) !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+}
+
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+        background-color: transparent !important;
+        cursor: pointer;
+    }

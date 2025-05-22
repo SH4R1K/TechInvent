@@ -32,7 +32,7 @@ namespace WebMVC.Controllers
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Workplaces = await _context.Workplaces.Include(w => w.IdCabinetNavigation).ToListAsync();
+            ViewBag.Workplaces = await _context.Workplaces.Where(ins => !ins.IsDecommissioned).Include(w => w.IdCabinetNavigation).ToListAsync();
             ViewData["IdRequestType"] = new SelectList(_context.RequestTypes, "IdRequestType", "Name");
             return View();
         }

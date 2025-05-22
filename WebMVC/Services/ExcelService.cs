@@ -1,6 +1,5 @@
 ﻿using ClosedXML.Excel;
 using TechInvent.DM.Models;
-using Monitor = TechInvent.DM.Models.Monitor;
 namespace WebMVC.Services
 {
     public partial class ExcelService
@@ -184,7 +183,7 @@ namespace WebMVC.Services
             worksheet.Cell(4, 8).Value = "Сетевые адаптеры";
             worksheet.Cell(4, 9).Value = "MAC";
             worksheet.Cell(4, 10).Value = "Диски";
-            worksheet.Cell(4, 11).Value = "Мониторы";
+            worksheet.Cell(4, 11).Value = "Оборудование";
 
             for (int i = 0; i < workplaces.Count; i++)
             {
@@ -198,7 +197,7 @@ namespace WebMVC.Services
                 worksheet.Cell(5 + i, 8).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.NetAdapter != null).Select(n => $"{n.Name}").ToList());
                 worksheet.Cell(5 + i, 9).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.NetAdapter != null).Select(n => $"{n.NetAdapter.MacAddress}").ToList());
                 worksheet.Cell(5 + i, 10).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Disk != null).Select(d => $"{d.Name} - {d.Disk.Size}Гб").ToList());
-                worksheet.Cell(5 + i, 11).Value = String.Join(Environment.NewLine, workplaces[i].Monitors.Select(d => $"{d.Name}({d.InventNumber ?? " - "}").ToList());
+                worksheet.Cell(5 + i, 11).Value = String.Join(Environment.NewLine, workplaces[i].CabinetEquipments.Select(d => $"{d.Name}({d.InventNumber ?? " - "}").ToList());
             }
             worksheet.Rows().AdjustToContents();
             worksheet.Cells().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
@@ -247,10 +246,10 @@ namespace WebMVC.Services
                 worksheet.Cell(8, 2).Value += $"{disk.Name} - {disk.Size}Гб{Environment.NewLine}";
             }
             worksheet.Cell(9, 1).Value = "Мониторы";
-            var monitors = workplace.Monitors.ToList();
-            foreach (Monitor monitor in monitors)
+            var equipments = workplace.CabinetEquipments.ToList();
+            foreach (CabinetEquipment equipment in equipments)
             {
-                worksheet.Cell(9, 2).Value += $"{monitor.Name}({monitor.InventNumber ?? "-"}){Environment.NewLine}";
+                worksheet.Cell(9, 2).Value += $"{equipment.Name}({equipment.InventNumber ?? "-"}){Environment.NewLine}";
             }
             worksheet.Rows().AdjustToContents();
             worksheet.Cells().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);

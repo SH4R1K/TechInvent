@@ -9,6 +9,9 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 
 </head>
 <body>
@@ -48,10 +51,10 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                                         <li>
-                                            <a class="nav-link" asp-area="" asp-controller="CabinetEquipments" asp-action="Index">Другое</a>
+                                            <a class="nav-link" asp-area="" asp-controller="CabinetEquipments" asp-action="Index">Список оборудования</a>
                                         </li>
                                         <li>
-                                            <a class="nav-link" asp-area="" asp-controller="Monitors" asp-action="Index">Мониторы</a>
+                                            <a class="nav-link" asp-area="" asp-controller="CabinetEquipmentTypes" asp-action="Index">Типы оборудования</a>
                                         </li>
                                         <li>
                                             <a class="nav-link" asp-area="" asp-controller="Vendors" asp-action="Index">Производители</a>
@@ -60,6 +63,9 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-controller="Import" asp-action="Index">Импорт</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="InventStuff" asp-action="DecommissionedStuff">Списанное оборудование</a>
                                 </li>
                             }
                         </ul>
@@ -111,3 +117,5 @@
     </script>
 </body>
 </html>
+
+@await Component.InvokeAsync("Toastify")

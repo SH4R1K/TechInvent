@@ -34,61 +34,6 @@
     <div>
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingZero">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMonitor">
-                    Мониторы
-                </button>
-            </h2>
-            <div id="collapseMonitor" class="accordion-collapse collapse">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                Название монитора
-                            </th>
-                            <th>
-                                Инвентарный номер
-                            </th>
-                            <th>
-                                Серийный номер
-                            </th>
-                            <th>
-                                Производитель
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (Monitor monitor in Model.Monitors)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => monitor.Name)
-                                </td>
-                                <td>
-                                    @(monitor.InventNumber ?? "нет")
-                                </td>
-                                <td>
-                                    @(monitor.SerialNumber ?? "нет")
-                                </td>
-                                <td>
-                                    @(monitor.Vendor?.Name ?? "нет")
-                                </td>
-                                <td>
-                                @if (Context.User.IsInRole("admin"))
-                                {
-                                    <form asp-action="DetachMonitor" asp-route-id="@Model.IdInventStuff" asp-route-idMonitor="@monitor.IdInventStuff" method="POST">
-                                        <button class="fbtn-link" type="submit">Открепить</button>
-                                    </form>
-                                }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingZero">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCabinetEquipment">
                     Оборудование
                 </button>
@@ -138,7 +83,9 @@
                                 {
                                     <td>
                                         <form asp-action="DetachEquipment" asp-controller="Workplaces" asp-route-id="@item.IdWorkplace" asp-route-idEquipment="@item.IdInventStuff" method="POST">
-                                            <a class="text-decoration-none" asp-action="Edit" asp-controller="CabinetEquipments" asp-route-id="@item.IdInventStuff">Редактировать</a> |
+                                            <a class="text-decoration-none" asp-action="Edit" asp-controller="CabinetEquipments" asp-route-id="@item.IdInventStuff">
+                                                <img src="~/images/pencil-edit.svg" />
+                                            </a> |
                                             <button class="fbtn-link" type="submit">Открепить</button>
                                         </form>
                                     </td>

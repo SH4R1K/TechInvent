@@ -11,7 +11,6 @@ public partial class Workplace : InventStuff
 
     public Guid Guid { get; set; } = Guid.NewGuid();
     public DateTime LastUpdate { get; set; } = DateTime.UtcNow;
-    public virtual List<Monitor> Monitors { get; set; } = new List<Monitor>();
     public virtual List<CabinetEquipment> CabinetEquipments { get; set; } = new List<CabinetEquipment>();
 
     public virtual List<TechRequestWorkplace> AttachedTechRequests { get; set; } = new List<TechRequestWorkplace>();

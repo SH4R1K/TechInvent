@@ -1,11 +1,9 @@
-﻿using LinqKit;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using QRCoder;
-using System.Linq;
-using System.Linq.Expressions;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 using WebMVC.Services;
@@ -17,13 +15,15 @@ namespace WebMVC.Controllers
     {
         private readonly TechInventContext _context;
         private readonly ExcelService _excelService;
+        private readonly IToastifyService _notifyService;
         private readonly IMemoryCache _cache;
 
-        public WorkplacesController(TechInventContext context, ExcelService excelService, IMemoryCache cache)
+        public WorkplacesController(TechInventContext context, ExcelService excelService, IMemoryCache cache, IToastifyService notifyService)
         {
             _context = context;
             _excelService = excelService;
             _cache = cache;
+            _notifyService = notifyService;
         }
         private IQueryable<Workplace> GetWorkplacesQuery()
         {
@@ -31,8 +31,6 @@ namespace WebMVC.Controllers
                 .AsNoTracking()
                 .Include(w => w.IdCabinetNavigation)
                 .Include(w => w.IdOsNavigation)
-                .Include(w => w.Monitors)
-                    .ThenInclude(w => w.Vendor)
                 .Include(w => w.CabinetEquipments)
                     .ThenInclude(c => c.CabinetEquipmentType)
                 .Include(w => w.CabinetEquipments)
@@ -62,32 +60,12 @@ namespace WebMVC.Controllers
         // GET: Workplaces
         public async Task<IActionResult> Index(int? id)
         {
-            var techInventContext = _context.Workplaces.AsNoTracking().OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
+            var techInventContext = _context.Workplaces.AsNoTracking()
+                .Where(w => !w.IsDecommissioned).OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
             ViewBag.cabinetEquipments = await _context.CabinetEquipments.AsNoTracking().Include(eq => eq.CabinetEquipmentType).Include(eq => eq.Vendor).Where(eq => eq.IdCabinet == id).ToListAsync();
             ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
             ViewBag.cabinets = await _context.Cabinets.ToListAsync();
             return View(await techInventContext.ToListAsync());
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost]
-        public async Task<IActionResult> DetachMonitor(int id, int idMonitor)
-        {
-            var monitor = await _context.Monitors.FindAsync(idMonitor);
-
-            if (monitor == null)
-                return NotFound();
-
-            if (monitor.IdWorkplace != id)
-                return BadRequest("Монитор не связан с этим рабочим местом");
-
-
-            monitor.IdWorkplace = null;
-
-            _context.Monitors.Update(monitor);
-            _context.SaveChanges();
-
-            return RedirectToAction("Details", new { id });
         }
 
         [Authorize(Roles = "admin")]
@@ -108,6 +86,7 @@ namespace WebMVC.Controllers
             _context.CabinetEquipments.Update(cabinetEquipment);
             _context.SaveChanges();
 
+            _notifyService.Success("Оборудование откреплено");
             return RedirectToAction("Details", new { id });
         }
 
@@ -130,6 +109,7 @@ namespace WebMVC.Controllers
             _context.Workplaces.Update(workplace);
             _context.SaveChanges();
 
+            _notifyService.Success("Рабочее место перенесено");
             return RedirectToAction("Index", new { id = idCabinet });
         }
 
@@ -137,70 +117,60 @@ namespace WebMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInventNumber(int id, string? inventNumber)
         {
-            var workplace = await _context.Workplaces.FindAsync(id);
-
-            if (workplace == null)
-                return NotFound();
-
-            if (inventNumber != null)
+            try
             {
-                inventNumber = inventNumber?.Trim();
+                var workplace = await _context.Workplaces.FindAsync(id);
+
+                if (workplace == null)
+                    return NotFound();
+
+                if (inventNumber != null)
+                {
+                    inventNumber = inventNumber?.Trim();
+                }
+
+                workplace.InventNumber = inventNumber;
+
+                _context.Workplaces.Update(workplace);
+                _context.SaveChanges();
+                _notifyService.Success("Инвентарный номер обновлен");
+                return RedirectToAction("Details", new { id });
             }
-
-            workplace.InventNumber = inventNumber;
-
-            _context.Workplaces.Update(workplace);
-            _context.SaveChanges();
-            return RedirectToAction("Details", new { id });
+            catch
+            {
+                _notifyService.Error("Инвентарный номер уже занят");
+                return RedirectToAction("Details", new { id });
+            }
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> UpdateSerialNumber(int id, string? serialNumber)
         {
-            var workplace = await _context.Workplaces.FindAsync(id);
-
-            if (workplace == null)
-                return NotFound();
-
-            if (serialNumber != null)
+            try
             {
-                serialNumber = serialNumber?.Trim();
+                var workplace = await _context.Workplaces.FindAsync(id);
+
+                if (workplace == null)
+                    return NotFound();
+
+                if (serialNumber != null)
+                {
+                    serialNumber = serialNumber?.Trim();
+                }
+
+                workplace.SerialNumber = serialNumber;
+
+                _context.Workplaces.Update(workplace);
+                _context.SaveChanges();
+                _notifyService.Success("Серийный номер обновлен");
+                return RedirectToAction("Details", new { id });
             }
-
-            workplace.SerialNumber = serialNumber;
-
-            _context.Workplaces.Update(workplace);
-            _context.SaveChanges();
-            return RedirectToAction("Details", new { id });
-        }
-
-        public async Task<IActionResult> Search(string? query, bool searchByComponent = true, bool searchBySoftware = true)
-        {
-
-            ViewBag.query = query;
-            Expression<Func<Workplace, bool>> predicate = PredicateBuilder.New<Workplace>(
-                workplaces => workplaces.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || 
-                workplaces.InventNumber.Contains(query, StringComparison.OrdinalIgnoreCase));
-            
-            if (searchByComponent)
-               predicate = predicate.Or(w => w.Components.Any(c => c.Name.Contains(query, StringComparison.OrdinalIgnoreCase)));
-
-            if (searchBySoftware)
-                predicate = predicate.Or(w => w.InstalledSoftware.Any(s => s.SoftwareNavigation.Name.Contains(query, StringComparison.OrdinalIgnoreCase)));
-
-            var cabinets = _context.Cabinets
-                .Include(w => w.Workplaces.AsQueryable().Where(predicate))
-                    .ThenInclude(w => w.Components)
-                .Include(w => w.Workplaces.AsQueryable().Where(predicate))
-                    .ThenInclude(w => w.InstalledSoftware)
-                        .ThenInclude(s => s.SoftwareNavigation)
-                .AsQueryable();
-
-            cabinets = cabinets.Where(c => c.Workplaces.AsQueryable().Any(predicate));
-            
-
-            return View(await cabinets.ToListAsync());
+            catch
+            {
+                _notifyService.Error("Серийный номер уже занят");
+                return RedirectToAction("Details", new { id });
+            }
         }
 
         [HttpGet("{Controller}/Details/{id}")]
@@ -264,12 +234,13 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            var workplace = await _context.Workplaces.AsNoTracking().FirstOrDefaultAsync(w => w.IdInventStuff == id);
+            var workplace = await _context.Workplaces.AsNoTracking().Where(w => !w.IsDecommissioned).FirstOrDefaultAsync(w => w.IdInventStuff == id);
 
             if (workplace == null)
             {
                 return NotFound();
             }
+
             byte[] qrCodeImage = null;
             byte[] data = null;
             string scheme = Request.Scheme;
