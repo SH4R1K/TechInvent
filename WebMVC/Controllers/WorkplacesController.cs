@@ -290,6 +290,7 @@ namespace WebMVC.Controllers
             }
 
             var workplaces = await GetWorkplacesQuery()
+                .Where(w => !w.IsDecommissioned)
                 .Where(w => w.IdCabinet == id)
                 .ToListAsync();
 
@@ -336,6 +337,7 @@ namespace WebMVC.Controllers
             }
 
             var workplaces = await GetWorkplacesQuery()
+                .Where(w => !w.IsDecommissioned)
                 .Where(w => w.IdCabinet == id)
                 .ToListAsync();
 
