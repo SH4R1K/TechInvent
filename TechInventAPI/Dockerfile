@@ -6,7 +6,7 @@ COPY ../TechInvent.BLL/*.csproj TechInvent.BLL/
 COPY ../TechInvent.DAL/*.csproj TechInvent.DAL/
 COPY ../TechInvent.DM/*.csproj TechInvent.DM/
 
-WORKDIR /source/WebMVC
+WORKDIR /source/TechInventAPI
 RUN dotnet restore
 
 WORKDIR /source
