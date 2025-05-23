@@ -23,8 +23,7 @@ namespace WebMVC.Controllers
         public async Task<IActionResult> Index()
         {
             var techrequest = _context.TechRequests.Include(t => t.RequestType).OrderByDescending(t => t.CreationDate).AsNoTracking();
-
-            if (_userService.GetUserRole() != "admin")
+            if (_userService.GetUserRole() == "user")
                 techrequest = techrequest.Where(tr => tr.IdUser == _userService.GetUserId());
 
             return View(await techrequest.ToListAsync());
@@ -53,7 +52,7 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            if (techRequest.User.IdUser != _userService.GetUserId() && _userService.GetUserRole() != "admin")
+            if (techRequest.User.IdUser != _userService.GetUserId() && _userService.GetUserRole() == "user")
             {
                 return Forbid();
             }
@@ -129,7 +128,7 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            if (techRequest.IdUser != _userService.GetUserId() && _userService.GetUserRole() != "admin")
+            if (techRequest.IdUser != _userService.GetUserId() && _userService.GetUserRole() == "user")
             {
                 return Forbid();
             }
@@ -152,7 +151,7 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            if (techRequest.IdUser != _userService.GetUserId() && _userService.GetUserRole() != "admin")
+            if (techRequest.IdUser != _userService.GetUserId() && _userService.GetUserRole() == "user")
             {
                 return Forbid();
             }
@@ -193,7 +192,7 @@ namespace WebMVC.Controllers
             
             var userId = _userService.GetUserId();
 
-            if (techRequest.IdUser != userId && _userService.GetUserRole() != "admin")
+            if (techRequest.IdUser != userId && _userService.GetUserRole() == "user")
             {
                 return Forbid();
             }
