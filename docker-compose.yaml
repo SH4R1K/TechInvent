@@ -11,7 +11,7 @@ services:
         restart: true
     image: techinvent_api
     build:
-      context: ./TechInventAPI/.
+      context: ./
       dockerfile: Dockerfile
     env_file:
       - path: ./environment/default.env
@@ -31,7 +31,7 @@ services:
         restart: true
     image: techinvent_mvc
     build:
-      context: ./WebMVC/.
+      context: ./
       dockerfile: Dockerfile
     env_file:
       - path: ./environment/default.env
