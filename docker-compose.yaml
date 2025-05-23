@@ -12,7 +12,7 @@ services:
     image: techinvent_api
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: TechInventAPI/Dockerfile
     env_file:
       - path: ./environment/default.env
         required: true
@@ -32,7 +32,7 @@ services:
     image: techinvent_mvc
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: WebMVC/Dockerfile
     env_file:
       - path: ./environment/default.env
         required: true
