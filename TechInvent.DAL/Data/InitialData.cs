@@ -22,5 +22,13 @@ namespace TechInvent.DAL.Data
             new RequestType {IdRequestType = 4, Name = "Проблема в кабинете"},
             new RequestType {IdRequestType = 5, Name = "Другое"},
         };
+        public static List<CabinetEquipmentType> CabinetEquipmentTypes { get; set; } = new List<CabinetEquipmentType>()
+        {
+            new CabinetEquipmentType {IdCabinetEquipmentType = 1, Name = "Маршрутизатор"},
+            new CabinetEquipmentType {IdCabinetEquipmentType = 2, Name = "Сервер"},
+            new CabinetEquipmentType {IdCabinetEquipmentType = 3, Name = "Ноутбук"},
+            new CabinetEquipmentType {IdCabinetEquipmentType = 4, Name = "Принтер"},
+            new CabinetEquipmentType {IdCabinetEquipmentType = 5, Name = "Монитор"},
+        };
     }
 }

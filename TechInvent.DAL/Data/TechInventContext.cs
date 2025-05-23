@@ -524,6 +524,7 @@ public partial class TechInventContext : DbContext
 
         modelBuilder.Entity<User>().HasData(InitialData.UsersList);
         modelBuilder.Entity<RequestType>().HasData(InitialData.RequestTypes);
+        modelBuilder.Entity<CabinetEquipmentType>().HasData(InitialData.CabinetEquipmentTypes);
         modelBuilder.Entity<Role>().HasData(InitialData.RolesList);
 
         OnModelCreatingPartial(modelBuilder);
