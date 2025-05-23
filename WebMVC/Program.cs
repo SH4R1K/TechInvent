@@ -80,6 +80,10 @@ app.UseStatusCodePages(async context =>
     {
         response.Redirect("/Auth/Index");
     }
+    else if (response.StatusCode == (int)HttpStatusCode.NotFound)
+    {
+        response.Redirect("/Home/NotFound");
+    }
 });
 app.UseStaticFiles();
 
