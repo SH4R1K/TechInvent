@@ -68,7 +68,7 @@ namespace WebMVC.Controllers
             if (selectedWorkplaces != null)
             {
                 model.AttachedWorkplaces = selectedWorkplaces
-                    .Select(id => new TechRequestWorkplace { IdWorkplace = id, IdTechRequest = model.IdRequest })
+                    .Select(id => new TechRequestWorkplace { IdWorkplace = id, IdTechRequest = model.IdRequest, IsActive = true })
                     .ToList();
             }
 
