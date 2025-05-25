@@ -99,8 +99,10 @@
         @for (int i = 0; i < workplaces.Count; i++)
         {
             <div class="card" style="width: 18rem; display: flex; flex-direction: column;">
-                <h5 class="card-header card-title p-2 d-flex justify-content-between align-items-start">
-                    @workplaces[i].Name
+                <h5 class="card-header p-2 d-flex justify-content-between align-items-start">
+                    <span class="card-title overflow-auto">
+                        @workplaces[i].Name
+                    </span>
                     @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
                     {
                         <div class="d-flex gap-1">
