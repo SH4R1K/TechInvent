@@ -50,8 +50,9 @@ namespace WebMVC.Controllers
                     }
                 }
             }
-            return RedirectToAction("Index","Cabinets");
+            return RedirectToAction("Index", "Cabinets");
         }
+
         [HttpPost]
         public async Task<IActionResult> UploadFileAndExcel([FromForm] List<IFormFile> files)
         {
@@ -64,7 +65,7 @@ namespace WebMVC.Controllers
                         using (var stream = new MemoryStream())
                         {
                             await file.CopyToAsync(stream);
-                            stream.Position = 0; 
+                            stream.Position = 0;
 
                             var equipments = await _excelService.ImportEquipmentAsync(stream);
 
@@ -80,7 +81,7 @@ namespace WebMVC.Controllers
 
                                 if (existingEquipment != null)
                                 {
-                                    existingEquipment.Cabinet = equipment.Cabinet; 
+                                    existingEquipment.Cabinet = equipment.Cabinet;
                                     existingEquipment.CabinetEquipmentType = equipment.CabinetEquipmentType;
                                     existingEquipment.Vendor = equipment.Vendor;
                                     existingEquipment.SerialNumber = equipment.SerialNumber;

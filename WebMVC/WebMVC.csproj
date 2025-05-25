@@ -26,4 +26,8 @@
     <ProjectReference Include="..\TechInvent.DM\TechInvent.DM.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\select2\" />
+  </ItemGroup>
+
 </Project>
