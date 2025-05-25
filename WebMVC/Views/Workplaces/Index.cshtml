@@ -99,13 +99,11 @@
         @for (int i = 0; i < workplaces.Count; i++)
         {
             <div class="card" style="width: 18rem; display: flex; flex-direction: column;">
-                <h5 class="card-header card-title">@workplaces[i].Name</h5>
-                <div class="card-body d-flex flex-column flex-grow-1">
-                    <p class="card-text">ОС: @workplaces[i].IdOsNavigation.OsName</p>
-                    <p class="card-text">Последнее обновление: @workplaces[i].LastUpdate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</p>
+                <h5 class="card-header card-title p-2 d-flex justify-content-between align-items-start">
+                    @workplaces[i].Name
                     @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
                     {
-                        <div class="position-absolute top-0 end-0 m-2">
+                        <div class="d-flex gap-1">
                             <a asp-action="DecommissionStuff" asp-controller="InventStuff" class="text-decoration-none" asp-route-id="@workplaces[i].IdInventStuff">
                                 <img src="~/images/gui-cancel.svg" />
                             </a>
@@ -114,6 +112,10 @@
                             </a>
                         </div>
                     }
+                </h5>
+                <div class="card-body d-flex flex-column flex-grow-1">
+                    <p class="card-text">ОС: @workplaces[i].IdOsNavigation.OsName</p>
+                    <p class="card-text">Последнее обновление: @workplaces[i].LastUpdate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</p>
                     <p class="card-text">Инвентарный номер: @(workplaces[i].InventNumber ?? "нет")</p>
                     <p class="card-text">Серийный номер: @(workplaces[i].SerialNumber ?? "нет")</p>
                 </div>
@@ -128,6 +130,7 @@
                     }
                 </div>
             </div>
+
 
         }
     </div>
