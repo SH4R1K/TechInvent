@@ -58,7 +58,7 @@ namespace WebMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdUser,Login,Password,IdRole")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("IdUser,Login,Password,IdRole,LastLoginDate")] User user)
         {
             if (id != user.IdUser)
             {

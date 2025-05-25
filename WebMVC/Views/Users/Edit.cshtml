@@ -13,6 +13,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdUser" />
+            <input type="hidden" asp-for="LastLoginDate" />
             <div class="mb-3 form-group">
                 <label asp-for="Login" class="control-label">Логин</label>
                 <input asp-for="Login" class="form-control" />
