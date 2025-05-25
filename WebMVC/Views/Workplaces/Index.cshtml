@@ -15,6 +15,7 @@
         {
             <a class="btn btn-secondary" asp-action="GenerateHardwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel комплектующие</a>
             <a class="btn btn-secondary" asp-action="GenerateSoftwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel ПО</a>
+            <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="GenerateQRCodes" asp-route-id="@workplaces[0]?.IdCabinet">Получить QR-коды</a>
         }
     </div>
 

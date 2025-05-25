@@ -25,6 +25,7 @@
                     <div class="row gy-2 justify-content-center justify-content-md-start">
                         <a asp-controller="Workplaces" asp-action="Index" asp-route-id="@cabinets[j].IdCabinet" class="btn btn-primary">Подробнее</a>
                         <a class="btn btn-secondary" asp-action="GenerateReportById" asp-route-id="@cabinets[j]?.IdCabinet">Экспортировать в Excel</a>
+                        <a class="btn btn-secondary" asp-action="GenerateQRCodes" asp-route-id="@cabinets[j]?.IdCabinet">Получить QR-коды</a>
                         @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
                         {
                             <button class="btn btn-primary" data-bs-toggle="modal" data-cabinet-name="@cabinets[j].Name" data-cabinet-id="@cabinets[j].IdCabinet" data-bs-target="#editCabinetModal">Редактировать кабинет</button>

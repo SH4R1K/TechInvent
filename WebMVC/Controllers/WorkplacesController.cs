@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using QRCoder;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 using WebMVC.Services;
@@ -15,15 +14,17 @@ namespace WebMVC.Controllers
     {
         private readonly TechInventContext _context;
         private readonly ExcelService _excelService;
+        private readonly QRService _qrService;
         private readonly IToastifyService _notifyService;
         private readonly IMemoryCache _cache;
 
-        public WorkplacesController(TechInventContext context, ExcelService excelService, IMemoryCache cache, IToastifyService notifyService)
+        public WorkplacesController(TechInventContext context, ExcelService excelService, IMemoryCache cache, IToastifyService notifyService, QRService qrService)
         {
             _context = context;
             _excelService = excelService;
             _cache = cache;
             _notifyService = notifyService;
+            _qrService = qrService;
         }
         private IQueryable<Workplace> GetWorkplacesQuery()
         {
@@ -241,17 +242,13 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            byte[] qrCodeImage = null;
-            byte[] data = null;
+            string qrCodeImage;
             string scheme = Request.Scheme;
             string url = Request.Host.ToString();
-            using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
-            using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(Url.Action("Public", "Workplaces", new { id = workplace.Guid }, scheme, url), QRCodeGenerator.ECCLevel.Q)) //Url.Page("./Workplaces/Details/" + id)
-            using (PngByteQRCode qrCode = new PngByteQRCode(qrCodeData))
-            {
-                qrCodeImage = qrCode.GetGraphic(5);
-            }
-            ViewData["qrBinary"] = Convert.ToBase64String(qrCodeImage);
+
+            qrCodeImage = _qrService.GenerateQrBase64(Url.Action("Public", "Workplaces", new { id = workplace.Guid }, scheme, url));
+
+            ViewData["qrBinary"] = qrCodeImage;
             ViewData["Reffer"] = Request.Headers["Referer"].ToString();
             return View();
         }

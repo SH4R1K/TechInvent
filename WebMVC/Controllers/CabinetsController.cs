@@ -1,7 +1,9 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using TechInvent.BLL.DtoModels.DtoMVC.Workplace;
 using TechInvent.DAL.Data;
 using TechInvent.DM.Models;
 using WebMVC.Services;
@@ -13,11 +15,13 @@ namespace WebMVC.Controllers
     {
         private readonly TechInventContext _context;
         private readonly ExcelService _excelService;
+        private readonly QRService _qrService;
 
-        public CabinetsController(TechInventContext context, ExcelService excelService)
+        public CabinetsController(TechInventContext context, ExcelService excelService, QRService qrService)
         {
             _context = context;
             _excelService = excelService;
+            _qrService = qrService;
         }
 
         // GET: Cabinets
@@ -101,6 +105,29 @@ namespace WebMVC.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Workplaces", new { id });
+        }
+
+        public async Task<IActionResult> GenerateQRCodes(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var cabinet = _context.Cabinets.AsNoTracking().Include(c => c.Workplaces.Where(w => !w.IsDecommissioned)).FirstOrDefault(c => c.IdCabinet == id);
+
+            if (cabinet == null)
+            {
+                return NotFound();
+            }
+
+            string scheme = Request.Scheme;
+            string url = Request.Host.ToString();
+
+            List<WorkplaceNameUrlDto> awesomelist = cabinet.Workplaces.Select(w => new WorkplaceNameUrlDto { Name = w.Name, Url = Url.Action("Public", "Workplaces", new { id = w.Guid }, scheme, url) }).ToList();
+
+            byte[] fileContents = _qrService.GeneratePdfForPrinting(awesomelist);
+
+            return File(fileContents, "application/pdf", $"{cabinet.Name}.pdf");
         }
 
         public async Task<IActionResult> GenerateReport()
