@@ -197,7 +197,7 @@ namespace WebMVC.Services
                 worksheet.Cell(5 + i, 8).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.NetAdapter != null).Select(n => $"{n.Name}").ToList());
                 worksheet.Cell(5 + i, 9).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.NetAdapter != null).Select(n => $"{n.NetAdapter.MacAddress}").ToList());
                 worksheet.Cell(5 + i, 10).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Disk != null).Select(d => $"{d.Name} - {d.Disk.Size}Гб").ToList());
-                worksheet.Cell(5 + i, 11).Value = String.Join(Environment.NewLine, workplaces[i].CabinetEquipments.Select(d => $"{d.Name}({d.InventNumber ?? " - "}").ToList());
+                worksheet.Cell(5 + i, 11).Value = String.Join(Environment.NewLine, workplaces[i].CabinetEquipments.Select(d => $"{d.Name}({d.InventNumber ?? " - "})").ToList());
             }
             worksheet.Rows().AdjustToContents();
             worksheet.Cells().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
@@ -245,7 +245,7 @@ namespace WebMVC.Services
             {
                 worksheet.Cell(8, 2).Value += $"{disk.Name} - {disk.Size}Гб{Environment.NewLine}";
             }
-            worksheet.Cell(9, 1).Value = "Мониторы";
+            worksheet.Cell(9, 1).Value = "Оборудование";
             var equipments = workplace.CabinetEquipments.ToList();
             foreach (CabinetEquipment equipment in equipments)
             {
