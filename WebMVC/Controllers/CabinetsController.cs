@@ -120,12 +120,19 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
+
+
             string scheme = Request.Scheme;
             string url = Request.Host.ToString();
 
-            List<WorkplaceNameUrlDto> awesomelist = cabinet.Workplaces.Select(w => new WorkplaceNameUrlDto { Name = w.Name, Url = Url.Action("Public", "Workplaces", new { id = w.Guid }, scheme, url) }).ToList();
+            if (cabinet.Workplaces.Count == 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-            byte[] fileContents = _qrService.GeneratePdfForPrinting(awesomelist);
+            List<WorkplaceNameUrlDto> workplacesList = cabinet.Workplaces.Select(w => new WorkplaceNameUrlDto { Name = w.Name, Url = Url.Action("Public", "Workplaces", new { id = w.Guid }, scheme, url) }).ToList();
+
+            byte[] fileContents = _qrService.GeneratePdfForPrinting(workplacesList);
 
             return File(fileContents, "application/pdf", $"{cabinet.Name}.pdf");
         }
