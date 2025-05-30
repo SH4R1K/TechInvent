@@ -27,6 +27,10 @@ namespace WebMVC.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Метод для импорта JSON файлов
+        /// </summary>
+        /// <param name="files">Принимает файлы</param>
         [HttpPost]
         public async Task<IActionResult> UploadFileAndJson([FromForm] List<IFormFile> files)
         {
@@ -36,9 +40,12 @@ namespace WebMVC.Controllers
                 {
                     try
                     {
+                        // Открываем поток для чтения json файла
                         using (var stream = new StreamReader(file.OpenReadStream()))
                         {
+                            // Считываем файл
                             var json = await stream.ReadToEndAsync();
+                            // Десериализуем
                             var cabinetDto = JsonSerializer.Deserialize<CabinetDto>(json);
                             await _dtoConverter.ConvertDtoCabinetAsync(cabinetDto);
                             Console.WriteLine("Cabinet updated");
@@ -104,6 +111,25 @@ namespace WebMVC.Controllers
             }
 
             return RedirectToAction("Index", "Cabinets");
+        }
+
+        public async Task<IActionResult> DownloadInventProgram()
+        {
+            try
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "files", "TechInvent.exe");
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+                return File(memory, "application/octet-stream", "TechInvent.exe");
+            }
+            catch
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }
