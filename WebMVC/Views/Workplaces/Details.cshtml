@@ -5,12 +5,15 @@
     ViewData["Title"] = @ViewData["PCName"];
 }
 
+
 <div style="padding-top: 1em;">
-    <a class="btn btn-secondary" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
+    <a class="btn btn-secondary mb-2" asp-action="Index" asp-route-id="@Model?.IdCabinet">Назад</a>
     @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
     {
-    <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdInventStuff" data-bs-target="#editWorkplaceModal">Изменить инвентарный номер</a>
-    <a class="btn btn-secondary" data-bs-toggle="modal" data-invent-number="@Model?.SerialNumber" data-workplace-id="@Model?.IdInventStuff" data-bs-target="#editWorkplaceSerialModal">Изменить серийный номер</a>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <a class="btn btn-secondary flex-grow-1" data-bs-toggle="modal" data-invent-number="@Model?.InventNumber" data-workplace-id="@Model?.IdInventStuff" data-bs-target="#editWorkplaceModal">Изменить инв. номер</a>
+            <a class="btn btn-secondary flex-grow-1" data-bs-toggle="modal" data-invent-number="@Model?.SerialNumber" data-workplace-id="@Model?.IdInventStuff" data-bs-target="#editWorkplaceSerialModal">Изменить серийный номер</a>
+        </div>
     }
 </div>
 
@@ -39,7 +42,8 @@
                 </button>
             </h2>
             <div id="collapseCabinetEquipment" class="accordion-collapse collapse">
-                <table class="table">
+                <div class="table-responsive">
+                <table class="table table-sm">
                     <thead>
                         <tr>
                             <th>
@@ -96,14 +100,20 @@
                         }
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="col-md-6">
         <h3 style="padding-top: 1em; padding-bottom: 1em;">Комплектующие</h3>
-        <a class="btn btn-secondary" asp-action="PublicGenerateHardwareReportById" asp-route-id="@Model?.Guid">Экспортировать в Excel</a>
-        <a class="btn btn-secondary toggleAccordion">Показать/Скрыть</a>
+        <div class="d-flex gap-2">
+            <a class="btn btn-secondary btn-sm" asp-action="PublicGenerateHardwareReportById" asp-route-id="@Model?.Guid">
+                <span class="d-none d-md-inline">Экспорт</span>
+                <span class="d-md-none">XLSX</span>
+            </a>
+            <a class="btn btn-secondary btn-sm toggleAccordion">Показать/Скрыть</a>
+        </div>
         <div class="scrollable-div" style="padding-top: 1em; height: 35em">
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
@@ -238,8 +248,13 @@
 
     <div class="col-md-6">
         <h3 style="padding-top: 1em; padding-bottom: 1em;">Программное обеспечение</h3>
-        <a class="btn btn-secondary" asp-action="PublicGenerateSoftwareReportById" asp-route-id="@Model?.Guid">Экспортировать в Excel</a>
-        <a class="btn btn-secondary toggleAccordion">Показать/Скрыть</a>
+        <div class="d-flex gap-2">
+            <a class="btn btn-secondary btn-sm" asp-action="PublicGenerateSoftwareReportById" asp-route-id="@Model?.Guid">
+                <span class="d-none d-md-inline">Экспорт</span>
+                <span class="d-md-none">XLSX</span>
+            </a>
+            <a class="btn btn-secondary btn-sm toggleAccordion">Показать/Скрыть</a>
+        </div>
         @{
             var groups = Model.InstalledSoftware.GroupBy(s => s.SoftwareNavigation.IdManufacturer);
             <div class="scrollable-div" style="padding-top: 1em; height: 35em">
@@ -273,8 +288,8 @@
 <script>
     document.querySelectorAll('.toggleAccordion').forEach(button => {
         button.addEventListener('click', function() {
-            const siblingDiv = this.nextElementSibling; 
-            const accordions = siblingDiv.querySelectorAll('.accordion-collapse');
+            const parentCard = this.closest('.col-md-6');
+            const accordions = parentCard.querySelectorAll('.accordion-collapse');
             const isAnyOpen = Array.from(accordions).some(accordion => accordion.classList.contains('show'));
 
             accordions.forEach(accordion => {
