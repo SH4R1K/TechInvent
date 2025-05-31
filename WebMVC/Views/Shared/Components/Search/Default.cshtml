@@ -5,13 +5,15 @@
             Кабинеты
         </a>
         <a class="nav-link dropdown-toggle dropdown-toggle-split" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="max-height: 35vh; overflow-y: auto;">
             @* Цикл, создающий элементы в выпадающем списке  *@
             @foreach (var item in Model) 
             {
-                <a asp-action="Index" asp-controller="Workplaces" asp-route-id="@item.IdCabinet" class="dropdown-item">
-                    @item.Name @* Название кабинета *@
-                </a>
+                <li>
+                    <a asp-action="Index" asp-controller="Workplaces" asp-route-id="@item.IdCabinet" class="dropdown-item">
+                        @item.Name @* Название кабинета *@
+                    </a>
+                </li>
             }
         </ul>
     </div>
