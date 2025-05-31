@@ -113,6 +113,17 @@ namespace WebMVC.Controllers
             return RedirectToAction("Index", "Cabinets");
         }
 
+        public async Task<IActionResult> DownloadExcelExample()
+        {
+            try
+            {
+                return File(await _excelService.FileEquipmentExampleAsync(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"ImportExample.xlsx");
+            }
+            catch
+            {
+                return RedirectToAction("Index");
+            }
+        }
         public async Task<IActionResult> DownloadInventProgram()
         {
             try
