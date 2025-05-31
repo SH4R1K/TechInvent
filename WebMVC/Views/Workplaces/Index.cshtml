@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = @ViewBag.cabinetName;
+    int currentPage = ((int)(ViewData["Page"]));
+    int pageCount = ((int)(ViewData["PageCount"]));
 }
 
 <h1>@ViewBag.cabinetName</h1>
@@ -136,6 +138,44 @@
 
 
         }
+        @if (pageCount > 1)
+        {
+            <nav>
+                <ul class="pagination justify-content-center">
+                    @if (currentPage != 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="1">&laquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)">&lt;</a>
+                        </li>
+                    }
+
+                    @if (currentPage > 1)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)">@(currentPage - 1)</a></li>
+                    }
+
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link">@currentPage</a>
+                    </li>
+
+                    @if (currentPage < pageCount)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)">@(currentPage + 1)</a></li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)">&gt;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(pageCount)">&raquo;</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+}
     </div>
 }
 

@@ -25,9 +25,25 @@ namespace WebMVC.Controllers
         }
 
         // GET: Cabinets
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchQuery, int page = 1)
         {
-            return View(await _context.Cabinets.AsNoTracking().Include(c => c.Workplaces.Where(w => !w.IsDecommissioned)).ToListAsync());
+            int pageSize = 8;
+            ViewData["Page"] = page;
+            ViewBag.SearchQuery = searchQuery;
+            var cabinets = _context.Cabinets.AsNoTracking().Include(c => c.Workplaces.Where(w => !w.IsDecommissioned))
+                .OrderBy(w => w.Name)
+                .AsQueryable();
+
+            if (searchQuery != null)
+                cabinets = cabinets.Where(c => c.Name.Contains(searchQuery));
+
+            int totalItems = cabinets.Count();
+            ViewData["PageCount"] = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            cabinets = cabinets
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize);
+            return View(await cabinets.ToListAsync());
         }
 
         [Authorize(Roles = "operator, admin")]

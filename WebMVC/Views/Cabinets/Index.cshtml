@@ -2,13 +2,15 @@
 
 @{
     ViewData["Title"] = "Кабинеты";
+    int currentPage = ((int)(ViewData["Page"]));
+    int pageCount = ((int)(ViewData["PageCount"]));
 }
 
 <h1>Кабинеты</h1>
 
 @{
     var cabinets = Model.ToList();
-    <div class="row gy-2 justify-content-center justify-content-md-start">
+    <div class="row gy-2 justify-content-center justify-content-md-start mb-3">
         <a class="btn btn-secondary" asp-action="GenerateReport">Экспортировать в Excel</a>
         @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
         {
@@ -16,6 +18,9 @@
         }
     </div>
     <div class="row justify-content-center justify-content-md-start">
+        <form asp-controller="Cabinets" asp-action="Index" method="get">
+            <input type="text" class="form-control" name="searchQuery" value="@ViewBag.SearchQuery" placeholder="Поиск..." />
+        </form>
         @for (int j = 0; j < cabinets.Count; j++)
         {
             <div class="card" style="width: 18rem;">
@@ -46,9 +51,44 @@
                 </div>
             </div>
         }
+        @if (pageCount > 1)
+        {
+            <nav>
+                <ul class="pagination justify-content-center">
+                    @if (currentPage != 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="1">&laquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)">&lt;</a>
+                        </li>
+                    }
+
+                    @if (currentPage > 1)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)">@(currentPage - 1)</a></li>
+                    }
+
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link">@currentPage</a>
+                    </li>
+
+                    @if (currentPage < pageCount)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)">@(currentPage + 1)</a></li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)">&gt;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(pageCount)">&raquo;</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
     </div>
 }
-
 @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
 {
     <partial name="_AddCabinetComponent.cshtml" />

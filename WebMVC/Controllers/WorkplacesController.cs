@@ -58,11 +58,15 @@ namespace WebMVC.Controllers
                         .ThenInclude(s => s.ManufacturerNavigation);
         }
 
-        // GET: Workplaces
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index(int id,  int page = 1)
         {
+            int pageSize = 8;
             var techInventContext = _context.Workplaces.AsNoTracking()
-                .Where(w => !w.IsDecommissioned).OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation);
+                .Where(w => !w.IsDecommissioned).OrderByDescending(w => w.LastUpdate).Where(w => w.IdCabinet == id).Include(w => w.IdCabinetNavigation).Include(w => w.IdOsNavigation).AsQueryable();
+            int totalItems = techInventContext.Count();
+            techInventContext = techInventContext.Skip((page - 1) * pageSize).Take(pageSize);
+            ViewData["Page"] = page;
+            ViewData["PageCount"] = (int)Math.Ceiling((double)totalItems / pageSize);
             ViewBag.cabinetEquipments = await _context.CabinetEquipments.AsNoTracking().Include(eq => eq.CabinetEquipmentType).Include(eq => eq.Vendor).Where(eq => eq.IdCabinet == id).ToListAsync();
             ViewBag.cabinetName = _context.Cabinets.AsNoTracking().FirstOrDefault(c => c.IdCabinet == id)?.Name;
             ViewBag.cabinets = await _context.Cabinets.ToListAsync();
