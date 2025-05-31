@@ -66,7 +66,9 @@ namespace WebMVC.Controllers
                 .Include(w => w.InstalledSoftware)
                     .ThenInclude(s => s.SoftwareNavigation)
                         .ThenInclude(s => s.ManufacturerNavigation)
-                .Where(ins => ins.IsDecommissioned).ToListAsync();
+                .Where(ins => ins.IsDecommissioned)
+                .OrderByDescending(ins => ins.DecommissionDate)
+                .ToListAsync();
 
             inventStuff.AddRange(workplace);
 
@@ -77,6 +79,7 @@ namespace WebMVC.Controllers
                 .Include(w => w.Workplace)
                 .Include(w => w.Vendor)
                 .Where(ins => ins.IsDecommissioned)
+                .OrderByDescending(ins => ins.DecommissionDate)
                 .ToListAsync();
 
             inventStuff.AddRange(cabinetEquipment);
