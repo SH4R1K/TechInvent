@@ -12,7 +12,7 @@ namespace TechInvent.BLL.DtoModels
         public string Manufacturer { get; set; }
 
         [JsonPropertyName("speed")]
-        public int Speed { get; set; }
+        public string Speed { get; set; }
 
         [JsonPropertyName("capacity")]
         public string Capacity { get; set; }
