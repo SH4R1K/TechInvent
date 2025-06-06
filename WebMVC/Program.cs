@@ -1,18 +1,33 @@
+using AspNetCoreHero.ToastNotification;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
-using WebMVC.Data;
+using TechInvent.BLL.Dto;
+using TechInvent.BLL.Service;
+using TechInvent.DAL.Data;
 using WebMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddToastify(config => { config.DurationInSeconds = 10; config.Position = Position.Right; config.Gravity = Gravity.Bottom; });
+
 builder.Services.AddScoped<JWTokenService>();
+builder.Services.AddScoped<QRService>();
 builder.Services.AddScoped<ExcelService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<EntityCheckerService>();
+builder.Services.AddScoped<DtoConverter>();
+
 builder.Services.AddDbContextPool<TechInventContext>(options =>
 {
     options.UseMySQL(Environment.GetEnvironmentVariable("MySQLConnString") ?? builder.Configuration.GetConnectionString("DefaultConnectionMysql") ?? "server=;user=;password=;database=;");
@@ -57,7 +72,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -70,6 +84,10 @@ app.UseStatusCodePages(async context =>
     if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
     {
         response.Redirect("/Auth/Index");
+    }
+    else if (response.StatusCode == (int)HttpStatusCode.NotFound)
+    {
+        response.Redirect("/Home/NotFound");
     }
 });
 app.UseStaticFiles();

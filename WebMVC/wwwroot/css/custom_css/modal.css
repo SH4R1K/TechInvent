@@ -1,0 +1,44 @@
+﻿.modal-content {
+    background-color: var(--background-section);
+    border: 1px solid var(--border-neon-purple);
+    border-radius: 0.5rem;
+}
+
+.modal-header {
+    background-color: var(--main-color);
+    color: var(--text-light);
+}
+
+.modal-title {
+    font-weight: bold;
+}
+
+.modal-body {
+    background-color: var(--background-section);
+    color: var(--text-light);
+}
+
+.modal-footer {
+    background-color: var(--main-color);
+}
+
+
+    .btn-primary:hover {
+        background-color: var(--button-hover);
+    }
+
+.form-label {
+    color: var(--text-light);
+}
+
+.form-control {
+    background-color: var(--background-input);
+    color: var(--text-light);
+    border: 1px solid var(--border-neon-purple);
+}
+
+    .form-control:focus {
+        background-color: var(--background-input-focus);
+        border-color: var(--border-neon-purple);
+        color: var(--text-light);
+    }

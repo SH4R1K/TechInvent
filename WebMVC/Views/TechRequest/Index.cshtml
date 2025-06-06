@@ -1,0 +1,109 @@
+﻿@model IEnumerable<TechRequest>
+@{
+    ViewData["Title"] = "Заявки";
+}
+
+<h1>Техническое обслуживание</h1>
+
+@{
+    var techRequests = Model.ToList();
+        <div>
+            <a class="btn btn-secondary" asp-action="Create">Создать заявку</a>
+        </div>
+}
+<h1> Активные заявки</h1>
+<div class="table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Кабинет
+            </th>
+            <th>
+                Тип заявки
+            </th>
+            <th>
+                Дата создания
+            </th>
+            <th>
+                Описание
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in techRequests.Where(t => t.IsActive))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @{
+                        var description = item.Description;
+                        var truncatedDescription = description.Length > 100 ? description.Substring(0, 100) + "..." : description;
+                    }
+                    @truncatedDescription
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.IdRequest">Подробнее</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+<h1> Архив заявок</h1>
+<div class="table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Кабинет
+            </th>
+            <th>
+                Тип заявки
+            </th>
+            <th>
+                Дата создания
+            </th>
+            <th>
+                Описание
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in techRequests.Where(t => !t.IsActive))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @{
+                        var description = item.Description;
+                        var truncatedDescription = description.Length > 100 ? description.Substring(0, 100) + "..." : description;
+                    }
+                    @truncatedDescription
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.IdRequest">Подробнее</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>

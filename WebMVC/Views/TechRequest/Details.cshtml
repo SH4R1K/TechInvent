@@ -1,0 +1,125 @@
+﻿@using System.Globalization
+@model TechRequest
+
+@{
+    ViewBag.Title = "Детали заявки";
+    var user = Context.User;
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">Детали заявки</h2>
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">@Model.Title</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Описание:</strong> @Model.Description</p>
+            <p><strong>Статус:</strong> @(Model.IsActive ? "Активен" : "Неактивен")</p>
+            <p><strong>Создал:</strong> @(Model.User.Login)</p>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    @{
+                        var activeWorkplace = Model.AttachedWorkplaces.Where(a => a.IsActive);
+                        var inactiveWorkplace = Model.AttachedWorkplaces.Where(a => !a.IsActive);
+                        if (activeWorkplace.Count() > 0)
+                        {
+                            <p><strong>Ожидающие обслуживания места:</strong></p>
+                            <ul class="list-group mb-2">
+                                @foreach (var workplace in activeWorkplace)
+                                {
+                                    <li class="list-group-item" style="background: var(--background-input)">
+                                        <form asp-action="CompleteWorkplace" asp-route-id="@Model.IdRequest" asp-controller="TechRequest" asp-route-idWorkplace="@workplace.IdWorkplace" method="POST">
+                                            <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
+                                                (@workplace.Workplace.IdCabinetNavigation.Name) @workplace.Workplace.Name
+                                            </a>
+                                            @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
+                                            {
+                                                <button class="btn-none float-end" type="submit">
+                                                    <img src="~/images/check.svg" />
+                                                </button>
+                                            }
+                                        </form>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        if (inactiveWorkplace.Count() > 0)
+                        {
+                            <p><strong>Обслуженные места:</strong></p>
+                            <ul class="list-group">
+                                @foreach (var workplace in inactiveWorkplace)
+                                {
+                                    <li class="list-group-item" style="background: var(--background-input)">
+                                        <form asp-action="RestoreWorkplace" asp-controller="TechRequest" asp-route-id="@Model.IdRequest" asp-route-idWorkplace="@workplace.IdWorkplace" method="POST">
+                                            <a class="text-decoration-none" asp-action="Details" asp-controller="Workplaces" asp-route-id="@workplace.IdWorkplace">
+                                                (@workplace.Workplace.IdCabinetNavigation.Name) @workplace.Workplace.Name
+                                            </a>
+                                            @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
+                                            {
+                                            <button class="btn-none float-end" type="submit">
+                                                <img src="~/images/restore.svg" />
+                                            </button>
+                                            }
+                                        </form>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="d-flex flex-column justify-content-between">
+                @if (Model.IsActive) 
+                {
+                    <a class="btn btn-secondary" asp-action="CloseRequest" asp-route-id="@Model?.IdRequest">Закрыть заявку</a>
+                }
+                else
+                {
+                    <a class="btn btn-secondary" asp-action="ReopenRequest" asp-route-id="@Model?.IdRequest">Возобновить заявку</a>
+                }
+                <small class="text-end mt-2">@Model.CreationDate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card my-4">
+            <div class="card-header">
+                <h4 class="card-title">Комментарии</h4>
+            </div>
+
+            <form asp-action="CommentRequest" asp-controller="TechRequest" method="post">
+                <div class="card-body demo-vertical-spacing demo-only-element">
+                    <div class="mb-3 form-group">
+                        <textarea class="form-control" name="message" rows="2" placeholder="Комментарий..."></textarea>
+                        <br />
+                        <input name="id" type="hidden" value="@Model.IdRequest" />
+                        <input type="submit" value="Отправить" class="btn btn-primary" />
+            </form>
+
+            @{
+                var comments = Model.Comments.OrderByDescending(c => c.CommentDate);
+                foreach (TechRequestComment item in comments)
+                    {
+                    <div class="card">
+                        <div class="card-body">
+                        @if (user.FindFirst("id").Value == item.Author.IdUser.ToString())
+                        {
+                                <h5 class="card-title">Вы</h5>
+                        }
+                        else
+                        {
+                                <h5 class="card-title">@item.Author.Login</h5>
+                        }
+                            <p class="card-text">@item.Message</p>
+                            <small class="float-end">@item.CommentDate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</small>
+                        </div>
+                    </div>
+                    }
+                }
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-column">
+    <a href="@Url.Action("Index", "TechRequest")" class="btn btn-secondary">Назад к списку</a>
+</div>

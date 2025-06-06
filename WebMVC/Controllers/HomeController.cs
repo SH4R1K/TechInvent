@@ -1,10 +1,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Text.Json;
+using TechInvent.BLL.Dto;
+using TechInvent.BLL.DtoModels;
+using TechInvent.DM.Models;
+using WebMVC.Services;
 
 namespace WebMVC.Controllers
 {
-    [Authorize(Roles = "user, admin")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -20,6 +25,10 @@ namespace WebMVC.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+        public IActionResult NotFound()
         {
             return View();
         }

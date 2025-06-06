@@ -1,7 +1,7 @@
-﻿@model IEnumerable<WebMVC.Models.User>
+﻿@model IEnumerable<TechInvent.DM.Models.User>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Пользователи";
 }
 
 <h1>Пользователи</h1>
@@ -21,6 +21,9 @@
             <th>
                 Роль
             </th>
+            <th>
+                Последняя дата входа
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -37,8 +40,15 @@
                 @Html.DisplayFor(modelItem => item.Role.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdUser">Редактировать</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdUser">Удалить</a>
+                @(item.LastLoginDate?.ToString() ?? "не заходил")
+            </td>
+            <td>
+                    <a class="text-decoration-none" asp-action="Edit" asp-route-id="@item.IdUser">
+                        <img src="~/images/pencil-edit.svg" />
+                    </a> 
+                    <a class="text-decoration-none" asp-action="Delete" asp-route-id="@item.IdUser">
+                        <img src="~/images/trashbin.svg" />
+                    </a>
             </td>
         </tr>
 }

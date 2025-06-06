@@ -3,45 +3,183 @@
 
 @{
     ViewData["Title"] = @ViewBag.cabinetName;
+    int currentPage = ((int)(ViewData["Page"]));
+    int pageCount = ((int)(ViewData["PageCount"]));
 }
 
 <h1>@ViewBag.cabinetName</h1>
 @{
-    if (Model.Count() == 0)
-    {
-        <div>
-            <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="Index">Назад</a>
+    var workplaces = Model.ToList();
+    List<CabinetEquipment> cabinetEquipment = ViewBag.cabinetEquipments;
+    <div class="row gy-2 justify-content-center justify-content-md-start">
+        <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="Index">Назад</a>
+        @if (workplaces.Count() != 0)
+        {
+            <a class="btn btn-secondary" asp-action="GenerateHardwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel комплектующие</a>
+            <a class="btn btn-secondary" asp-action="GenerateSoftwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel ПО</a>
+            <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="GenerateQRCodes" asp-route-id="@workplaces[0]?.IdCabinet">Получить QR-коды</a>
+        }
+    </div>
+
+    <div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingZero">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCabinetEquipment">
+                    Оборудование
+                </button>
+            </h2>
+            <div id="collapseCabinetEquipment" class="accordion-collapse collapse">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Название
+                            </th>
+                            <th>
+                                Инвентарный номер
+                            </th>
+                            <th>
+                                Серийный номер
+                            </th>
+                            <th>
+                                Производитель
+                            </th>
+                            <th>
+                                Тип оборудования
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in cabinetEquipment)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @(item.InventNumber ?? "нет")
+                                </td>
+                                <td>
+                                    @(item.SerialNumber ?? "нет")
+                                </td>
+                                <td>
+                                    @(item.Vendor?.Name ?? "нет")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CabinetEquipmentType.Name)
+                                </td>
+                                @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
+                                {
+                                    <td>
+                                        <form asp-action="DetachEquipment" asp-controller="Cabinets" asp-route-id="@item.IdCabinet" asp-route-idEquipment="@item.IdInventStuff" method="POST">
+                                            <a class="text-decoration-none" asp-action="Edit" asp-controller="CabinetEquipments" asp-route-id="@item.IdInventStuff">
+                                                <img src="~/images/pencil-edit.svg" />
+                                            </a> 
+                                            <button class="fbtn-link" type="submit">
+                                                <img src="~/images/broken-chain.svg" />
+                                            </button>
+                                        </form>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
+    </div>
+
+    if (workplaces.Count() == 0)
+    {
         <div style="margin: 1rem">
             В данном кабинете ещё нет рабочих мест
         </div>
         return;
     }
-    var workplaces = Model.ToList();
-    <div>
-        <a class="btn btn-secondary" asp-controller="Cabinets" asp-action="Index">Назад</a>
-        <a class="btn btn-secondary" asp-action="GenerateHardwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel комплектующие</a>
-        <a class="btn btn-secondary" asp-action="GenerateSoftwareReportByIdCabinet" asp-route-id="@workplaces[0]?.IdCabinet">Экспортировать в Excel ПО</a>
-    </div>
     <div class="row justify-content-center justify-content-lg-start">
+
         @for (int i = 0; i < workplaces.Count; i++)
         {
-            <div class="card" style="width: 18rem; margin: 1rem">
-                <div class="card-body">
-                    <h5 class="card-title">@workplaces[i].Name</h5>
+            <div class="card" style="width: 18rem; display: flex; flex-direction: column;">
+                <h5 class="card-header p-2 d-flex justify-content-between align-items-start">
+                    <span class="card-title overflow-auto">
+                        @workplaces[i].Name
+                    </span>
+                    @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
+                    {
+                        <div class="d-flex gap-1">
+                            <a asp-action="DecommissionStuff" asp-controller="InventStuff" class="text-decoration-none" asp-route-id="@workplaces[i].IdInventStuff">
+                                <img src="~/images/gui-cancel.svg" />
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@workplaces[i].IdInventStuff">
+                                <img src="~/images/trashbin.svg" />
+                            </a>
+                        </div>
+                    }
+                </h5>
+                <div class="card-body d-flex flex-column flex-grow-1">
                     <p class="card-text">ОС: @workplaces[i].IdOsNavigation.OsName</p>
-                    <a class="position-absolute top-0 end-0 m-2" asp-action="Delete" asp-route-id="@workplaces[i].IdWorkplace">
-                        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke="#a020f0" d="M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M18 6V16.2C18 17.8802 18 18.7202 17.673 19.362C17.3854 19.9265 16.9265 20.3854 16.362 20.673C15.7202 21 14.8802 21 13.2 21H10.8C9.11984 21 8.27976 21 7.63803 20.673C7.07354 20.3854 6.6146 19.9265 6.32698 19.362C6 18.7202 6 17.8802 6 16.2V6M14 10V17M10 10V17" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                    <div>
-                        <a asp-action="Details" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">Подробнее</a>
-                        <a asp-action="QRCode" asp-route-id="@workplaces[i].IdWorkplace" class="btn btn-primary">QR-Код</a>
-                    </div>
-                    <p class="card-text"><small class="text-body-secondary">Последнее обновление: @workplaces[i].LastUpdate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</small></p> <!-- Ну в перспективе надо написать определение часового пояса пользователя-->
+                    <p class="card-text">Последнее обновление: @workplaces[i].LastUpdate.AddHours(3).ToString("g", CultureInfo.CreateSpecificCulture("ru-RU"))</p>
+                    <p class="card-text">Инвентарный номер: @(workplaces[i].InventNumber ?? "нет")</p>
+                    <p class="card-text">Серийный номер: @(workplaces[i].SerialNumber ?? "нет")</p>
+                </div>
+                <div class="card-footer row gy-2 justify-content-center justify-content-md-start">
+                    <a asp-action="Details" asp-route-id="@workplaces[i].IdInventStuff" class="btn btn-primary">Подробнее</a>
+                    <a asp-action="QRCode" asp-route-id="@workplaces[i].IdInventStuff" class="btn btn-primary">QR-Код</a>
+                    @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
+                    {
+                        <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#moveWorkplaceModal" data-workplace-id="@workplaces[i].IdInventStuff" data-cabinet-id="@workplaces[i].IdCabinet">
+                            Перенос в другой кабинет
+                        </a>
+                    }
                 </div>
             </div>
+
+
+        }
+        @if (pageCount > 1)
+        {
+            <nav>
+                <ul class="pagination justify-content-center">
+                    @if (currentPage != 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="1">&laquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)">&lt;</a>
+                        </li>
+                    }
+
+                    @if (currentPage > 1)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)">@(currentPage - 1)</a></li>
+                    }
+
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link">@currentPage</a>
+                    </li>
+
+                    @if (currentPage < pageCount)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)">@(currentPage + 1)</a></li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)">&gt;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(pageCount)">&raquo;</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         }
     </div>
+}
+    </div>
+}
+
+@if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
+{
+    <partial name="_MoveWorkplace.cshtml" />
 }

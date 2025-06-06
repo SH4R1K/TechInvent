@@ -1,0 +1,64 @@
+﻿@model TechRequest
+
+@{
+    ViewBag.Title = "Запрос технической поддержки";
+}
+
+<h2>Создание заявки</h2>
+
+
+<form asp-action="Create">
+    @Html.AntiForgeryToken()
+    <input asp-for="IdUser" type="hidden" value="@Context.User.FindFirst("id")!.Value" />
+    <div class="mb-3 form-group">
+        <label asp-for="Title">Кабинет</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-group">
+        <label asp-for="Description">Описание</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3 form-group">
+        <label asp-for="IdRequestType" class="control-label">Тип заявки</label>
+        <select asp-for="IdRequestType" class="form-control" asp-items="ViewBag.IdRequestType" data-val-required="Тип не может быть пустым"></select>
+        <span asp-validation-for="IdRequestType" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-group">
+        <label asp-for="AttachedWorkplaces" class="control-label">Рабочие места</label>
+        <select id="workplace-select" name="selectedWorkplaces" class="form-control" multiple="multiple">
+            @foreach (Workplace workplace in ViewBag.Workplaces)
+            {
+                <option value="@workplace.IdInventStuff">
+                    (@workplace.IdCabinetNavigation.Name) @workplace.Name
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3 form-group">
+        <button type="submit" class="btn btn-primary">Создать</button>
+        <a class="btn btn-primary" href="javascript:history.back()">Назад</a>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#workplace-select').select2({
+            placeholder: "Выберите рабочие места",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

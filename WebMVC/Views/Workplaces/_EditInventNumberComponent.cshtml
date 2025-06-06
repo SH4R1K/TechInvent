@@ -1,0 +1,36 @@
+﻿<div class="modal fade" id="editWorkplaceModal" tabindex="-1" aria-labelledby="editWorkplaceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editWorkplaceModalLabel">Изменить инвентарный номер</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="UpdateInventNumber" method="post">
+                    <div class="mb-3">
+                        <input type="hidden" class="form-control" id="EditIdCabinet" name="id" required />
+                        <label for="EditWorkplaceInventNumber" class="form-label">Инвентарный номер</label>
+                        <input type="text" class="form-control" id="EditWorkplaceInventNumber" name="inventNumber"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Обновить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var buttons = document.querySelectorAll('[data-bs-target="#editWorkplaceModal"]');
+
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var workplaceId = this.getAttribute('data-workplace-id');
+                var inventNumber = this.getAttribute('data-invent-number');
+
+                document.getElementById('EditIdCabinet').value = workplaceId;
+                document.getElementById('EditWorkplaceInventNumber').value = inventNumber;
+            });
+        });
+    });
+</script>

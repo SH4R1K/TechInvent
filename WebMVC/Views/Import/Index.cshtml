@@ -1,0 +1,19 @@
+﻿<h1>Импортировать рабочее место</h1>
+
+<form asp-action="UploadFileAndJson" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <input class="form-control" name="files" type="file" accept=".json" multiple="multiple"/>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Загрузить" />
+    <a class="btn btn-secondary" asp-action="DownloadInventProgram">Скачать программу для инвентаризации</a>
+</form>
+
+<h1>Импортировать оборудование</h1>
+
+<form asp-action="UploadFileAndExcel" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <input class="form-control" name="files" type="file" accept=".xlsx" multiple="multiple" />
+    </div>
+    <input class="btn btn-primary" type="submit" value="Загрузить" />
+    <a class="btn btn-secondary" asp-action="DownloadExcelExample">Скачать пример файла</a>
+</form>

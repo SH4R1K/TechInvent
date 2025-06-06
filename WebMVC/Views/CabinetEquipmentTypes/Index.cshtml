@@ -1,0 +1,38 @@
+﻿@model IEnumerable<TechInvent.DM.Models.CabinetEquipmentType>
+
+@{
+    ViewData["Title"] = "Типы оборудования";
+}
+
+<h1>Типы оборудования</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Создать</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                    <a class="text-decoration-none" asp-action="Edit" asp-route-id="@item.IdCabinetEquipmentType">
+                        <img src="~/images/pencil-edit.svg" />
+                    </a> 
+                    <a class="text-decoration-none" asp-action="Delete" asp-route-id="@item.IdCabinetEquipmentType">
+                        <img src="~/images/trashbin.svg" />
+                    </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

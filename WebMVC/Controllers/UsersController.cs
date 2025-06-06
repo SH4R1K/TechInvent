@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using WebMVC.Data;
-using WebMVC.Models;
+using TechInvent.DAL.Data;
+using TechInvent.DM.Models;
 
 namespace WebMVC.Controllers
 {
@@ -19,23 +19,18 @@ namespace WebMVC.Controllers
             _context = context;
         }
 
-        // GET: Users
         public async Task<IActionResult> Index()
         {
-            var techInventContext = _context.User.Include(u => u.Role);
+            var techInventContext = _context.Users.Include(u => u.Role);
             return View(await techInventContext.ToListAsync());
         }
 
-        // GET: Users/Create
         public IActionResult Create()
         {
             ViewData["IdRole"] = new SelectList(_context.Set<Role>(), "IdRole", "Name");
             return View();
         }
 
-        // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdUser,Login,Password,IdRole")] User user)
@@ -45,7 +40,6 @@ namespace WebMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -53,7 +47,7 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -62,12 +56,9 @@ namespace WebMVC.Controllers
             return View(user);
         }
 
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdUser,Login,Password,IdRole")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("IdUser,Login,Password,IdRole,LastLoginDate")] User user)
         {
             if (id != user.IdUser)
             {
@@ -93,7 +84,6 @@ namespace WebMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -101,7 +91,7 @@ namespace WebMVC.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            var user = await _context.Users
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(m => m.IdUser == id);
             if (user == null)
@@ -112,15 +102,14 @@ namespace WebMVC.Controllers
             return View(user);
         }
 
-        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
-                _context.User.Remove(user);
+                _context.Users.Remove(user);
             }
 
             await _context.SaveChangesAsync();
@@ -129,7 +118,7 @@ namespace WebMVC.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.User.Any(e => e.IdUser == id);
+            return _context.Users.Any(e => e.IdUser == id);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using ClosedXML.Excel;
-using WebMVC.Models;
+using TechInvent.DM.Models;
 namespace WebMVC.Services
 {
-    public class ExcelService
+    public partial class ExcelService
     {
         public async Task<MemoryStream> GenerateCabinetsReportAsync(List<Cabinet> cabinets)
         {
@@ -92,7 +92,7 @@ namespace WebMVC.Services
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add(workplaces.FirstOrDefault()?.IdCabinetNavigation.Name ?? "Безымянный");
-                GenerateCabinetWorkplacesHardwareWorksheet(worksheet, workplaces);
+                GenerateCabinetWorkplacesHardwareWorksheet(worksheet, workplaces.OrderBy(w => w.Name).ToList());
                 await Task.Run(() => workbook.SaveAs(memoryStream));
             }
 
@@ -106,7 +106,7 @@ namespace WebMVC.Services
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add(workplaces.FirstOrDefault()?.IdCabinetNavigation.Name ?? "Безымянный");
-                GenerateCabinetWorkplacesSoftwareWorksheet(worksheet, workplaces, softwares);
+                GenerateCabinetWorkplacesSoftwareWorksheet(worksheet, workplaces.OrderBy(w => w.Name).ToList(), softwares);
                 await Task.Run(() => workbook.SaveAs(memoryStream));
             }
 
@@ -128,6 +128,7 @@ namespace WebMVC.Services
             worksheet.Cell(4, 5).Value = "Последнее обновление";
             worksheet.Cell(4, 6).Value = "Уникальный идентификатор";
 
+            workplaces = workplaces.OrderBy(w => w.Name).ToList();
             for (int i = 0; i < workplaces.Count; i++)
             {
                 worksheet.Cell(5 + i, 1).Value = i + 1;
@@ -146,17 +147,18 @@ namespace WebMVC.Services
             {
                 worksheet.Cell(1, 1).Value = "Рабочее место";
                 worksheet.Cell(2, 1).Value = "Количество ПО";
-                worksheet.Cell(1, 2 + i).Value = workplaces[i].Name;
-                worksheet.Cell(2, 2 + i).Value = workplaces[i].InstalledSoftware.Count;
+                worksheet.Cell(1, 3 + i).Value = workplaces[i].Name;
+                worksheet.Cell(2, 3 + i).Value = workplaces[i].InstalledSoftware.Count;
                 for (int j = 0; j < softwares.Count; j++)
                 {
                     if (i == 0)
                     {
                         worksheet.Cell(3 + j, 1).Value = softwares[j].Name;
+                        worksheet.Cell(3 + j, 2).Value = softwares[j].Version;
                     }
                     if (workplaces[i].InstalledSoftware.Any(s => s.IdSoftware == softwares[j].IdSoftware))
                     {
-                        worksheet.Cell(3 + j, 2 + i).Value = "+";
+                        worksheet.Cell(3 + j, 3 + i).Value = "+";
                     }
                 }
             }
@@ -179,7 +181,9 @@ namespace WebMVC.Services
             worksheet.Cell(4, 6).Value = "Видеокарта";
             worksheet.Cell(4, 7).Value = "Оперативная память";
             worksheet.Cell(4, 8).Value = "Сетевые адаптеры";
-            worksheet.Cell(4, 9).Value = "Диски";
+            worksheet.Cell(4, 9).Value = "MAC";
+            worksheet.Cell(4, 10).Value = "Диски";
+            worksheet.Cell(4, 11).Value = "Оборудование";
 
             for (int i = 0; i < workplaces.Count; i++)
             {
@@ -191,7 +195,9 @@ namespace WebMVC.Services
                 worksheet.Cell(5 + i, 6).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Gpu != null).Select(g => $"{g.Name}").ToList());
                 worksheet.Cell(5 + i, 7).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Ram != null).Select(r => $"{r.Name} - {r.Ram.Capacity}").ToList());
                 worksheet.Cell(5 + i, 8).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.NetAdapter != null).Select(n => $"{n.Name}").ToList());
-                worksheet.Cell(5 + i, 9).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Disk != null).Select(d => $"{d.Disk.Model} - {d.Disk.Size}Гб").ToList());
+                worksheet.Cell(5 + i, 9).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.NetAdapter != null).Select(n => $"{n.NetAdapter.MacAddress}").ToList());
+                worksheet.Cell(5 + i, 10).Value = String.Join(Environment.NewLine, workplaces[i].Components.Where(c => c.Disk != null).Select(d => $"{d.Name} - {d.Disk.Size}Гб").ToList());
+                worksheet.Cell(5 + i, 11).Value = String.Join(Environment.NewLine, workplaces[i].CabinetEquipments.Select(d => $"{d.Name}({d.InventNumber ?? " - "})").ToList());
             }
             worksheet.Rows().AdjustToContents();
             worksheet.Cells().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
@@ -227,16 +233,23 @@ namespace WebMVC.Services
 
             worksheet.Cell(7, 1).Value = "Сетевые адаптеры";
             var netadapters = workplace.Components.Where(c => c.NetAdapter != null).ToList();
-            foreach (var netadapter in netadapters)
+            foreach (NetAdapter netadapter in netadapters)
             {
                 worksheet.Cell(7, 2).Value += $"{netadapter.Name}{Environment.NewLine}";
+                worksheet.Cell(7, 3).Value += $"{netadapter.MacAddress}{Environment.NewLine}";
             }
 
             worksheet.Cell(8, 1).Value = "Диски";
             var disks = workplace.Components.Where(c => c.Disk != null).ToList();
             foreach (Disk disk in disks)
             {
-                worksheet.Cell(8, 2).Value += $"{disk.Model} - {disk.Size}Гб{Environment.NewLine}";
+                worksheet.Cell(8, 2).Value += $"{disk.Name} - {disk.Size}Гб{Environment.NewLine}";
+            }
+            worksheet.Cell(9, 1).Value = "Оборудование";
+            var equipments = workplace.CabinetEquipments.ToList();
+            foreach (CabinetEquipment equipment in equipments)
+            {
+                worksheet.Cell(9, 2).Value += $"{equipment.Name}({equipment.InventNumber ?? "-"}){Environment.NewLine}";
             }
             worksheet.Rows().AdjustToContents();
             worksheet.Cells().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);

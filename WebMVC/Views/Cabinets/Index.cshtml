@@ -2,28 +2,95 @@
 
 @{
     ViewData["Title"] = "Кабинеты";
+    int currentPage = ((int)(ViewData["Page"]));
+    int pageCount = ((int)(ViewData["PageCount"]));
 }
 
 <h1>Кабинеты</h1>
 
 @{
     var cabinets = Model.ToList();
-    <div>
+    <div class="row gy-2 justify-content-center justify-content-md-start mb-3">
         <a class="btn btn-secondary" asp-action="GenerateReport">Экспортировать в Excel</a>
+        @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
+        {
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCabinetModal">Добавить кабинет</button>
+        }
     </div>
     <div class="row justify-content-center justify-content-md-start">
+        <form asp-controller="Cabinets" asp-action="Index" method="get">
+            <input type="text" class="form-control" name="searchQuery" value="@ViewBag.SearchQuery" placeholder="Поиск..." />
+        </form>
         @for (int j = 0; j < cabinets.Count; j++)
         {
-            <div class="card" style="width: 18rem; margin: 1rem;">
+            <div class="card" style="width: 18rem;">
+                <h5 class="card-header card-title">@cabinets[j].Name</h5>
                 <div class="card-body">
-                    <h5 class="card-title">@cabinets[j].Name</h5>
                     <p class="card-text">Количество рабочих мест: @cabinets[j].Workplaces.Count</p>
-                    <div>
+                    <div class="row gy-2 justify-content-center justify-content-md-start">
                         <a asp-controller="Workplaces" asp-action="Index" asp-route-id="@cabinets[j].IdCabinet" class="btn btn-primary">Подробнее</a>
                         <a class="btn btn-secondary" asp-action="GenerateReportById" asp-route-id="@cabinets[j]?.IdCabinet">Экспортировать в Excel</a>
+                        @if (cabinets[j]?.Workplaces.Count > 0)
+                        {
+                            <a class="btn btn-secondary" asp-action="GenerateQRCodes" asp-route-id="@cabinets[j]?.IdCabinet">Получить QR-коды</a>
+                        }
+                        @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
+                        {
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-cabinet-name="@cabinets[j].Name" data-cabinet-id="@cabinets[j].IdCabinet" data-bs-target="#editCabinetModal">Редактировать кабинет</button>
+                        }
                     </div>
+                    @if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
+                    {
+                        @if (cabinets[j].Name != "Неопределённый")
+                        {
+                            <a class="position-absolute top-0 end-0 m-2" asp-action="Delete" asp-route-id="@cabinets[j].IdCabinet">
+                                <img src="~/images/trashbin.svg" />
+                            </a>
+                        }
+                    }
                 </div>
             </div>
         }
+        @if (pageCount > 1)
+        {
+            <nav>
+                <ul class="pagination justify-content-center">
+                    @if (currentPage != 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="1">&laquo;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)">&lt;</a>
+                        </li>
+                    }
+
+                    @if (currentPage > 1)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)">@(currentPage - 1)</a></li>
+                    }
+
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link">@currentPage</a>
+                    </li>
+
+                    @if (currentPage < pageCount)
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)">@(currentPage + 1)</a></li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)">&gt;</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(pageCount)">&raquo;</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
     </div>
+}
+@if (Context.User.IsInRole("admin") || Context.User.IsInRole("operator"))
+{
+    <partial name="_AddCabinetComponent.cshtml" />
+    <partial name="_EditCabinetComponent.cshtml" />
 }

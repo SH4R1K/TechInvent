@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using WebMVC.Models;
+using TechInvent.DM.Models;
 
 namespace WebMVC.Services
 {

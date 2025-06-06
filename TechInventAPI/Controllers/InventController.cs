@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NuGet.Protocol;
-using TechInventAPI.Data;
-using TechInventAPI.Dto;
-using TechInventAPI.DtoModels;
-using TechInventAPI.Models;
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using TechInvent.BLL.Dto;
+using TechInvent.BLL.DtoModels;
+using TechInvent.DM.Models;
+using TechInvent.DAL.Data;
 
 namespace TechInventAPI.Controllers
 {
@@ -21,12 +20,11 @@ namespace TechInventAPI.Controllers
             _dtoConverter = dtoConverter;
         }
         [HttpPost(Name = "PostInvent")]
-        public IActionResult Post(object json)
+        public async Task<IActionResult> Post([FromBody] CabinetDto cabinetDto)
         {
             try
             {
-                var cabinetDto = JsonConvert.DeserializeObject<CabinetDto>(json.ToString());
-                _dtoConverter.ConvertDtoCabinet(cabinetDto);
+                await _dtoConverter.ConvertDtoCabinetAsync(cabinetDto);
                 Console.WriteLine("Cabinet updated");
                 return StatusCode(200);
             }

@@ -1,0 +1,38 @@
+﻿<div class="modal fade" id="moveWorkplaceModal" tabindex="-1" aria-labelledby="moveWorkplaceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="moveWorkplaceModalLabel">Перенос рабочего места</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="moveWorkplaceForm" method="post" asp-action="MoveWorkplace" asp-controller="Workplaces">
+                    <input type="hidden" name="id" id="workplaceId" />
+                    <div class="mb-3">
+                        <label for="cabinetSelect" class="form-label">Выберите кабинет</label>
+                        <select class="form-control" id="cabinetSelect" name="idCabinet" required>
+                            @foreach (var cabinet in ViewBag.cabinets) 
+                            {
+                                <option value="@cabinet.IdCabinet">@cabinet.Name</option>
+                            }
+                        </select>
+                    </div>
+                        <button type="submit" class="btn btn-primary">Перенести</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var moveWorkplaceModal = document.getElementById('moveWorkplaceModal');
+    moveWorkplaceModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; 
+        var workplaceId = button.getAttribute('data-workplace-id');
+        var cabinetId = button.getAttribute('data-cabinet-id');
+        var workplaceIdInput = document.getElementById('workplaceId');
+        workplaceIdInput.value = workplaceId;
+        var select = document.getElementById('cabinetSelect');
+        select.value = cabinetId;
+    });
+</script>

@@ -1,0 +1,26 @@
+﻿@model TechInvent.DM.Models.Vendor
+
+@{
+    ViewData["Title"] = "Удалить";
+}
+
+<h1>Удалить</h1>
+
+<div>
+    <h4>Производитель</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Имя
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="IdVendor" />
+        <input type="submit" value="Удалить" class="btn btn-danger" /> 
+        <a class="btn btn-primary" href="javascript:history.back()">Назад к списку</a>
+    </form>
+</div>
