@@ -24,14 +24,14 @@ namespace WebMVC.Services
                 worksheet.Cell("D1").Value = "Серийный номер";
                 worksheet.Cell("E1").Value = "Производитель";
                 worksheet.Cell("F1").Value = "Место нахождения";
-                worksheet.Cell("F1").Value = "Тип оборудования";
+                worksheet.Cell("G1").Value = "Тип оборудования";
                 worksheet.Columns().AdjustToContents();
                 worksheet.Column(3).Width = 2;
                 worksheet.Range("B1:C1").Merge();
-                worksheet.Range("A1:F1").Style.Font.Bold = true;
-                worksheet.Range("A1:F1").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                worksheet.Range("A1:F1").Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                worksheet.Range("A1:F100").Style
+                worksheet.Range("A1:G1").Style.Font.Bold = true;
+                worksheet.Range("A1:G1").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                worksheet.Range("A1:G1").Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                worksheet.Range("A1:G100").Style
                         .Border.SetTopBorder(XLBorderStyleValues.Thin)
                         .Border.SetRightBorder(XLBorderStyleValues.Thin)
                         .Border.SetBottomBorder(XLBorderStyleValues.Thin)
